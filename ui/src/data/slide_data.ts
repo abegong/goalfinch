@@ -46,7 +46,7 @@ export interface NestedChartsSlide extends Slide {
 export interface BulletListSlide extends Slide {
     type: SlideType.BULLET_LIST;
     content: string[];
-    captions: any;
+    captions: Captions;
 }
 
 export interface NestedBulletListSlide extends Slide {

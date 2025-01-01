@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { slideData, Slide } from '../data/slide_data';
+import { slideData, Slide, Captions } from '../data/slide_data';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
-import SlideConfig from './SlideConfig';
+import SlideConfig, { getSlideIcon } from './SlideConfig';
 
 const Goals: React.FC = () => {
   const [slides, setSlides] = useState<Slide[]>(slideData);
@@ -11,6 +11,25 @@ const Goals: React.FC = () => {
     const newSlides = [...slides];
     newSlides[index] = { ...newSlides[index], ...newConfig };
     setSlides(newSlides);
+  };
+
+  const formatSlideType = (type: string) => {
+    return type.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+  };
+
+  const getSlideName = (slide: Slide) => {
+    if (slide.captions) {
+      // Check all caption fields in order of preference
+      const captionFields: (keyof Captions)[] = ['top_center', 'bottom_center', 'bottom_right', 'bottom_left'];
+      for (const field of captionFields) {
+        if (slide.captions[field]) {
+          return slide.captions[field];
+        }
+      }
+    }
+    return formatSlideType(slide.type);
   };
 
   return (
@@ -28,20 +47,17 @@ const Goals: React.FC = () => {
         <TimelineItem key={index}>
           <TimelineOppositeContent>
             <Typography variant="body2" color="text.secondary">
-              {new Date('2025-01-01T15:45:48-07:00').toLocaleDateString()}
+              {getSlideName(slide)}
             </Typography>
           </TimelineOppositeContent>
           <TimelineSeparator>
-            <TimelineDot />
+            <TimelineDot sx={{ p: 0 }}>
+              {getSlideIcon(slide.type)}
+            </TimelineDot>
             {index < slides.length - 1 && <TimelineConnector />}
           </TimelineSeparator>
           <TimelineContent>
             <Card elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
-              <CardHeader
-                title={`Slide ${index + 1}`}
-                titleTypography={{ variant: 'subtitle1' }}
-                sx={{ pb: 1 }}
-              />
               <CardContent>
                 <SlideConfig
                   {...slide}
