@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import { slideData, Slide, Captions } from '../data/slide_data';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography, Box } from '@mui/material';
 import SlideConfig, { getSlideIcon } from './SlideConfig';
 
 const Goals: React.FC = () => {
   const [slides, setSlides] = useState<Slide[]>(slideData);
+  const [expandedItems, setExpandedItems] = useState<boolean[]>(new Array(slideData.length).fill(false));
 
   const handleSlideChange = (index: number, newConfig: Partial<Slide>) => {
     const newSlides = [...slides];
     newSlides[index] = { ...newSlides[index], ...newConfig };
     setSlides(newSlides);
+  };
+
+  const toggleExpanded = (index: number) => {
+    const newExpandedItems = [...expandedItems];
+    newExpandedItems[index] = !newExpandedItems[index];
+    setExpandedItems(newExpandedItems);
   };
 
   const formatSlideType = (type: string) => {
@@ -29,46 +36,109 @@ const Goals: React.FC = () => {
         }
       }
     }
-    return formatSlideType(slide.type);
+    return null; // Return empty string if no caption is found or slide has no caption
+    //formatSlideType(slide.type);
   };
 
   return (
     <Timeline
       sx={{
         [`& .MuiTimelineItem-root`]: {
-          minHeight: 'auto',
+          minHeight: '80px',
+          '&:hover': {
+            '& .timeline-text:not(:empty)': {
+              backgroundColor: 'primary.light',
+              color: 'common.white'
+            },
+            '& .MuiTimelineDot-root': {
+              transform: 'scale(1.1)',
+              backgroundColor: 'primary.light'
+            },
+            '& .MuiTimelineConnector-root': {
+              backgroundColor: 'primary.light'
+            }
+          }
         },
         [`& .${timelineOppositeContentClasses.root}`]: {
           flex: '0 0 150px',
           maxWidth: '150px',
-          padding: '16px 8px',
+          padding: '8px 8px',
           marginTop: 0,
           marginBottom: 0
         },
       }}
     >
       {slides.map((slide, index) => (
-        <TimelineItem key={index}>
+        <TimelineItem 
+          key={index}
+          sx={{ cursor: 'pointer' }}
+          onClick={() => toggleExpanded(index)}
+        >
           <TimelineOppositeContent>
-            <Typography variant="body2" color="text.secondary">
-              {getSlideName(slide)}
-            </Typography>
+            {getSlideName(slide) && (
+              <Typography 
+                variant="body2" 
+                color="text.secondary"
+                className="timeline-text"
+                sx={{
+                  display: 'inline-block',
+                  margin: '1px -24px 0px 0px',
+                  padding: '8px 32px 8px 12px',
+                  borderRadius: '16px',
+                  fontWeight: 'bold',
+                  transition: 'background-color 0.2s, color 0.2s'
+                }}
+              >
+                {getSlideName(slide)}
+              </Typography>
+            )}
           </TimelineOppositeContent>
           <TimelineSeparator>
-            <TimelineDot sx={{ p: 0 }}>
-              {getSlideIcon(slide.type)}
+            <TimelineDot 
+              sx={{ 
+                p: 0,
+                borderRadius: '6px',
+                width: '50px',
+                height: '50px',
+                justifyContent: 'center',
+                transition: 'transform 0.2s, background-color 0.2s'
+              }}
+            >
+              <Box sx={{ 
+                fontSize: '42px',
+                '& > svg': {
+                  width: '42px',
+                  height: '42px'
+                }
+              }}>
+                {getSlideIcon(slide.type)}
+              </Box>
             </TimelineDot>
-            {index < slides.length - 1 && <TimelineConnector />}
+            {index < slides.length - 1 && (
+              <TimelineConnector 
+                sx={{ 
+                  transition: 'background-color 0.2s',
+                  width: '4px',
+                  //rounded edges
+                  borderTopLeftRadius: '4px',
+                  borderTopRightRadius: '4px',
+                  borderBottomRightRadius: '4px',
+                  borderBottomLeftRadius: '4px'
+                }}
+              />
+            )}
           </TimelineSeparator>
           <TimelineContent>
-            <Card elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
-              <CardContent>
-                <SlideConfig
-                  {...slide}
-                  onChange={(newConfig) => handleSlideChange(index, newConfig)}
-                />
-              </CardContent>
-            </Card>
+            {expandedItems[index] && (
+              <Card elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
+                <CardContent>
+                  <SlideConfig
+                    {...slide}
+                    onChange={(newConfig) => handleSlideChange(index, newConfig)}
+                  />
+                </CardContent>
+              </Card>
+            )}
           </TimelineContent>
         </TimelineItem>
       ))}

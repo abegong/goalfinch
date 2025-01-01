@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SlideType, Captions } from '../data/slide_data';
 import { 
   FormatListBulleted, 
-  GridView, 
+  Landscape, 
   ShowChart, 
   List, 
   Timeline,
@@ -171,7 +171,7 @@ export const getSlideIcon = (type: SlideType) => {
     case SlideType.BULLET_LIST:
       return <FormatListBulleted />;
     case SlideType.NESTED_IMAGES:
-      return <GridView />;
+      return <Landscape />;
     case SlideType.NESTED_CHARTS:
       return <ShowChart />;
     case SlideType.NESTED_BULLET_LIST:
