@@ -1,6 +1,43 @@
-interface SlideData {
-  // Define your data structure here
-  slide_list: any[]
+interface Captions {
+  top_center?: string;
+  bottom_center?: string;
+  bottom_right?: string;
+  bottom_left?: string;
+}
+
+interface Slide {
+  type: string;
+  content?: any;
+  captions?: Captions;
+  url?: string;
+  goal?: number;
+  rounding?: number;
+  units?: string;
+}
+
+interface LookForwardChartSlide extends Slide {
+    type: string;
+    content: any;
+    captions: Captions;
+    url: string;
+    goal: number;
+    rounding: number;
+    units: string;
+}
+
+interface NestedImagesSlide extends Slide {
+    type: string;
+}
+
+interface NestedChartsSlide extends Slide {
+    type: string;
+    content: LookForwardChartSlide[];
+}
+
+interface BulletListSlide extends Slide {
+    type: string;
+    content: string[];
+    captions: any;
 }
 
 const preprocessRowCounts = (data: any[]) => {
@@ -17,8 +54,7 @@ const preprocessRowValue = (data: any[], field: string) => {
   }));
 };
 
-export const slideData: SlideData = {
-  slide_list : [
+export const slideData: Slide[] = [
     {
         "type": "bullet-list",
         "content": [
@@ -29,10 +65,10 @@ export const slideData: SlideData = {
         "captions": {
             "bottom_right": "life goals"
         }
-    },
+    } as BulletListSlide,
     {
         "type": "nested-images",
-    },
+    } as NestedImagesSlide,
     {
         "type": "nested-charts",
         "captions": {
@@ -82,10 +118,10 @@ export const slideData: SlideData = {
                 "units": " min",
             }        
         ]
-    },
+    } as NestedChartsSlide,
     {
         "type": "nested-images",
-    },
+    } as NestedImagesSlide,
     {
         "type": "checkbox-list",
         "content": [
@@ -95,10 +131,10 @@ export const slideData: SlideData = {
         "captions": {
             "bottom_right": "Quarterly goals"
         }
-    },
+    } as BulletListSlide,
     {
         "type": "nested-images",
-    },
+    } as NestedImagesSlide,
     {
         "type": "nested-charts",
         "captions": {
@@ -183,10 +219,10 @@ export const slideData: SlideData = {
                 "units": "",
             },            
         ]
-    },    
+    } as NestedChartsSlide,
     {
         "type": "nested-images",
-    },
+    } as NestedImagesSlide,
     {
         "type": "bullet-list",
         "content": [
@@ -200,10 +236,10 @@ export const slideData: SlideData = {
         "captions": {
             "bottom_right": "monthly goals"
         }
-    },
+    } as BulletListSlide,
     {
         "type": "nested-images",
-    },
+    } as NestedImagesSlide,
     {
         "type": "nested-bullet-list",
         "content": [
@@ -218,11 +254,10 @@ export const slideData: SlideData = {
         "captions": {
             "bottom_right": "family goals"
         }
-    },
+    } as BulletListSlide,
     {
         "type": "nested-images",
-    }
-]
-};
+    } as NestedImagesSlide,
+];
 
 export default slideData;

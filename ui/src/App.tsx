@@ -8,7 +8,6 @@ import './App.css';
 
 // Placeholder components for each route
 const Home = () => <div>Home Page</div>;
-// const Goals = () => <div>Goals Page</div>;
 // const Events = () => <div>Events Page</div>;
 // const Reports = () => <div>Reports Page</div>;
 // const Input = () => <div>Input Page</div>;

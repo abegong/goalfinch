@@ -10,7 +10,7 @@ const Goals: React.FC = () => {
         Goals
       </Typography>
       <Stack spacing={3}>
-        {slideData.slide_list.map((slide, index) => (
+        {slideData.map((slide, index) => (
           <Card key={index} elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
             <CardHeader
               title={`Slide ${index + 1}`}
