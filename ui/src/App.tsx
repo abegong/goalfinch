@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import Settings from './components/Settings';
 import './App.css';
 
 // Placeholder components for each route
 const Home = () => <div>Home Page</div>;
 const Goals = () => <div>Goals Page</div>;
-const Settings = () => <div>Settings Page</div>;
 // const Events = () => <div>Events Page</div>;
 // const Reports = () => <div>Reports Page</div>;
 // const Input = () => <div>Input Page</div>;

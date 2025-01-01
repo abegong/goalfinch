@@ -146,14 +146,13 @@ export default function Layout({ children }: LayoutProps) {
           </Tooltip>
         </Toolbar>
       </AppBar>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          mt: 8
-        }}
-      >
+      <Box component="main" sx={{ 
+        flexGrow: 1, 
+        p: 3, 
+        mt: '64px',
+        bgcolor: '#f5f5f5',
+        minHeight: '100vh'
+      }}>
         {children}
       </Box>
     </Box>
