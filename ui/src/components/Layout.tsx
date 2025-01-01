@@ -57,7 +57,19 @@ export default function Layout({ children }: LayoutProps) {
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>
               {menuItems.slice(1).map((item) => (
-                <Tooltip key={item.text} title={item.text}>
+                <Tooltip 
+                  key={item.text} 
+                  title={item.text}
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        fontSize: '1.1rem',
+                        padding: '8px 12px',
+                        bgcolor: 'rgba(0, 0, 0, 0.8)'
+                      }
+                    }
+                  }}
+                >
                   <IconButton
                     component={Link}
                     to={item.path}
@@ -90,7 +102,18 @@ export default function Layout({ children }: LayoutProps) {
               ))}
             </Box>
           </Box>
-          <Tooltip title="Dashboard">
+          <Tooltip 
+            title="Dashboard"
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  fontSize: '1.1rem',
+                  padding: '8px 12px',
+                  bgcolor: 'rgba(0, 0, 0, 0.8)'
+                }
+              }
+            }}
+          >
             <IconButton
               component={Link}
               to="/dashboard"
