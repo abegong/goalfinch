@@ -91,15 +91,14 @@ export default function Layout({ children }: LayoutProps) {
                 width: open ? drawerWidth : theme.spacing(9),
               },
               transform: drawerVisible ? 'none' : 'translateX(-100%)',
-              visibility: drawerVisible ? 'visible' : 'hidden',
-              transition: theme.transitions.create(['transform', 'width', 'visibility'], {
+              transition: theme.transitions.create(['transform', 'width'], {
                 easing: theme.transitions.easing.easeOut,
                 duration: theme.transitions.duration.enteringScreen,
               }),
             },
           }}
           variant="persistent"
-          open={open}
+          open={drawerVisible}
         >
           <List>
             <ListItem disablePadding sx={{ display: 'block' }}>
@@ -216,7 +215,7 @@ export default function Layout({ children }: LayoutProps) {
             pl: 1
           }}>
             <IconButton 
-              onClick={open ? handleDrawerClose : handleDrawerOpen}
+              onClick={() => setOpen(!open)}
               sx={{
                 transform: open ? 'rotate(0deg)' : 'rotate(-90deg)',
                 transition: theme.transitions.create('transform', {
