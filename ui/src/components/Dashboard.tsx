@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -21,6 +22,7 @@ const Dashboard: React.FC = () => {
   const [visibleColorIndex, setVisibleColorIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -42,6 +44,16 @@ const Dashboard: React.FC = () => {
     }
   }, [isTransitioning, nextColorIndex]);
 
+  const handleColorClick = (index: number) => {
+    setNextColorIndex(index);
+    setIsTransitioning(true);
+    setDrawerOpen(false);
+  };
+
+  const toggleDrawer = (open: boolean) => {
+    setDrawerOpen(open);
+  };
+
   const colorBlockStyles = {
     width: '100%',
     height: '100%',
@@ -49,20 +61,77 @@ const Dashboard: React.FC = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    border: 'none',
+    outline: 'none'
   };
 
   return (
-    <Box
-      sx={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        overflow: 'hidden',
+    <Box 
+      component="div"
+      sx={{ 
         position: 'fixed',
         top: 0,
         left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        border: 'none',
+        outline: 'none',
+        padding: 0,
+        margin: 0,
+        boxSizing: 'border-box'
       }}
     >
+      <IconButton
+        onClick={() => toggleDrawer(true)}
+        sx={{ 
+          position: 'fixed',
+          bottom: 24,
+          right: 24,
+          zIndex: 2000,
+          color: 'white',
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          padding: '16px',
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.3)'
+          }
+        }}
+      >
+        <MenuIcon sx={{ fontSize: 32 }} />
+      </IconButton>
+      
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={() => toggleDrawer(false)}
+      >
+        <List sx={{ width: 250 }}>
+          {colors.map((color, index) => (
+            <ListItem
+              key={color.hex}
+              onClick={() => handleColorClick(index)}
+              sx={{
+                '&:hover': {
+                  backgroundColor: `${color.hex}20`
+                }
+              }}
+            >
+              <Box
+                sx={{
+                  width: 20,
+                  height: 20,
+                  backgroundColor: color.hex,
+                  marginRight: 2,
+                  borderRadius: 1
+                }}
+              />
+              <ListItemText primary={color.name} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
       {isTransitioning && (
         <Box
           sx={{
