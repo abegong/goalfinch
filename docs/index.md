@@ -1,3 +1,4 @@
+<img class="logo" src="goldfinch-logo.svg" alt="GoalFinch Logo">
 # GoalFinch
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).

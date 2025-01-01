@@ -1,0 +1,18 @@
+:root {
+    --primary-color: #F4B942;
+    --secondary-color: #2C3E50;
+    --accent-color: #E67E22;
+    --background-color: #FDF6E3;
+    --text-color: #34495E;
+    --border-color: #F4B942;
+}
+
+.logo {
+    width: 200px;
+    height: auto;
+    display: block;
+    float: right;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 2px solid var(--border-color);
+    border-radius: 100px;
+}

@@ -2,6 +2,8 @@ site_name: GoalFinch Documentation
 
 theme:
   name: material
+  favicon: favicon.ico
+  logo: goldfinch-logo.svg
   palette:
     # Palette toggle for light mode
     - scheme: default
@@ -18,3 +20,6 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+
+extra_css:
+  - stylesheets/extra.css
