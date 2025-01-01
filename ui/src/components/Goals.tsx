@@ -7,6 +7,7 @@ import SlideConfig, { getSlideIcon } from './SlideConfig';
 const Goals: React.FC = () => {
   const [slides, setSlides] = useState<Slide[]>(slideData);
   const [expandedItems, setExpandedItems] = useState<boolean[]>(new Array(slideData.length).fill(false));
+  const [animatingItems, setAnimatingItems] = useState<boolean[]>(new Array(slideData.length).fill(false));
 
   const handleSlideChange = (index: number, newConfig: Partial<Slide>) => {
     const newSlides = [...slides];
@@ -15,9 +16,36 @@ const Goals: React.FC = () => {
   };
 
   const toggleExpanded = (index: number) => {
+    if (animatingItems[index]) return; // Prevent toggling while animating
+
     const newExpandedItems = [...expandedItems];
-    newExpandedItems[index] = !newExpandedItems[index];
+    const newAnimatingItems = [...animatingItems];
+    
+    if (expandedItems[index]) {
+      // Start collapsing animation
+      newAnimatingItems[index] = true;
+      setAnimatingItems(newAnimatingItems);
+    } else {
+      // Immediately show and start expanding animation
+      newExpandedItems[index] = true;
+      newAnimatingItems[index] = true;
+      setExpandedItems(newExpandedItems);
+      setAnimatingItems(newAnimatingItems);
+    }
+  };
+
+  const handleTransitionEnd = (index: number) => {
+    const newExpandedItems = [...expandedItems];
+    const newAnimatingItems = [...animatingItems];
+    
+    if (!expandedItems[index]) {
+      // If we were collapsing, now remove the component
+      newExpandedItems[index] = false;
+    }
+    
+    newAnimatingItems[index] = false;
     setExpandedItems(newExpandedItems);
+    setAnimatingItems(newAnimatingItems);
   };
 
   const formatSlideType = (type: string) => {
@@ -136,6 +164,7 @@ const Goals: React.FC = () => {
                   <SlideConfig
                     {...slide}
                     onChange={(newConfig) => handleSlideChange(index, newConfig)}
+                    onTransitionEnd={() => handleTransitionEnd(index)}
                   />
                 </CardContent>
               </Card>

@@ -36,6 +36,27 @@
 .slide-config-content {
   padding: 16px;
   border-top: 1px solid #e0e0e0;
+  transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out, padding 0.3s ease-in-out;
+  max-height: 1000px;
+  opacity: 1;
+  will-change: max-height, opacity, padding;
+}
+
+.slide-config-content.collapsed {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.expand-icon {
+  transition: transform 0.3s ease;
+  margin-left: 8px;
+}
+
+.expand-icon.rotated {
+  transform: rotate(180deg);
 }
 
 .caption-config,

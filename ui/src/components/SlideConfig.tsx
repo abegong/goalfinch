@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SlideType, Captions } from '../data/slide_data';
 import { 
   FormatListBulleted, 
@@ -10,6 +10,7 @@ import {
   ExpandLess
 } from '@mui/icons-material';
 import styles from './SlideConfig.module.css';
+import clsx from 'clsx';
 
 interface BaseSlideConfigProps {
   captions?: Captions;
@@ -164,6 +165,7 @@ interface SlideConfigProps {
   rounding?: number;
   units?: string;
   onChange: (config: any) => void;
+  onTransitionEnd?: () => void;
 }
 
 export const getSlideIcon = (type: SlideType) => {
@@ -183,8 +185,37 @@ export const getSlideIcon = (type: SlideType) => {
   }
 };
 
+const formatSlideType = (type: SlideType) => {
+  switch (type) {
+    case SlideType.BULLET_LIST:
+      return 'Bullet List';
+    case SlideType.NESTED_IMAGES:
+      return 'Nested Images';
+    case SlideType.NESTED_CHARTS:
+      return 'Nested Charts';
+    case SlideType.NESTED_BULLET_LIST:
+      return 'Nested Bullet List';
+    case SlideType.LOOK_FORWARD_CHART:
+      return 'Look Forward Chart';
+    default:
+      return '';
+  }
+};
+
 const SlideConfig: React.FC<SlideConfigProps> = (props) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setIsCollapsed(false);
+    });
+  }, []);
+
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (e.target === e.currentTarget) {
+      props.onTransitionEnd?.();
+    }
+  };
 
   const renderConfig = () => {
     switch (props.type) {
@@ -226,19 +257,26 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
         className={styles['slide-config-header']} 
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
-        <div className={styles['slide-type-icon']}>
-          {getSlideIcon(props.type)}
-        </div>
-        <div className={styles['slide-type-text']}>
-          {props.type}
-        </div>
-        {isCollapsed ? <ExpandMore /> : <ExpandLess />}
+        {getSlideIcon(props.type)}
+        <span className={styles['slide-type-text']}>
+          {formatSlideType(props.type)}
+        </span>
+        <ExpandMore 
+          className={clsx(
+            styles['expand-icon'],
+            !isCollapsed && styles['rotated']
+          )} 
+        />
       </div>
-      {!isCollapsed && (
-        <div className={styles['slide-config-content']}>
-          {renderConfig()}
-        </div>
-      )}
+      <div 
+        className={clsx(
+          styles['slide-config-content'],
+          isCollapsed && styles['collapsed']
+        )}
+        onTransitionEnd={handleTransitionEnd}
+      >
+        {renderConfig()}
+      </div>
     </div>
   );
 };
