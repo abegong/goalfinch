@@ -55,16 +55,12 @@ const Dashboard: React.FC = () => {
   };
 
   const handleMenuClick = () => {
-    if( drawerOpen ) {
-      setDrawerOpen(false);
-    } else {
-      setDrawerOpen(true);
-    }
+    const newDrawerState = !drawerOpen;
+    setDrawerOpen(newDrawerState);
+    
     if (headerVisible) {
-      // setDrawerOpen(false);
       setHeaderVisible(false);
     } else {
-      // setDrawerOpen(true);
       setHeaderVisible(true);
     }
   };
@@ -117,9 +113,11 @@ const Dashboard: React.FC = () => {
         <MenuIcon sx={{ fontSize: 32 }} />
       </IconButton>
       <Drawer
-        anchor="left"
+        anchor="right"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
+        hideBackdrop={true}
+        variant="persistent"
       >
         <List sx={{ width: 250 }}>
           {colors.map((color, index) => (
