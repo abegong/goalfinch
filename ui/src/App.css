@@ -46,6 +46,21 @@
   }
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+  100% {
+    transform: scale(1);
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
 /* Appbar icon styles */
 .MuiListItemIcon-root {
   width: 44px !important;
@@ -53,13 +68,27 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  border-radius: 50%;
 }
 
 .MuiListItemIcon-root svg {
   font-size: 28px !important;
 }
 
+.MuiListItemButton-root:hover {
+  background-color: transparent !important;
+  /* animation: pulse 0.5s ease-in-out infinite; */
+}
+
+.MuiListItemButton-root.Mui-selected:hover {
+  background-color: transparent !important;
+}
+
 .MuiListItemButton-root.Mui-selected .MuiListItemIcon-root {
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.MuiListItemIcon-root:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  animation: pulse 1.2s ease-in-out infinite;
 }

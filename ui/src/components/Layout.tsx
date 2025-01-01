@@ -183,6 +183,9 @@ export default function Layout({ children }: LayoutProps) {
                       minHeight: 48,
                       justifyContent: open ? 'initial' : 'center',
                       px: 2.5,
+                      '&.Mui-selected': {
+                        backgroundColor: 'transparent',
+                      }
                     }}
                   >
                     <ListItemIcon 
