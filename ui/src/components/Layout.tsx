@@ -73,64 +73,55 @@ export default function Layout({ children }: LayoutProps) {
             width: drawerWidth,
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              // width: drawerWidth,
               boxSizing: 'border-box',
               bgcolor: 'rgb(255, 193, 5)',
               overflowX: 'hidden',
               whiteSpace: 'nowrap',
+              width: open ? drawerWidth : theme.spacing(7),
+              [theme.breakpoints.up('sm')]: {
+                width: open ? drawerWidth : theme.spacing(9),
+              },
               transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen,
-              }),
-              ...(open ? {
-                width: drawerWidth,
-              } : {
-                width: theme.spacing(7),
-                [theme.breakpoints.up('sm')]: {
-                  width: theme.spacing(9),
-                },
               }),
             },
           }}
           variant="permanent"
           open={open}
         >
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            alignItems: 'center',
-            py: 2,
-          }}>
-            <Box sx={{ 
-              mb: 2,
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              transition: theme.transitions.create(['width', 'margin'], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-              }),
-            }}>
-              <Box sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 1 
-              }}>
-                <Link 
-                  to="/"
-                  style={{ 
-                    textDecoration: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
+          <List>
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                component={Link}
+                to="/"
+                selected={location.pathname === '/'}
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                  '&.Mui-selected': {
+                    backgroundColor: 'transparent',
+                  }
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                    transition: theme.transitions.create('margin-right', {
+                      easing: theme.transitions.easing.sharp,
+                      duration: theme.transitions.duration.enteringScreen,
+                    }),
                   }}
                 >
                   <Box 
                     sx={{ 
                       backgroundColor: location.pathname === '/' ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, 0.5)',
                       borderRadius: '50%',
-                      padding: '0px',
+                      width: '48px',
+                      height: '48px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -140,37 +131,29 @@ export default function Layout({ children }: LayoutProps) {
                       src="/goldfinch-logo.svg" 
                       alt="Goalfinch Logo" 
                       style={{ 
-                        width: '64px',
-                        height: 'auto',
-                        transition: theme.transitions.create(['width', 'max-width'], {
-                          easing: theme.transitions.easing.sharp,
-                          duration: theme.transitions.duration.enteringScreen,
-                        }),
+                        width: '48px',
+                        height: '48px',
                       }} 
                     />
                   </Box>
-                  {open && (
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 'bold',
-                        opacity: open ? 1 : 0,
-                        transition: theme.transitions.create('opacity', {
-                          easing: theme.transitions.easing.sharp,
-                          duration: theme.transitions.duration.enteringScreen,
-                        }),
-                        color: 'inherit',
-                      }}
-                    >
-                      GoalFinch
-                    </Typography>
-                  )}
-                </Link>
-              </Box>
-            </Box>
-          </Box>
-          <Divider />
-          <List>
+                </ListItemIcon>
+                <ListItemText 
+                  primary="GoalFinch"
+                  primaryTypographyProps={{
+                    variant: 'h6',
+                    sx: { 
+                      fontWeight: 'bold',
+                      color: 'rgb(33, 33, 33)',
+                    }
+                  }}
+                  sx={{ 
+                    opacity: open ? 1 : 0,
+                    m: 0
+                  }} 
+                />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
             {menuItems.map((item) => (
               <>
                 {item.text === 'Dashboard' && <Divider />}
@@ -194,6 +177,10 @@ export default function Layout({ children }: LayoutProps) {
                         mr: open ? 3 : 'auto',
                         justifyContent: 'center',
                         color: 'rgb(33, 33, 33)',
+                        transition: theme.transitions.create('margin-right', {
+                          easing: theme.transitions.easing.sharp,
+                          duration: theme.transitions.duration.enteringScreen,
+                        }),
                       }}
                     >
                       {item.icon}
