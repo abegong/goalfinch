@@ -37,8 +37,6 @@ const menuItems = [
 ];
 
 interface LayoutContextType {
-  headerVisible: boolean;
-  setHeaderVisible: (visible: boolean) => void;
   drawerOpen: boolean;
   setDrawerOpen: (open: boolean) => void;
   drawerVisible: boolean;
@@ -46,8 +44,6 @@ interface LayoutContextType {
 }
 
 export const LayoutContext = createContext<LayoutContextType>({
-  headerVisible: true,
-  setHeaderVisible: () => {},
   drawerOpen: true,
   setDrawerOpen: () => {},
   drawerVisible: true,
@@ -61,7 +57,6 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const theme = useTheme();
-  const [headerVisible, setHeaderVisibleState] = useState(true);
   const [open, setOpen] = useState(true);
   const [drawerVisible, setDrawerVisible] = useState(location.pathname !== '/dashboard');
 
@@ -75,8 +70,6 @@ export default function Layout({ children }: LayoutProps) {
   
   return (
     <LayoutContext.Provider value={{ 
-      headerVisible, 
-      setHeaderVisible: setHeaderVisibleState,
       drawerOpen: open,
       setDrawerOpen: setOpen,
       drawerVisible,
@@ -253,7 +246,7 @@ export default function Layout({ children }: LayoutProps) {
             display: 'flex', 
             alignItems: 'center', 
             padding: theme.spacing(1),
-            ...(headerVisible && location.pathname !== '/dashboard' ? {} : { display: 'none' })
+            ...(drawerVisible && location.pathname !== '/dashboard' ? {} : { display: 'none' })
           }}>
             <IconButton
               color="inherit"

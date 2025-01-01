@@ -25,8 +25,6 @@ const Dashboard: React.FC = () => {
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { 
-    headerVisible, 
-    setHeaderVisible, 
     drawerOpen, 
     setDrawerOpen,
     drawerVisible,
@@ -56,7 +54,6 @@ const Dashboard: React.FC = () => {
   const handleColorClick = (index: number) => {
     setNextColorIndex(index);
     setIsTransitioning(true);
-    setHeaderVisible(false);
     setDrawerOpen(false);
     setDrawerVisible(false);
   };
@@ -65,7 +62,6 @@ const Dashboard: React.FC = () => {
     const newState = !drawerVisible;
     setDrawerVisible(newState);
     setDrawerOpen(newState);
-    setHeaderVisible(newState);
   };
 
   const colorBlockStyles = {
