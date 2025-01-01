@@ -21,7 +21,7 @@ import {
   Settings as SettingsIcon,
   MonitorHeart as DashboardIcon,
   ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon
+  ExpandCircleDown as ChevronIcon,
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -168,18 +168,6 @@ export default function Layout({ children }: LayoutProps) {
                 </Link>
               </Box>
             </Box>
-            <IconButton 
-              onClick={open ? handleDrawerClose : handleDrawerOpen}
-              sx={{
-                transform: open ? 'rotate(0deg)' : 'rotate(180deg)',
-                transition: theme.transitions.create('transform', {
-                  easing: theme.transitions.easing.sharp,
-                  duration: theme.transitions.duration.enteringScreen,
-                }),
-              }}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
           </Box>
           <Divider />
           <List>
@@ -219,6 +207,27 @@ export default function Layout({ children }: LayoutProps) {
               </>
             ))}
           </List>
+          <Box sx={{ 
+            mt: 'auto', 
+            mb: 1,
+            display: 'flex',
+            justifyContent: 'flex-start',
+            pl: 1
+          }}>
+            <IconButton 
+              onClick={open ? handleDrawerClose : handleDrawerOpen}
+              sx={{
+                transform: open ? 'rotate(0deg)' : 'rotate(-90deg)',
+                transition: theme.transitions.create('transform', {
+                  easing: theme.transitions.easing.sharp,
+                  duration: theme.transitions.duration.enteringScreen,
+                }),
+                padding: '12px',
+              }}
+            >
+              <ChevronIcon sx={{ fontSize: 36 }} />
+            </IconButton>
+          </Box>
         </Drawer>
         <Box
           component="main"
