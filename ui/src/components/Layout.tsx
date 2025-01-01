@@ -184,36 +184,39 @@ export default function Layout({ children }: LayoutProps) {
           <Divider />
           <List>
             {menuItems.map((item) => (
-              <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
-                <ListItemButton
-                  component={Link}
-                  to={item.path}
-                  selected={location.pathname === item.path}
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon 
+              <>
+                {item.text === 'Dashboard' && <Divider />}
+                <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
+                  <ListItemButton
+                    component={Link}
+                    to={item.path}
+                    selected={location.pathname === item.path}
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
-                      color: 'rgb(33, 33, 33)',
+                      minHeight: 48,
+                      justifyContent: open ? 'initial' : 'center',
+                      px: 2.5,
                     }}
                   >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={item.text} 
-                    sx={{ 
-                      opacity: open ? 1 : 0,
-                      color: 'rgb(33, 33, 33)',
-                    }} 
-                  />
-                </ListItemButton>
-              </ListItem>
+                    <ListItemIcon 
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                        color: 'rgb(33, 33, 33)',
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={item.text} 
+                      sx={{ 
+                        opacity: open ? 1 : 0,
+                        color: 'rgb(33, 33, 33)',
+                      }} 
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </>
             ))}
           </List>
         </Drawer>
