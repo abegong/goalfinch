@@ -9,16 +9,17 @@ import {
   Tooltip
 } from '@mui/material';
 import {
-  Dashboard,
-  Flag as GoalIcon,
-  Event as EventIcon,
-  Assessment as ReportIcon,
-  Input as InputIcon
+  // Dashboard,
+  EmojiEvents as GoalIcon,
+  EventAvailable as EventIcon,
+  Article as ReportIcon,
+  CheckCircle as InputIcon,
+  MonitorHeart as DashboardIcon
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const menuItems = [
-  { text: 'Dashboard', icon: <Dashboard />, path: '/' },
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
   { text: 'Goals', icon: <GoalIcon />, path: '/goals' },
   { text: 'Events', icon: <EventIcon />, path: '/events' },
   { text: 'Reports', icon: <ReportIcon />, path: '/reports' },
@@ -98,7 +99,7 @@ export default function Layout({ children }: LayoutProps) {
                 transition: 'all 0.2s'
               }}
             >
-              <Dashboard />
+              <DashboardIcon />
             </IconButton>
           </Tooltip>
         </Toolbar>
