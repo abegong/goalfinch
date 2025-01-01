@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import './App.css';
-import './theme.css';
 
 // Placeholder components for each route
 const Dashboard = () => <div>Dashboard Page</div>;
