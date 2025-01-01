@@ -59,14 +59,6 @@ export default function Layout({ children }: LayoutProps) {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [drawerVisible, setDrawerVisible] = useState(location.pathname !== '/dashboard');
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
   
   return (
     <LayoutContext.Provider value={{ 
@@ -250,7 +242,7 @@ export default function Layout({ children }: LayoutProps) {
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerOpen}
+              onClick={() => setOpen(true)}
               edge="start"
               sx={{ mr: 2, ...(open && { display: 'none' }) }}
             >
