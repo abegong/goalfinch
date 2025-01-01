@@ -12,16 +12,18 @@ import {
   EventAvailable as EventIcon,
   Article as ReportIcon,
   CheckCircle as InputIcon,
+  Settings as SettingsIcon,
   MonitorHeart as DashboardIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 
 const menuItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
   { text: 'Goals', icon: <GoalIcon />, path: '/goals' },
-  { text: 'Events', icon: <EventIcon />, path: '/events' },
-  { text: 'Reports', icon: <ReportIcon />, path: '/reports' },
-  { text: 'Input', icon: <InputIcon />, path: '/input' },
+  { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
+  // { text: 'Events', icon: <EventIcon />, path: '/events' },
+  // { text: 'Reports', icon: <ReportIcon />, path: '/reports' },
+  // { text: 'Input', icon: <InputIcon />, path: '/input' },
+  // { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
 ];
 
 interface LayoutProps {
@@ -56,7 +58,7 @@ export default function Layout({ children }: LayoutProps) {
               />
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {menuItems.slice(1).map((item) => (
+              {menuItems.map((item) => (
                 <Tooltip 
                   key={item.text} 
                   title={item.text}
