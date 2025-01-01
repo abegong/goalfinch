@@ -1,5 +1,6 @@
 interface SlideData {
   // Define your data structure here
+  slide_list: any[]
 }
 
 const preprocessRowCounts = (data: any[]) => {
