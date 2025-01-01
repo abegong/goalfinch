@@ -7,14 +7,14 @@ export enum SlideType {
   LOOK_FORWARD_CHART = "look-forward-chart",
 }
 
-interface Captions {
+export interface Captions {
   top_center?: string;
   bottom_center?: string;
   bottom_right?: string;
   bottom_left?: string;
 }
 
-interface Slide {
+export interface Slide {
   type: SlideType;
   content?: any;
   captions?: Captions;
@@ -24,7 +24,7 @@ interface Slide {
   units?: string;
 }
 
-interface LookForwardChartSlide extends Slide {
+export interface LookForwardChartSlide extends Slide {
     type: SlideType.LOOK_FORWARD_CHART;
     content: any;
     captions: Captions;
@@ -34,22 +34,22 @@ interface LookForwardChartSlide extends Slide {
     units: string;
 }
 
-interface NestedImagesSlide extends Slide {
+export interface NestedImagesSlide extends Slide {
     type: SlideType.NESTED_IMAGES;
 }
 
-interface NestedChartsSlide extends Slide {
+export interface NestedChartsSlide extends Slide {
     type: SlideType.NESTED_CHARTS;
     content: LookForwardChartSlide[];
 }
 
-interface BulletListSlide extends Slide {
+export interface BulletListSlide extends Slide {
     type: SlideType.BULLET_LIST;
     content: string[];
     captions: any;
 }
 
-interface NestedBulletListSlide extends Slide {
+export interface NestedBulletListSlide extends Slide {
     type: SlideType.NESTED_BULLET_LIST;
     content: string[];
     captions: Captions;
