@@ -214,7 +214,7 @@ export default function Layout({ children }: LayoutProps) {
           sx={{
             flexGrow: 1,
             padding: theme.spacing(3),
-            marginLeft: appControlBarVisible ? (open ? `${drawerWidth}px` : `${theme.spacing(9)}px`) : '0px',
+            marginLeft: `0px`,
           }}
         >
           <Box sx={{ 

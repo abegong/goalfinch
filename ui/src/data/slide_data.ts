@@ -1,3 +1,12 @@
+//Enumerate valid the slide_types
+export enum SlideType {
+  BULLET_LIST = "bullet-list",
+  NESTED_IMAGES = "nested-images",
+  NESTED_CHARTS = "nested-charts",
+  NESTED_BULLET_LIST = "nested-bullet-list",
+  LOOK_FORWARD_CHART = "look-forward-chart",
+}
+
 interface Captions {
   top_center?: string;
   bottom_center?: string;
@@ -6,7 +15,7 @@ interface Captions {
 }
 
 interface Slide {
-  type: string;
+  type: SlideType;
   content?: any;
   captions?: Captions;
   url?: string;
@@ -16,7 +25,7 @@ interface Slide {
 }
 
 interface LookForwardChartSlide extends Slide {
-    type: string;
+    type: SlideType.LOOK_FORWARD_CHART;
     content: any;
     captions: Captions;
     url: string;
@@ -26,18 +35,24 @@ interface LookForwardChartSlide extends Slide {
 }
 
 interface NestedImagesSlide extends Slide {
-    type: string;
+    type: SlideType.NESTED_IMAGES;
 }
 
 interface NestedChartsSlide extends Slide {
-    type: string;
+    type: SlideType.NESTED_CHARTS;
     content: LookForwardChartSlide[];
 }
 
 interface BulletListSlide extends Slide {
-    type: string;
+    type: SlideType.BULLET_LIST;
     content: string[];
     captions: any;
+}
+
+interface NestedBulletListSlide extends Slide {
+    type: SlideType.NESTED_BULLET_LIST;
+    content: string[];
+    captions: Captions;
 }
 
 const preprocessRowCounts = (data: any[]) => {
@@ -123,7 +138,7 @@ export const slideData: Slide[] = [
         "type": "nested-images",
     } as NestedImagesSlide,
     {
-        "type": "checkbox-list",
+        "type": "bullet-list",
         "content": [
             "Professional milestone 1",
             "Personal project planning",
@@ -254,7 +269,7 @@ export const slideData: Slide[] = [
         "captions": {
             "bottom_right": "family goals"
         }
-    } as BulletListSlide,
+    } as NestedBulletListSlide,
     {
         "type": "nested-images",
     } as NestedImagesSlide,
