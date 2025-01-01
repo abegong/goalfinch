@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Settings from './components/Settings';
+import Dashboard from './components/Dashboard';
 import './App.css';
 
 // Placeholder components for each route
@@ -10,7 +11,6 @@ const Goals = () => <div>Goals Page</div>;
 // const Events = () => <div>Events Page</div>;
 // const Reports = () => <div>Reports Page</div>;
 // const Input = () => <div>Input Page</div>;
-const Dashboard = () => <div>Dashboard Page</div>;
 
 function App() {
   return (
