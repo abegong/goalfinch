@@ -23,11 +23,10 @@ const Dashboard: React.FC = () => {
   const [visibleColorIndex, setVisibleColorIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [dashboardControlBarVisible, setDashboardControlBarVisible] = useState(false);
   const { 
-    appControlBarOpen, 
-    setAppControlBarOpen,
     appControlBarVisible,
-    setAppControlBarVisible
+    setAppControlBarVisible,
   } = useContext(LayoutContext);
 
   useEffect(() => {
@@ -53,14 +52,14 @@ const Dashboard: React.FC = () => {
   const handleColorClick = (index: number) => {
     setNextColorIndex(index);
     setIsTransitioning(true);
-    setAppControlBarOpen(false);
+    setDashboardControlBarVisible(false);
     setAppControlBarVisible(false);
   };
 
   const handleMenuClick = () => {
     const newState = !appControlBarVisible;
     setAppControlBarVisible(newState);
-    setAppControlBarOpen(newState);
+    setDashboardControlBarVisible(newState);
   };
 
   const colorBlockStyles = {
@@ -114,8 +113,8 @@ const Dashboard: React.FC = () => {
         component="aside"
         aria-label="Dashboard Control Bar"
         anchor="right"
-        open={appControlBarOpen}
-        onClose={() => setAppControlBarOpen(false)}
+        open={dashboardControlBarVisible}
+        onClose={() => setDashboardControlBarVisible(false)}
         hideBackdrop={true}
         variant="persistent"
       >
