@@ -33,7 +33,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <CssBaseline />
-      <AppBar position="fixed">
+      <AppBar position="fixed" sx={{ bgcolor: 'rgb(255, 193, 5)' }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
@@ -43,12 +43,12 @@ export default function Layout({ children }: LayoutProps) {
                 style={{ 
                   height: '64px',
                   width: 'auto',
-                  marginRight: '12px'
+                  marginRight: '12px',
+                  backgroundColor: 'rgb(255, 255, 255)',
+                  borderRadius: '32px',
+                  border: '4px solid rgb(255, 193, 5)',
                 }} 
               />
-              <Typography variant="h6" noWrap component="div">
-                GoalFinch
-              </Typography>
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>
               {menuItems.slice(1).map((item) => (
@@ -56,9 +56,9 @@ export default function Layout({ children }: LayoutProps) {
                   <IconButton
                     component={Link}
                     to={item.path}
-                    color="inherit"
                     size="large"
                     sx={{ 
+                      color: 'rgb(33, 33, 33)',
                       padding: '12px',
                       '& .MuiSvgIcon-root': {
                         fontSize: '2.4rem',
@@ -82,9 +82,9 @@ export default function Layout({ children }: LayoutProps) {
             <IconButton
               component={Link}
               to="/"
-              color="inherit"
               size="large"
               sx={{ 
+                color: 'rgb(33, 33, 33)',
                 padding: '12px',
                 '& .MuiSvgIcon-root': {
                   fontSize: '2.4rem',
