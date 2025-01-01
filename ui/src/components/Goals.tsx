@@ -39,7 +39,11 @@ const Goals: React.FC = () => {
           minHeight: 'auto',
         },
         [`& .${timelineOppositeContentClasses.root}`]: {
-          flex: 0.0,
+          flex: '0 0 150px',
+          maxWidth: '150px',
+          padding: '16px 8px',
+          marginTop: 0,
+          marginBottom: 0
         },
       }}
     >
