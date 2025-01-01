@@ -10,7 +10,6 @@ import {
   ListItemText,
   ListItemButton,
   Divider,
-  Typography,
   useTheme
 } from '@mui/material';
 import {
@@ -20,7 +19,6 @@ import {
   CheckCircle as InputIcon,
   Settings as SettingsIcon,
   MonitorHeart as DashboardIcon,
-  ChevronLeft as ChevronLeftIcon,
   ExpandCircleDown as ChevronIcon,
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
