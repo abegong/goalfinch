@@ -14,7 +14,7 @@ import {
   CheckCircle as InputIcon,
   MonitorHeart as DashboardIcon
 } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
@@ -29,6 +29,8 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const location = useLocation();
+  
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <CssBaseline />
@@ -63,6 +65,13 @@ export default function Layout({ children }: LayoutProps) {
                     sx={{ 
                       color: 'rgb(33, 33, 33)',
                       padding: '12px',
+                      position: 'relative',
+                      backgroundColor: location.pathname === item.path ? 'rgba(255, 255, 255, 0.4)' : 'transparent',
+                      borderRadius: '50%',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                        transform: 'scale(1.1)'
+                      },
                       '& .MuiSvgIcon-root': {
                         fontSize: '2.4rem',
                         fontWeight: 'bold',
@@ -89,6 +98,12 @@ export default function Layout({ children }: LayoutProps) {
               sx={{ 
                 color: 'rgb(33, 33, 33)',
                 padding: '12px',
+                position: 'relative',
+                backgroundColor: location.pathname === '/dashboard' ? 'rgba(255, 255, 255, 0.5)' : 'transparent',
+                borderRadius: '50%',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.4)'
+                },
                 '& .MuiSvgIcon-root': {
                   fontSize: '2.4rem',
                   fontWeight: 'bold',
