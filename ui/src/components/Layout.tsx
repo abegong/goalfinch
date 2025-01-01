@@ -112,10 +112,6 @@ export default function Layout({ children }: LayoutProps) {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
-                    transition: theme.transitions.create('margin-right', {
-                      easing: theme.transitions.easing.sharp,
-                      duration: theme.transitions.duration.enteringScreen,
-                    }),
                   }}
                 >
                   <Box 
@@ -179,10 +175,6 @@ export default function Layout({ children }: LayoutProps) {
                         mr: open ? 3 : 'auto',
                         justifyContent: 'center',
                         color: 'rgb(33, 33, 33)',
-                        transition: theme.transitions.create('margin-right', {
-                          easing: theme.transitions.easing.sharp,
-                          duration: theme.transitions.duration.enteringScreen,
-                        }),
                       }}
                     >
                       {item.icon}
@@ -210,10 +202,6 @@ export default function Layout({ children }: LayoutProps) {
               onClick={() => setOpen(!open)}
               sx={{
                 transform: open ? 'rotate(0deg)' : 'rotate(-90deg)',
-                transition: theme.transitions.create('transform', {
-                  easing: theme.transitions.easing.sharp,
-                  duration: theme.transitions.duration.enteringScreen,
-                }),
                 padding: '12px',
               }}
             >
@@ -226,10 +214,6 @@ export default function Layout({ children }: LayoutProps) {
           sx={{
             flexGrow: 1,
             padding: theme.spacing(3),
-            transition: theme.transitions.create('margin', {
-              easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
             marginLeft: appControlBarVisible ? (open ? `${drawerWidth}px` : `${theme.spacing(9)}px`) : '0px',
           }}
         >

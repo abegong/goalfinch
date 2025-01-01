@@ -52,12 +52,10 @@ const Dashboard: React.FC = () => {
   const handleColorClick = (index: number) => {
     setNextColorIndex(index);
     setIsTransitioning(true);
-    setDashboardControlBarVisible(false);
-    setAppControlBarVisible(false);
   };
 
   const handleMenuClick = () => {
-    const newState = !appControlBarVisible;
+    const newState = !dashboardControlBarVisible;
     setAppControlBarVisible(newState);
     setDashboardControlBarVisible(newState);
   };
