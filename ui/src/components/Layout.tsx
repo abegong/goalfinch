@@ -21,8 +21,7 @@ import {
   Settings as SettingsIcon,
   MonitorHeart as DashboardIcon,
   ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-  Menu as MenuIcon
+  ChevronRight as ChevronRightIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -98,36 +97,88 @@ export default function Layout({ children }: LayoutProps) {
         >
           <Box sx={{ 
             display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between',
-            padding: theme.spacing(1),
-            minHeight: theme.spacing(8),
+            flexDirection: 'column',
+            alignItems: 'center',
+            py: 2,
           }}>
-            {open && (
-              <Box 
-                component={Link}
-                to="/"
-                sx={{ display: 'flex', alignItems: 'center' }}
-              >
-                <img 
-                  src="/goldfinch-logo.svg" 
-                  alt="Goalfinch Logo" 
+            <Box sx={{ 
+              mb: 2,
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+            }}>
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1 
+              }}>
+                <Link 
+                  to="/"
                   style={{ 
-                    height: '48px',
-                    width: 'auto',
-                    marginRight: '12px',
-                    backgroundColor: 'rgb(255, 255, 255)',
-                    borderRadius: '24px',
-                    border: '4px solid rgb(255, 193, 5)',
-                  }} 
-                />
-                <Typography variant="h6" noWrap>
-                  Goalfinch
-                </Typography>
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                  }}
+                >
+                  <Box 
+                    sx={{ 
+                      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                      borderRadius: '50%',
+                      padding: '0px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img 
+                      src="/goldfinch-logo.svg" 
+                      alt="Goalfinch Logo" 
+                      style={{ 
+                        width: '64px',
+                        height: 'auto',
+                        transition: theme.transitions.create(['width', 'max-width'], {
+                          easing: theme.transitions.easing.sharp,
+                          duration: theme.transitions.duration.enteringScreen,
+                        }),
+                      }} 
+                    />
+                  </Box>
+                  {open && (
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 'bold',
+                        opacity: open ? 1 : 0,
+                        transition: theme.transitions.create('opacity', {
+                          easing: theme.transitions.easing.sharp,
+                          duration: theme.transitions.duration.enteringScreen,
+                        }),
+                        color: 'inherit',
+                      }}
+                    >
+                      GoalFinch
+                    </Typography>
+                  )}
+                </Link>
               </Box>
-            )}
-            <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
-              {open ? (theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />) : <MenuIcon />}
+            </Box>
+            <IconButton 
+              onClick={open ? handleDrawerClose : handleDrawerOpen}
+              sx={{
+                transform: open ? 'rotate(0deg)' : 'rotate(180deg)',
+                transition: theme.transitions.create('transform', {
+                  easing: theme.transitions.easing.sharp,
+                  duration: theme.transitions.duration.enteringScreen,
+                }),
+              }}
+            >
+              <ChevronLeftIcon />
             </IconButton>
           </Box>
           <Divider />
