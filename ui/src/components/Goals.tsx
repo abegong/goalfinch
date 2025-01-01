@@ -68,6 +68,28 @@ const Goals: React.FC = () => {
     //formatSlideType(slide.type);
   };
 
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    e.dataTransfer.setData('text/plain', index.toString());
+    e.stopPropagation();
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const sourceIndex = parseInt(e.dataTransfer.getData('text/plain'));
+    if (sourceIndex === targetIndex) return;
+
+    const newSlides = [...slides];
+    const [removed] = newSlides.splice(sourceIndex, 1);
+    newSlides.splice(targetIndex, 0, removed);
+    setSlides(newSlides);
+  };
+
   return (
     <Timeline
       sx={{
@@ -123,6 +145,10 @@ const Goals: React.FC = () => {
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineDot 
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, index)}
               sx={{ 
                 p: 0,
                 borderRadius: '6px',
@@ -130,7 +156,11 @@ const Goals: React.FC = () => {
                 height: '50px',
                 justifyContent: 'center',
                 transition: 'transform 0.2s, background-color 0.2s',
-                backgroundColor: 'text.secondary'
+                backgroundColor: 'text.secondary',
+                cursor: 'grab',
+                '&:active': {
+                  cursor: 'grabbing'
+                }
               }}
             >
               <Box sx={{ 
