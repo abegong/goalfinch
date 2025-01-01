@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, createContext, useContext } from 'react';
 import { 
   AppBar, 
   Box, 
@@ -26,17 +26,36 @@ const menuItems = [
   // { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
 ];
 
+interface LayoutContextType {
+  headerVisible: boolean;
+  setHeaderVisible: (visible: boolean) => void;
+}
+
+export const LayoutContext = createContext<LayoutContextType>({
+  headerVisible: true,
+  setHeaderVisible: () => {},
+});
+
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
+  const [headerVisible, setHeaderVisibleState] = useState(true);
   
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      <CssBaseline />
-      <AppBar position="fixed" sx={{ bgcolor: 'rgb(255, 193, 5)' }}>
+    <LayoutContext.Provider value={{ headerVisible, setHeaderVisible: setHeaderVisibleState }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <CssBaseline />
+        <AppBar 
+          position="fixed" 
+          sx={{ 
+            bgcolor: 'rgb(255, 193, 5)',
+            transform: headerVisible ? 'translateY(0)' : 'translateY(-100%)',
+            transition: 'transform 0.3s ease-in-out'
+          }}
+        >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box 
@@ -149,12 +168,13 @@ export default function Layout({ children }: LayoutProps) {
       <Box component="main" sx={{ 
         flexGrow: 1, 
         p: 3, 
-        mt: '64px',
+        mt: headerVisible ? '64px' : '0px',
         bgcolor: '#f5f5f5',
         minHeight: '100vh'
       }}>
         {children}
       </Box>
     </Box>
+  </LayoutContext.Provider>
   );
 }

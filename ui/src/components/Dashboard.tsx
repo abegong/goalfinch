@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Typography, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { LayoutContext } from './Layout';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -23,6 +25,7 @@ const Dashboard: React.FC = () => {
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const {headerVisible, setHeaderVisible } = useContext(LayoutContext);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -47,11 +50,23 @@ const Dashboard: React.FC = () => {
   const handleColorClick = (index: number) => {
     setNextColorIndex(index);
     setIsTransitioning(true);
+    setHeaderVisible(false);
     setDrawerOpen(false);
   };
 
-  const toggleDrawer = (open: boolean) => {
-    setDrawerOpen(open);
+  const handleMenuClick = () => {
+    if( drawerOpen ) {
+      setDrawerOpen(false);
+    } else {
+      setDrawerOpen(true);
+    }
+    if (headerVisible) {
+      // setDrawerOpen(false);
+      setHeaderVisible(false);
+    } else {
+      // setDrawerOpen(true);
+      setHeaderVisible(true);
+    }
   };
 
   const colorBlockStyles = {
@@ -85,7 +100,7 @@ const Dashboard: React.FC = () => {
       }}
     >
       <IconButton
-        onClick={() => toggleDrawer(true)}
+        onClick={handleMenuClick}
         sx={{ 
           position: 'fixed',
           bottom: 24,
@@ -101,11 +116,10 @@ const Dashboard: React.FC = () => {
       >
         <MenuIcon sx={{ fontSize: 32 }} />
       </IconButton>
-      
       <Drawer
         anchor="left"
         open={drawerOpen}
-        onClose={() => toggleDrawer(false)}
+        onClose={() => setDrawerOpen(false)}
       >
         <List sx={{ width: 250 }}>
           {colors.map((color, index) => (
