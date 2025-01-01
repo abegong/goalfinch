@@ -101,7 +101,8 @@ const Goals: React.FC = () => {
                 width: '50px',
                 height: '50px',
                 justifyContent: 'center',
-                transition: 'transform 0.2s, background-color 0.2s'
+                transition: 'transform 0.2s, background-color 0.2s',
+                backgroundColor: 'text.secondary'
               }}
             >
               <Box sx={{ 
