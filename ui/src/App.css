@@ -45,3 +45,21 @@
     transform: rotate(360deg);
   }
 }
+
+/* Appbar icon styles */
+.MuiListItemIcon-root {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.MuiListItemIcon-root svg {
+  font-size: 28px !important;
+}
+
+.MuiListItemButton-root.Mui-selected .MuiListItemIcon-root {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+}
