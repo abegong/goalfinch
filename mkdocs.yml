@@ -1,1 +1,20 @@
-site_name: My Docs
+site_name: GoalFinch Documentation
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: amber
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: amber
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
