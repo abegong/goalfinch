@@ -5,11 +5,9 @@ import {
   CssBaseline,
   IconButton,
   Toolbar, 
-  Typography,
   Tooltip
 } from '@mui/material';
 import {
-  // Dashboard,
   EmojiEvents as GoalIcon,
   EventAvailable as EventIcon,
   Article as ReportIcon,
@@ -37,7 +35,11 @@ export default function Layout({ children }: LayoutProps) {
       <AppBar position="fixed" sx={{ bgcolor: 'rgb(255, 193, 5)' }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
+            <Box 
+              component={Link}
+              to="/"
+              sx={{ display: 'flex', alignItems: 'center', mr: 3 }}
+            >
               <img 
                 src="/goldfinch-logo.svg" 
                 alt="Goalfinch Logo" 
@@ -82,7 +84,7 @@ export default function Layout({ children }: LayoutProps) {
           <Tooltip title="Dashboard">
             <IconButton
               component={Link}
-              to="/"
+              to="/dashboard"
               size="large"
               sx={{ 
                 color: 'rgb(33, 33, 33)',
