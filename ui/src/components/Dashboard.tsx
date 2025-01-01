@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Box, Typography, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { LayoutContext } from './Layout';
 
 const colors = [
