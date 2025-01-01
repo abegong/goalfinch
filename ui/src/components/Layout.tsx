@@ -58,6 +58,19 @@ export default function Layout({ children }: LayoutProps) {
                     to={item.path}
                     color="inherit"
                     size="large"
+                    sx={{ 
+                      padding: '12px',
+                      '& .MuiSvgIcon-root': {
+                        fontSize: '2.4rem',
+                        fontWeight: 'bold',
+                        stroke: 'currentColor',
+                        strokeWidth: 0.4
+                      },
+                      '&:hover .MuiSvgIcon-root': {
+                        transform: 'scale(1.1)'
+                      },
+                      transition: 'all 0.2s'
+                    }}
                   >
                     {item.icon}
                   </IconButton>
@@ -71,6 +84,19 @@ export default function Layout({ children }: LayoutProps) {
               to="/"
               color="inherit"
               size="large"
+              sx={{ 
+                padding: '12px',
+                '& .MuiSvgIcon-root': {
+                  fontSize: '2.4rem',
+                  fontWeight: 'bold',
+                  stroke: 'currentColor',
+                  strokeWidth: 0.4
+                },
+                '&:hover .MuiSvgIcon-root': {
+                  transform: 'scale(1.1)'
+                },
+                transition: 'all 0.2s'
+              }}
             >
               <Dashboard />
             </IconButton>
