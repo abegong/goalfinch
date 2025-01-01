@@ -1,11 +1,17 @@
 import React, { useState, createContext, useContext } from 'react';
 import { 
-  AppBar, 
   Box, 
   CssBaseline,
   IconButton,
-  Toolbar, 
-  Tooltip
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListItemButton,
+  Divider,
+  Typography,
+  useTheme
 } from '@mui/material';
 import {
   EmojiEvents as GoalIcon,
@@ -13,9 +19,14 @@ import {
   Article as ReportIcon,
   CheckCircle as InputIcon,
   Settings as SettingsIcon,
-  MonitorHeart as DashboardIcon
+  MonitorHeart as DashboardIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  Menu as MenuIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
+
+const drawerWidth = 240;
 
 const menuItems = [
   { text: 'Goals', icon: <GoalIcon />, path: '/goals' },
@@ -23,7 +34,7 @@ const menuItems = [
   // { text: 'Events', icon: <EventIcon />, path: '/events' },
   // { text: 'Reports', icon: <ReportIcon />, path: '/reports' },
   // { text: 'Input', icon: <InputIcon />, path: '/input' },
-  // { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
 ];
 
 interface LayoutContextType {
@@ -42,139 +53,156 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
+  const theme = useTheme();
   const [headerVisible, setHeaderVisibleState] = useState(true);
+  const [open, setOpen] = useState(true);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
   
   return (
     <LayoutContext.Provider value={{ headerVisible, setHeaderVisible: setHeaderVisibleState }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar 
-          position="fixed" 
-          sx={{ 
-            bgcolor: 'rgb(255, 193, 5)',
-            transform: headerVisible ? 'translateY(0)' : 'translateY(-100%)',
-            transition: 'transform 0.3s ease-in-out'
+        <Drawer
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              // width: drawerWidth,
+              boxSizing: 'border-box',
+              bgcolor: 'rgb(255, 193, 5)',
+              overflowX: 'hidden',
+              whiteSpace: 'nowrap',
+              transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+              ...(open ? {
+                width: drawerWidth,
+              } : {
+                width: theme.spacing(7),
+                [theme.breakpoints.up('sm')]: {
+                  width: theme.spacing(9),
+                },
+              }),
+            },
           }}
+          variant="permanent"
+          open={open}
         >
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box 
-              component={Link}
-              to="/"
-              sx={{ display: 'flex', alignItems: 'center', mr: 3 }}
-            >
-              <img 
-                src="/goldfinch-logo.svg" 
-                alt="Goalfinch Logo" 
-                style={{ 
-                  height: '64px',
-                  width: 'auto',
-                  marginRight: '12px',
-                  backgroundColor: 'rgb(255, 255, 255)',
-                  borderRadius: '32px',
-                  border: '4px solid rgb(255, 193, 5)',
-                }} 
-              />
-            </Box>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              {menuItems.map((item) => (
-                <Tooltip 
-                  key={item.text} 
-                  title={item.text}
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        fontSize: '1.1rem',
-                        padding: '8px 12px',
-                        bgcolor: 'rgba(0, 0, 0, 0.8)'
-                      }
-                    }
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            padding: theme.spacing(1),
+            minHeight: theme.spacing(8),
+          }}>
+            {open && (
+              <Box 
+                component={Link}
+                to="/"
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                <img 
+                  src="/goldfinch-logo.svg" 
+                  alt="Goalfinch Logo" 
+                  style={{ 
+                    height: '48px',
+                    width: 'auto',
+                    marginRight: '12px',
+                    backgroundColor: 'rgb(255, 255, 255)',
+                    borderRadius: '24px',
+                    border: '4px solid rgb(255, 193, 5)',
+                  }} 
+                />
+                <Typography variant="h6" noWrap>
+                  Goalfinch
+                </Typography>
+              </Box>
+            )}
+            <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
+              {open ? (theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />) : <MenuIcon />}
+            </IconButton>
+          </Box>
+          <Divider />
+          <List>
+            {menuItems.map((item) => (
+              <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                  component={Link}
+                  to={item.path}
+                  selected={location.pathname === item.path}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
                   }}
                 >
-                  <IconButton
-                    component={Link}
-                    to={item.path}
-                    size="large"
-                    sx={{ 
+                  <ListItemIcon 
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
                       color: 'rgb(33, 33, 33)',
-                      padding: '12px',
-                      position: 'relative',
-                      backgroundColor: location.pathname === item.path ? 'rgba(255, 255, 255, 0.4)' : 'transparent',
-                      borderRadius: '50%',
-                      '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.4)',
-                        transform: 'scale(1.1)'
-                      },
-                      '& .MuiSvgIcon-root': {
-                        fontSize: '2.4rem',
-                        fontWeight: 'bold',
-                        stroke: 'currentColor',
-                        strokeWidth: 0.4
-                      },
-                      '&:hover .MuiSvgIcon-root': {
-                        transform: 'scale(1.1)'
-                      },
-                      transition: 'all 0.2s'
                     }}
                   >
                     {item.icon}
-                  </IconButton>
-                </Tooltip>
-              ))}
-            </Box>
-          </Box>
-          <Tooltip 
-            title="Dashboard"
-            componentsProps={{
-              tooltip: {
-                sx: {
-                  fontSize: '1.1rem',
-                  padding: '8px 12px',
-                  bgcolor: 'rgba(0, 0, 0, 0.8)'
-                }
-              }
-            }}
-          >
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.text} 
+                    sx={{ 
+                      opacity: open ? 1 : 0,
+                      color: 'rgb(33, 33, 33)',
+                    }} 
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            padding: theme.spacing(3),
+            transition: theme.transitions.create('margin', {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.leavingScreen,
+            }),
+            marginLeft: `${theme.spacing(9)}px`,
+            ...(open && {
+              transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+              marginLeft: `${drawerWidth}px`,
+            }),
+          }}
+        >
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            padding: theme.spacing(1),
+            ...(headerVisible ? {} : { display: 'none' })
+          }}>
             <IconButton
-              component={Link}
-              to="/dashboard"
-              size="large"
-              sx={{ 
-                color: 'rgb(33, 33, 33)',
-                padding: '12px',
-                position: 'relative',
-                backgroundColor: location.pathname === '/dashboard' ? 'rgba(255, 255, 255, 0.5)' : 'transparent',
-                borderRadius: '50%',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.4)'
-                },
-                '& .MuiSvgIcon-root': {
-                  fontSize: '2.4rem',
-                  fontWeight: 'bold',
-                  stroke: 'currentColor',
-                  strokeWidth: 0.4
-                },
-                '&:hover .MuiSvgIcon-root': {
-                  transform: 'scale(1.1)'
-                },
-                transition: 'all 0.2s'
-              }}
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
             >
-              <DashboardIcon />
             </IconButton>
-          </Tooltip>
-        </Toolbar>
-      </AppBar>
-      <Box component="main" sx={{ 
-        flexGrow: 1, 
-        p: 3, 
-        mt: headerVisible ? '64px' : '0px',
-        bgcolor: '#f5f5f5',
-        minHeight: '100vh'
-      }}>
-        {children}
+          </Box>
+          {children}
+        </Box>
       </Box>
-    </Box>
-  </LayoutContext.Provider>
+    </LayoutContext.Provider>
   );
 }
