@@ -1,25 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
 import './App.css';
+
+// Placeholder components for each route
+const Dashboard = () => <div>Dashboard Page</div>;
+const Goals = () => <div>Goals Page</div>;
+const Events = () => <div>Events Page</div>;
+const Reports = () => <div>Reports Page</div>;
+const Input = () => <div>Input Page</div>;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/goals" element={<Goals />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/input" element={<Input />} />
+        </Routes>
+      </Layout>
+    </Router>
   );
 }
 
