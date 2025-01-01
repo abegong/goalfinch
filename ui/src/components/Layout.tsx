@@ -128,7 +128,7 @@ export default function Layout({ children }: LayoutProps) {
                 >
                   <Box 
                     sx={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                      backgroundColor: location.pathname === '/' ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, 0.5)',
                       borderRadius: '50%',
                       padding: '0px',
                       display: 'flex',
