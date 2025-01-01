@@ -37,17 +37,17 @@ const menuItems = [
 ];
 
 interface LayoutContextType {
-  drawerOpen: boolean;
-  setDrawerOpen: (open: boolean) => void;
-  drawerVisible: boolean;
-  setDrawerVisible: (visible: boolean) => void;
+  appControlBarOpen: boolean;
+  setAppControlBarOpen: (open: boolean) => void;
+  appControlBarVisible: boolean;
+  setAppControlBarVisible: (visible: boolean) => void;
 }
 
 export const LayoutContext = createContext<LayoutContextType>({
-  drawerOpen: true,
-  setDrawerOpen: () => {},
-  drawerVisible: true,
-  setDrawerVisible: () => {},
+  appControlBarOpen: true,
+  setAppControlBarOpen: () => {},
+  appControlBarVisible: true,
+  setAppControlBarVisible: () => {},
 });
 
 interface LayoutProps {
@@ -58,18 +58,20 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const theme = useTheme();
   const [open, setOpen] = useState(true);
-  const [drawerVisible, setDrawerVisible] = useState(location.pathname !== '/dashboard');
+  const [appControlBarVisible, setAppControlBarVisible] = useState(location.pathname !== '/dashboard');
   
   return (
     <LayoutContext.Provider value={{ 
-      drawerOpen: open,
-      setDrawerOpen: setOpen,
-      drawerVisible,
-      setDrawerVisible
+      appControlBarOpen: open,
+      setAppControlBarOpen: setOpen,
+      appControlBarVisible,
+      setAppControlBarVisible
     }}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Drawer
+          component="aside"
+          aria-label="App Control Bar"
           sx={{
             width: drawerWidth,
             flexShrink: 0,
@@ -82,7 +84,7 @@ export default function Layout({ children }: LayoutProps) {
               [theme.breakpoints.up('sm')]: {
                 width: open ? drawerWidth : theme.spacing(9),
               },
-              transform: drawerVisible ? 'none' : 'translateX(-100%)',
+              transform: appControlBarVisible ? 'none' : 'translateX(-100%)',
               transition: theme.transitions.create(['transform', 'width'], {
                 easing: theme.transitions.easing.easeOut,
                 duration: theme.transitions.duration.enteringScreen,
@@ -90,7 +92,7 @@ export default function Layout({ children }: LayoutProps) {
             },
           }}
           variant="persistent"
-          open={drawerVisible}
+          open={appControlBarVisible}
         >
           <List>
             <ListItem disablePadding sx={{ display: 'block' }}>
@@ -230,14 +232,14 @@ export default function Layout({ children }: LayoutProps) {
               easing: theme.transitions.easing.easeOut,
               duration: theme.transitions.duration.enteringScreen,
             }),
-            marginLeft: drawerVisible ? (open ? `${drawerWidth}px` : `${theme.spacing(9)}px`) : '0px',
+            marginLeft: appControlBarVisible ? (open ? `${drawerWidth}px` : `${theme.spacing(9)}px`) : '0px',
           }}
         >
           <Box sx={{ 
             display: 'flex', 
             alignItems: 'center', 
             padding: theme.spacing(1),
-            ...(drawerVisible && location.pathname !== '/dashboard' ? {} : { display: 'none' })
+            ...(appControlBarVisible && location.pathname !== '/dashboard' ? {} : { display: 'none' })
           }}>
             <IconButton
               color="inherit"
