@@ -135,6 +135,7 @@ export default function Layout({ children }: LayoutProps) {
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
+                    className="logo-container"
                   >
                     <img 
                       src="/goldfinch-logo.svg" 
