@@ -24,8 +24,14 @@ const Dashboard: React.FC = () => {
   const [visibleColorIndex, setVisibleColorIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const {headerVisible, setHeaderVisible } = useContext(LayoutContext);
+  const { 
+    headerVisible, 
+    setHeaderVisible, 
+    drawerOpen, 
+    setDrawerOpen,
+    drawerVisible,
+    setDrawerVisible
+  } = useContext(LayoutContext);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,17 +58,14 @@ const Dashboard: React.FC = () => {
     setIsTransitioning(true);
     setHeaderVisible(false);
     setDrawerOpen(false);
+    setDrawerVisible(false);
   };
 
   const handleMenuClick = () => {
-    const newDrawerState = !drawerOpen;
-    setDrawerOpen(newDrawerState);
-    
-    if (headerVisible) {
-      setHeaderVisible(false);
-    } else {
-      setHeaderVisible(true);
-    }
+    const newState = !drawerVisible;
+    setDrawerVisible(newState);
+    setDrawerOpen(newState);
+    setHeaderVisible(newState);
   };
 
   const colorBlockStyles = {

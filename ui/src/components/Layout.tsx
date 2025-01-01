@@ -39,11 +39,19 @@ const menuItems = [
 interface LayoutContextType {
   headerVisible: boolean;
   setHeaderVisible: (visible: boolean) => void;
+  drawerOpen: boolean;
+  setDrawerOpen: (open: boolean) => void;
+  drawerVisible: boolean;
+  setDrawerVisible: (visible: boolean) => void;
 }
 
 export const LayoutContext = createContext<LayoutContextType>({
   headerVisible: true,
   setHeaderVisible: () => {},
+  drawerOpen: true,
+  setDrawerOpen: () => {},
+  drawerVisible: true,
+  setDrawerVisible: () => {},
 });
 
 interface LayoutProps {
@@ -55,6 +63,7 @@ export default function Layout({ children }: LayoutProps) {
   const theme = useTheme();
   const [headerVisible, setHeaderVisibleState] = useState(true);
   const [open, setOpen] = useState(true);
+  const [drawerVisible, setDrawerVisible] = useState(location.pathname !== '/dashboard');
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -65,7 +74,14 @@ export default function Layout({ children }: LayoutProps) {
   };
   
   return (
-    <LayoutContext.Provider value={{ headerVisible, setHeaderVisible: setHeaderVisibleState }}>
+    <LayoutContext.Provider value={{ 
+      headerVisible, 
+      setHeaderVisible: setHeaderVisibleState,
+      drawerOpen: open,
+      setDrawerOpen: setOpen,
+      drawerVisible,
+      setDrawerVisible
+    }}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Drawer
@@ -81,13 +97,15 @@ export default function Layout({ children }: LayoutProps) {
               [theme.breakpoints.up('sm')]: {
                 width: open ? drawerWidth : theme.spacing(9),
               },
-              transition: theme.transitions.create('width', {
-                easing: theme.transitions.easing.sharp,
+              transform: drawerVisible ? 'none' : 'translateX(-100%)',
+              visibility: drawerVisible ? 'visible' : 'hidden',
+              transition: theme.transitions.create(['transform', 'width', 'visibility'], {
+                easing: theme.transitions.easing.easeOut,
                 duration: theme.transitions.duration.enteringScreen,
               }),
             },
           }}
-          variant="permanent"
+          variant="persistent"
           open={open}
         >
           <List>
@@ -225,24 +243,17 @@ export default function Layout({ children }: LayoutProps) {
             flexGrow: 1,
             padding: theme.spacing(3),
             transition: theme.transitions.create('margin', {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.leavingScreen,
+              easing: theme.transitions.easing.easeOut,
+              duration: theme.transitions.duration.enteringScreen,
             }),
-            marginLeft: `${theme.spacing(9)}px`,
-            ...(open && {
-              transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-              }),
-              marginLeft: `${drawerWidth}px`,
-            }),
+            marginLeft: drawerVisible ? (open ? `${drawerWidth}px` : `${theme.spacing(9)}px`) : '0px',
           }}
         >
           <Box sx={{ 
             display: 'flex', 
             alignItems: 'center', 
             padding: theme.spacing(1),
-            ...(headerVisible ? {} : { display: 'none' })
+            ...(headerVisible && location.pathname !== '/dashboard' ? {} : { display: 'none' })
           }}>
             <IconButton
               color="inherit"
