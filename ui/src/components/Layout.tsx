@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   AppBar, 
   Box, 
-  CssBaseline, 
-  Drawer, 
-  IconButton, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
-  ListItemText, 
+  CssBaseline,
+  IconButton,
   Toolbar, 
-  Typography 
+  Typography,
+  Tooltip
 } from '@mui/material';
 import {
-  Menu as MenuIcon,
   Dashboard,
   Flag as GoalIcon,
   Event as EventIcon,
@@ -21,12 +16,6 @@ import {
   Input as InputIcon
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-
-const drawerWidth = 240;
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
 
 const menuItems = [
   { text: 'Dashboard', icon: <Dashboard />, path: '/' },
@@ -36,96 +25,66 @@ const menuItems = [
   { text: 'Input', icon: <InputIcon />, path: '/input' },
 ];
 
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
 export default function Layout({ children }: LayoutProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const drawer = (
-    <div>
-      <Toolbar />
-      <List>
-        {menuItems.map((item) => (
-          <ListItem 
-            button 
-            key={item.text} 
-            component={Link} 
-            to={item.path}
-            sx={{
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              },
-            }}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Goalfinch
-          </Typography>
+      <AppBar position="fixed">
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
+              <img 
+                src="/goldfinch-logo.svg" 
+                alt="Goalfinch Logo" 
+                style={{ 
+                  height: '64px',
+                  width: 'auto',
+                  marginRight: '12px'
+                }} 
+              />
+              <Typography variant="h6" noWrap component="div">
+                GoalFinch
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              {menuItems.slice(1).map((item) => (
+                <Tooltip key={item.text} title={item.text}>
+                  <IconButton
+                    component={Link}
+                    to={item.path}
+                    color="inherit"
+                    size="large"
+                  >
+                    {item.icon}
+                  </IconButton>
+                </Tooltip>
+              ))}
+            </Box>
+          </Box>
+          <Tooltip title="Dashboard">
+            <IconButton
+              component={Link}
+              to="/"
+              color="inherit"
+              size="large"
+            >
+              <Dashboard />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          mt: 8
+        }}
       >
-        <Toolbar />
         {children}
       </Box>
     </Box>
