@@ -1,21 +1,30 @@
-# goalfinch
-Cheap and flexible tools for personal goal tracking
+# Goal Finch
 
-## Design principles
+A simple, flexible progress tracker for personal goals.
+        
+## Features
 
-* Flexible and extensible
-* Hosting is cheap and easy to set up
-* Personal dashboard
+* Low-key visual reminders to help you stay on track.
+* Simple setup, with a ton of flexibility.
+* You can track virtually anything.
+* Complete control of personal data
+* Open source and extensible
 
-## Manifest
+## Developer setup
 
+
+
+## Code manifest
+
+```
 site/
 docs/
 server/
 ui/
 scripts/
+```
 
-## Setup
+## Contributing
 
 * MongoDB
 * Server
