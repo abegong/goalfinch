@@ -4,6 +4,7 @@ import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineC
 import { Card, CardContent, CardHeader, Typography, Box } from '@mui/material';
 import SlideConfig, { getSlideIcon } from './SlideConfig';
 import { Add } from '@mui/icons-material';
+import { isConstructorDeclaration } from 'typescript';
 
 const Goals: React.FC = () => {
   const [slides, setSlides] = useState<Slide[]>(slideData);
@@ -31,8 +32,8 @@ const Goals: React.FC = () => {
     handleSlideOrderChange(newSlides);
     
     // Update expanded and animating states
-    setExpandedItems([...expandedItems, true]);
-    setAnimatingItems([...animatingItems, true]);
+    setExpandedItems([...expandedItems, false]);
+    setAnimatingItems([...animatingItems, false]);
   };
 
   const toggleExpanded = (index: number) => {
@@ -43,16 +44,17 @@ const Goals: React.FC = () => {
     
     if (expandedItems[index]) {
       // Start collapsing animation
-      newAnimatingItems[index] = true;
-      setAnimatingItems(newAnimatingItems);
+      newExpandedItems[index] = false;
+      // newAnimatingItems[index] = true;
     } else {
       // Immediately show and start expanding animation
       newExpandedItems[index] = true;
-      newAnimatingItems[index] = true;
-      setExpandedItems(newExpandedItems);
-      setAnimatingItems(newAnimatingItems);
+      // newAnimatingItems[index] = true;
     }
-  };
+
+    setExpandedItems(newExpandedItems);
+    setAnimatingItems(newAnimatingItems);
+};
 
   const handleTransitionEnd = (index: number) => {
     const newExpandedItems = [...expandedItems];
@@ -68,12 +70,6 @@ const Goals: React.FC = () => {
     setAnimatingItems(newAnimatingItems);
   };
 
-  const formatSlideType = (type: string) => {
-    return type.split('-').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-  };
-
   const getSlideName = (slide: Slide) => {
     if (slide.captions) {
       // Check all caption fields in order of preference
@@ -85,7 +81,6 @@ const Goals: React.FC = () => {
       }
     }
     return null; // Return empty string if no caption is found or slide has no caption
-    //formatSlideType(slide.type);
   };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -166,10 +161,12 @@ const Goals: React.FC = () => {
       {slides.map((slide, index) => (
         <TimelineItem 
           key={index}
-          sx={{ cursor: 'pointer' }}
-          onClick={() => toggleExpanded(index)}
+          sx={{ cursor: 'default' }}
         >
-          <TimelineOppositeContent>
+          <TimelineOppositeContent
+            onClick={() => toggleExpanded(index)}
+            sx={{ cursor: 'pointer' }}
+          >
             {getSlideName(slide) && (
               <Typography 
                 variant="body2" 
@@ -191,10 +188,15 @@ const Goals: React.FC = () => {
           <TimelineSeparator>
             <TimelineDot 
               draggable
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleExpanded(index);
+              }}
               onDragStart={(e) => handleDragStart(e, index)}
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, index)}
               sx={{ 
+                cursor: 'pointer',
                 p: 0,
                 borderRadius: '6px',
                 width: '50px',
@@ -202,7 +204,6 @@ const Goals: React.FC = () => {
                 justifyContent: 'center',
                 transition: 'transform 0.2s, background-color 0.2s',
                 backgroundColor: 'text.secondary',
-                cursor: 'grab',
                 '&:active': {
                   cursor: 'grabbing'
                 }
