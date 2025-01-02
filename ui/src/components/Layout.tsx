@@ -55,7 +55,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const theme = useTheme();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [appControlBarVisible, setAppControlBarVisible] = useState(location.pathname !== '/dashboard');
   
   return (
