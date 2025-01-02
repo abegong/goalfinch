@@ -1,4 +1,4 @@
-<img class="logo" src="goldfinch-logo.svg" alt="GoalFinch Logo" style="
+<img class="logo" src="img/goal-finch-logo.svg" alt="GoalFinch Logo" style="
     width: 200px;
     height: auto;
     display: block;
