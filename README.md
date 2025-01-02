@@ -1,5 +1,5 @@
 # Goal Finch
-<img class="logo" src="img/goal-finch-logo.svg" alt="GoalFinch Logo" align="right" style="width: 160px; right:20px; background-color: #FDF6E3; border: 2px solid #F4B942; border-radius: 50%;">
+<img class="logo" src="img/goal-finch-logo.svg" alt="Goal Finch Logo" align="right" style="width: 160px; right:20px; background-color: #FDF6E3; border: 2px solid #F4B942; border-radius: 50%;">
 
 A simple, flexible progress tracker for personal goals.
 
@@ -12,8 +12,8 @@ Features:
 
 ## Links
 
-* [www.goalfinch.com](www.goalfinch.com): The app is hosted here
-* [docs.goalfinch.com](docs.goalfinch.com): Technical documentation
+* [www.goalfinch.com](https://www.goalfinch.com): The app is hosted here
+* [docs.goalfinch.com](https://docs.goalfinch.com): Technical documentation
 * [https://github.com/abegong/goalfinch](https://github.com/abegong/goalfinch): Github repo
 
 ## Code manifest
