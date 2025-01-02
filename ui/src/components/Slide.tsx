@@ -26,9 +26,10 @@ const colorBlockStyles = {
 
 const captionStyles = {
   position: 'absolute' as const,
-  color: 'white',
-  padding: '16px',
-  fontSize: '1.1rem',
+  color: 'rgb(255, 255, 255, 0.7)',
+  fontWeight: 'bold',
+  padding: '64px',
+  fontSize: '2.4rem',
   textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
   maxWidth: '40%',
   overflow: 'hidden',
