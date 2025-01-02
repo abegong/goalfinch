@@ -12,13 +12,10 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
 }) => {
   return (
     <Box sx={{ 
-      position: 'fixed',
+      position: 'relative',
       bottom: 16,
-      right: 16,
-      bgcolor: 'rgba(255, 255, 255, 0.9)',
-      borderRadius: 1,
+      left: 16,
       padding: 1,
-      boxShadow: 1,
     }}>
       <FormControlLabel
         control={

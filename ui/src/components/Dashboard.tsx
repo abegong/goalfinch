@@ -13,6 +13,7 @@ import GallerySlide from './GallerySlide';
 import BulletListSlide from './BulletListSlide';
 import { Landscape, ShowChart, SsidChart } from '@mui/icons-material';
 import DashboardControlBar from './DashboardControlBar';
+import { Typography } from '@mui/material';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -142,7 +143,7 @@ const Dashboard: React.FC = () => {
         onClick={handleMenuClick}
         sx={{ 
           position: 'fixed',
-          bottom: 24,
+          top: 24,
           right: 24,
           zIndex: 2000,
           color: 'white',
@@ -167,16 +168,23 @@ const Dashboard: React.FC = () => {
         sx={{
           '& .MuiDrawer-paper': {
             bgcolor: 'rgb(255, 193, 5)',
-            width: 250
+            width: 240,
+            padding: '10px',
           }
         }}
       >
-        <List sx={{ width: 250 }}>
+        <Typography variant="h4" sx={{ ml: '20px', mt: '20px', mb: '20px' }}>
+          Slides
+        </Typography>
+        <List sx={{ width: 220, borderTop: '1px solid rgba(0, 0, 0, 0.1)', borderBottom: '1px solid rgba(0, 0, 0, 0.1)', margin: '10px' }}>
           {slides.map((slide, index) => (
             <ListItem
               key={index}
               onClick={() => handleColorClick(index)}
               sx={{
+                cursor: 'pointer',
+                m: 0,
+                p: '6px',
                 '&:hover': {
                   backgroundColor: 'rgba(0, 0, 0, 0.04)'
                 }
@@ -185,11 +193,10 @@ const Dashboard: React.FC = () => {
               <ListItemIcon
                 sx={{
                   minWidth: 48,
-                  '& .MuiSvgIcon-root': {
-                    padding: index === visibleColorIndex ? 1 : 0,
-                    borderRadius: '50%',
-                    backgroundColor: index === visibleColorIndex ? 'rgba(255,255,255,0.5)' : 'transparent'
-                  }
+                  color: index === visibleColorIndex ? 'white' : 'black',
+                  borderRadius: '16px',
+                  backgroundColor: index === visibleColorIndex ? 'rgba(255,255,255,0.5)' : 'rgba(0, 0, 0, 0.1)',
+                  mr: '6px',
                 }}
               >
                 {slide.type === SlideType.BULLET_LIST && <FormatListBulletedIcon />}
