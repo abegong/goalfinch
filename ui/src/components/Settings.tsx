@@ -5,10 +5,8 @@ import {
   CardHeader,
   TextField,
   Stack,
-  IconButton,
   Typography,
 } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
 
 interface SettingsData {
   serverUrl: string;

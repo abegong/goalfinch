@@ -25,7 +25,6 @@ const Dashboard: React.FC = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [dashboardControlBarVisible, setDashboardControlBarVisible] = useState(false);
   const { 
-    appControlBarVisible,
     setAppControlBarVisible,
   } = useContext(LayoutContext);
 

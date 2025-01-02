@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { slideData, Slide, Captions, SlideType } from '../data/slide_data';
+import { Slide, Captions, SlideType } from '../data/slide_interfaces';
+import { slideData } from '../data/slide_data';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
-import { Card, CardContent, CardHeader, Typography, Box } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import SlideConfig, { getSlideIcon } from './SlideConfig';
 import { Add } from '@mui/icons-material';
-import { isConstructorDeclaration } from 'typescript';
 
 const Goals: React.FC = () => {
   const [slides, setSlides] = useState<Slide[]>(slideData);

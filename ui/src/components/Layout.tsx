@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, createContext } from 'react';
 import { 
   Box, 
   CssBaseline,
@@ -14,9 +14,9 @@ import {
 } from '@mui/material';
 import {
   MonitorHeart as GoalIcon,
-  EventAvailable as EventIcon,
-  Article as ReportIcon,
-  CheckCircle as InputIcon,
+  // EventAvailable as EventIcon,
+  // Article as ReportIcon,
+  // CheckCircle as InputIcon,
   Settings as SettingsIcon,
   Slideshow as DashboardIcon,
   ExpandCircleDown as ChevronIcon,
