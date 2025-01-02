@@ -1,3 +1,13 @@
+<img class="logo" src="goldfinch-logo.svg" alt="GoalFinch Logo" style="
+    width: 200px;
+    height: auto;
+    display: block;
+    float: right;
+    background-color: var(--background-color);
+    border: 2px solid var(--border-color);
+    border-radius: 100px;
+">
+
 # Goal Finch
 
 A simple, flexible progress tracker for personal goals.
