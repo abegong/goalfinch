@@ -7,6 +7,7 @@ interface SlideProps {
   isTransitioning: boolean;
   isOutgoing?: boolean;
   animationDuration: number;
+  children?: React.ReactNode;
 }
 
 const colorBlockStyles = {
@@ -26,6 +27,7 @@ const Slide: React.FC<SlideProps> = ({
   isTransitioning,
   isOutgoing = false,
   animationDuration,
+  children
 }) => {
   const animation = isTransitioning
     ? isOutgoing
@@ -57,9 +59,12 @@ const Slide: React.FC<SlideProps> = ({
         },
       }}
     >
-      <Typography variant="h1" sx={{ color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-        {text}
-      </Typography>
+      {text && (
+        <Typography variant="h1" sx={{ color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+          {text}
+        </Typography>
+      )}
+      {children}
     </Box>
   );
 };
