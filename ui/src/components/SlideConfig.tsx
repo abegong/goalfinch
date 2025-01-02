@@ -13,7 +13,7 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogC
 import styles from './SlideConfig.module.css';
 import clsx from 'clsx';
 import BulletListConfig from './BulletListConfig';
-import LookForwardChartConfig from './LookForwardChartConfig';
+import ChartConfig from './ChartConfig';
 import NestedChartsConfig from './NestedChartsConfig';
 
 interface SlideConfigProps {
@@ -39,7 +39,7 @@ export const getSlideIcon = (type: SlideType) => {
       return <ShowChart />;
     case SlideType.NESTED_BULLET_LIST:
       return <List />;
-    case SlideType.LOOK_FORWARD_CHART:
+    case SlideType.CHART:
       return <Timeline />;
     default:
       return null;
@@ -56,7 +56,7 @@ const formatSlideType = (type: SlideType) => {
       return 'Nested Charts';
     case SlideType.NESTED_BULLET_LIST:
       return 'Nested Bullet List';
-    case SlideType.LOOK_FORWARD_CHART:
+    case SlideType.CHART:
       return 'Chart';
     default:
       return '';
@@ -68,7 +68,7 @@ const shownSlideTypes = [
   SlideType.BULLET_LIST,
   // SlideType.NESTED_CHARTS,
   // SlideType.NESTED_BULLET_LIST,
-  SlideType.LOOK_FORWARD_CHART,
+  SlideType.CHART,
 ];
 
 const SlideConfig: React.FC<SlideConfigProps> = (props) => {
@@ -204,8 +204,8 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
             onChange={props.onChange}
           />
         )}
-        {props.type === SlideType.LOOK_FORWARD_CHART && (
-          <LookForwardChartConfig
+        {props.type === SlideType.CHART && (
+          <ChartConfig
             url={props.url || ''}
             goal={props.goal || 0}
             rounding={props.rounding || 0}

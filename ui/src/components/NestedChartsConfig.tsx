@@ -1,7 +1,7 @@
 import React from 'react';
 import { Captions } from '../data/slide_data';
 import BaseSlideConfig from './BaseSlideConfig';
-import LookForwardChartConfig from './LookForwardChartConfig';
+import ChartConfig from './ChartConfig';
 import styles from './SlideConfig.module.css';
 
 interface NestedChartsConfigProps {
@@ -16,7 +16,7 @@ export const NestedChartsConfig: React.FC<NestedChartsConfigProps> = ({ content,
       <div className={styles['nested-charts-config']}>
         <h3>Nested Charts</h3>
         {content.map((chart, index) => (
-          <LookForwardChartConfig
+          <ChartConfig
             key={index}
             {...chart}
             onChange={(newConfig) => {

@@ -3,7 +3,7 @@ import { Captions } from '../data/slide_data';
 import BaseSlideConfig, { CollapsibleSection } from './BaseSlideConfig';
 import styles from './SlideConfig.module.css';
 
-interface LookForwardChartConfigProps {
+interface ChartConfigProps {
   url: string;
   goal: number;
   rounding: number;
@@ -12,7 +12,7 @@ interface LookForwardChartConfigProps {
   onChange: (config: any) => void;
 }
 
-export const LookForwardChartConfig: React.FC<LookForwardChartConfigProps> = ({
+export const ChartConfig: React.FC<ChartConfigProps> = ({
   url,
   goal,
   rounding,
@@ -60,4 +60,4 @@ export const LookForwardChartConfig: React.FC<LookForwardChartConfigProps> = ({
   );
 };
 
-export default LookForwardChartConfig;
+export default ChartConfig;

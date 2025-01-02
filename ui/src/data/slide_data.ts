@@ -4,7 +4,7 @@ export enum SlideType {
   NESTED_IMAGES = "nested-images",
   NESTED_CHARTS = "nested-charts",
   NESTED_BULLET_LIST = "nested-bullet-list",
-  LOOK_FORWARD_CHART = "look-forward-chart",
+  CHART = "chart",
 }
 
 export interface Captions {
@@ -24,8 +24,8 @@ export interface Slide {
   units?: string;
 }
 
-export interface LookForwardChartSlide extends Slide {
-    type: SlideType.LOOK_FORWARD_CHART;
+export interface ChartSlide extends Slide {
+    type: SlideType.CHART;
     content: any;
     captions: Captions;
     url: string;
@@ -40,7 +40,7 @@ export interface NestedImagesSlide extends Slide {
 
 export interface NestedChartsSlide extends Slide {
     type: SlideType.NESTED_CHARTS;
-    content: LookForwardChartSlide[];
+    content: ChartSlide[];
 }
 
 export interface BulletListSlide extends Slide {
@@ -91,7 +91,7 @@ export const slideData: Slide[] = [
         },
         "content" : [
             {
-                "type": "look-forward-chart",
+                "type": "chart",
                 "content": "",
                 "captions": {
                     "top_center": "Cardio Activity 1",
@@ -105,7 +105,7 @@ export const slideData: Slide[] = [
                 "units": "km"
             },
             {
-                "type": "look-forward-chart",
+                "type": "chart",
                 "content": "",
                 "captions": {
                     "top_center": "Strength Training",
@@ -119,7 +119,7 @@ export const slideData: Slide[] = [
                 "units": "",
             },
             {
-                "type": "look-forward-chart",
+                "type": "chart",
                 "content": "",
                 "captions": {
                     "top_center": "Sleep Schedule",
@@ -157,7 +157,7 @@ export const slideData: Slide[] = [
         },
         "content" : [
             {
-                "type": "look-forward-chart",
+                "type": "chart",
                 "content": "",
                 "captions": {
                     "top_center": "Professional Connections",
@@ -172,7 +172,7 @@ export const slideData: Slide[] = [
                 "preprocessing": "rowCounts"
             },
             {
-                "type": "look-forward-chart",
+                "type": "chart",
                 "content": "",
                 "captions": {
                     "top_center": "Family Activities",
@@ -187,7 +187,7 @@ export const slideData: Slide[] = [
                 "preprocessing": "rowCounts"
             },
             {
-                "type": "look-forward-chart",
+                "type": "chart",
                 "content": "",
                 "placeholder": true,
                 "captions": {
@@ -202,7 +202,7 @@ export const slideData: Slide[] = [
                 "units": "",
             },
             {
-                "type": "look-forward-chart",
+                "type": "chart",
                 "content": "",
                 "captions": {
                     "top_center": "Social Media Engagement",
@@ -220,7 +220,7 @@ export const slideData: Slide[] = [
                 }
             },
             {
-                "type": "look-forward-chart",
+                "type": "chart",
                 "content": "",
                 "captions": {
                     "top_center": "Digital Wellness",
