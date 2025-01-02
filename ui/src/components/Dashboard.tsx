@@ -54,6 +54,19 @@ const Dashboard: React.FC = () => {
     }
   }, [isTransitioning, nextColorIndex]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        const newState = !dashboardControlBarVisible;
+        setAppControlBarVisible(newState);
+        setDashboardControlBarVisible(newState);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [dashboardControlBarVisible, setAppControlBarVisible]);
+
   const handleColorClick = (index: number) => {
     setNextColorIndex(index);
     setIsTransitioning(true);
