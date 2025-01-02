@@ -5,6 +5,7 @@ nav:
   - Home: index.md
   - Tutorials:
     - Connect to data in Google Sheets: tutorials/connect-to-data-in-google-sheets.md
+    - Use Goal Finch as your new tab background in Chrome: tutorials/use-goalfinch-as-your-new-tab-background-in-chrome.md
     # - Set up a self-hosted backend: tutorials/set-up-a-self-hosted-backend.md
     # - Log events via API: tutorials/log-events-via-api.md
   - Architecture:
