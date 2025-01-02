@@ -8,8 +8,8 @@ import {
   Timeline,
   ExpandMore,
   ExpandLess,
-  Edit,
-  Delete
+  Delete,
+  Build,
 } from '@mui/icons-material';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import styles from './SlideConfig.module.css';
@@ -307,7 +307,7 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
       </Dialog>
       <SpeedDial
         ariaLabel="Change slide type"
-        icon={<SpeedDialIcon openIcon={<Edit />} />}
+        icon={<SpeedDialIcon openIcon={<Build />} icon={<Build />} />}
         open={speedDialOpen}
         onOpen={() => setSpeedDialOpen(true)}
         onClose={() => setSpeedDialOpen(false)}
