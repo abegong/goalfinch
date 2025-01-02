@@ -1,15 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { Slide, Captions, SlideType } from '../data/slide_interfaces';
-import { slideData } from '../data/slide_data';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import SlideConfig, { getSlideIcon } from './SlideConfig';
 import { Add } from '@mui/icons-material';
+import { useSlides } from '../context/SlideContext';
 
 const Goals: React.FC = () => {
-  const [slides, setSlides] = useState<Slide[]>(slideData);
-  const [expandedItems, setExpandedItems] = useState<boolean[]>(new Array(slideData.length).fill(false));
-  const [animatingItems, setAnimatingItems] = useState<boolean[]>(new Array(slideData.length).fill(false));
+  const { slides, setSlides } = useSlides();
+  const [expandedItems, setExpandedItems] = useState<boolean[]>(new Array(slides.length).fill(false));
+  const [animatingItems, setAnimatingItems] = useState<boolean[]>(new Array(slides.length).fill(false));
 
   const handleSlideChange = (index: number, newConfig: Partial<Slide>) => {
     const newSlides = [...slides];
@@ -19,9 +19,7 @@ const Goals: React.FC = () => {
 
   const handleSlideOrderChange = useCallback((newSlides: Slide[]) => {
     setSlides(newSlides);
-    // Update slideData to persist the changes
-    Object.assign(slideData, newSlides);
-  }, []);
+  }, [setSlides]);
 
   const handleAddSlide = () => {
     const newSlide: Slide = {
