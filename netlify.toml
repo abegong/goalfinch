@@ -1,0 +1,41 @@
+[[sites]]
+name = "goalfinch-site"
+[sites.build]
+base = "/"
+command = ""
+publish = "site/"
+ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF site/"
+edge_functions = []
+functions = {}
+headers = []
+redirects = []
+[sites.environment]
+NODE_VERSION = "18"
+
+[[sites]]
+name = "goalfinch-docs"
+[sites.build]
+base = "/"
+command = "mkdocs build -d build"
+publish = "build/"
+ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF docs/"
+edge_functions = []
+functions = {}
+headers = []
+redirects = []
+[sites.environment]
+PYTHON_VERSION = "3.11"
+
+[[sites]]
+name = "goalfinch-app"
+[sites.build]
+base = "ui/"
+command = "npm run build"
+publish = "ui/build/"
+ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF ui/"
+edge_functions = []
+functions = {}
+headers = []
+redirects = []
+[sites.environment]
+NODE_VERSION = "18"

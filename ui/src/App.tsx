@@ -4,11 +4,9 @@ import Layout from './components/Layout';
 import Settings from './components/Settings';
 import Dashboard from './components/Dashboard';
 import Goals from './components/Goals';
+import Home from './components/Home';
 import { SlideProvider } from './context/SlideContext';
 import './App.css';
-
-// Placeholder components for each route
-const Home = () => <div>Home Page</div>;
 
 function App() {
   return (
