@@ -3,8 +3,8 @@
     height: auto;
     display: block;
     float: right;
-    background-color: var(--background-color);
-    border: 2px solid var(--border-color);
+    background-color: #FDF6E3;
+    border: 2px solid #F4B942;
     border-radius: 100px;
 ">
 
