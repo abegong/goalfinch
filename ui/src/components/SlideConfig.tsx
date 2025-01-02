@@ -9,181 +9,12 @@ import {
   Delete,
   Build,
 } from '@mui/icons-material';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
 import styles from './SlideConfig.module.css';
 import clsx from 'clsx';
-
-interface BaseSlideConfigProps {
-  captions?: Captions;
-  onChange: (config: any) => void;
-}
-
-const CollapsibleSection: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
-  
-  return (
-    <div className={styles['collapsible-section']}>
-      <div 
-        className={styles['section-header']} 
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        <div className={styles['header-left']}>
-          <span className={`${styles['collapse-icon']} ${isExpanded ? styles['expanded'] : ''}`}>▼</span>
-          <h3>{title}</h3>
-        </div>
-      </div>
-      <div className={`${styles['section-content']} ${isExpanded ? '' : styles['collapsed']}`}>
-        {children}
-      </div>
-    </div>
-  );
-};
-
-export const BaseSlideConfig: React.FC<BaseSlideConfigProps> = ({ captions, onChange }) => {
-  return (
-    <div className={styles['slide-config']}>
-      <CollapsibleSection title="Captions">
-        <div className={styles['caption-config']}>
-          <input
-            type="text"
-            placeholder="Top Center"
-            value={captions?.top_center || ''}
-            onChange={(e) => onChange({ ...captions, top_center: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Bottom Center"
-            value={captions?.bottom_center || ''}
-            onChange={(e) => onChange({ ...captions, bottom_center: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Bottom Right"
-            value={captions?.bottom_right || ''}
-            onChange={(e) => onChange({ ...captions, bottom_right: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Bottom Left"
-            value={captions?.bottom_left || ''}
-            onChange={(e) => onChange({ ...captions, bottom_left: e.target.value })}
-          />
-        </div>
-      </CollapsibleSection>
-    </div>
-  );
-};
-
-interface BulletListConfigProps extends BaseSlideConfigProps {
-  content: string[];
-}
-
-export const BulletListConfig: React.FC<BulletListConfigProps> = ({ content, captions, onChange }) => {
-  const handleBulletChange = (index: number, value: string) => {
-    const newContent = [...content];
-    newContent[index] = value;
-    onChange({ content: newContent });
-  };
-
-  return (
-    <div>
-      <BaseSlideConfig captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
-      <div className={styles['bullet-list-config']}>
-        <h3>Bullet Points</h3>
-        {content.map((bullet, index) => (
-          <input
-            key={index}
-            type="text"
-            value={bullet}
-            onChange={(e) => handleBulletChange(index, e.target.value)}
-          />
-        ))}
-        <button onClick={() => onChange({ content: [...content, ''] })}>Add Bullet</button>
-      </div>
-    </div>
-  );
-};
-
-interface LookForwardChartConfigProps extends BaseSlideConfigProps {
-  url: string;
-  goal: number;
-  rounding: number;
-  units: string;
-}
-
-export const LookForwardChartConfig: React.FC<LookForwardChartConfigProps> = ({
-  url,
-  goal,
-  rounding,
-  units,
-  captions,
-  onChange,
-}) => {
-  return (
-    <div>
-      <BaseSlideConfig captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
-      <CollapsibleSection title="Chart Settings">
-        <div className={styles['form-grid']}>
-          <label htmlFor="data-url">Data URL</label>
-          <input
-            id="data-url"
-            type="text"
-            value={url}
-            onChange={(e) => onChange({ url: e.target.value })}
-          />
-          <label htmlFor="goal-value">Goal</label>
-          <input
-            id="goal-value"
-            type="number"
-            value={goal}
-            onChange={(e) => onChange({ goal: parseFloat(e.target.value) })}
-          />
-          <label htmlFor="rounding-digits">Decimals</label>
-          <input
-            id="rounding-digits"
-            type="number"
-            min="0"
-            value={rounding}
-            onChange={(e) => onChange({ rounding: parseInt(e.target.value) })}
-          />
-          <label htmlFor="units-label">Units</label>
-          <input
-            id="units-label"
-            type="text"
-            value={units}
-            onChange={(e) => onChange({ units: e.target.value })}
-          />
-        </div>
-      </CollapsibleSection>
-    </div>
-  );
-};
-
-interface NestedChartsConfigProps extends BaseSlideConfigProps {
-  content: any[];
-}
-
-export const NestedChartsConfig: React.FC<NestedChartsConfigProps> = ({ content, captions, onChange }) => {
-  return (
-    <div>
-      <div className={styles['nested-charts-config']}>
-        <h3>Nested Charts</h3>
-        {content.map((chart, index) => (
-          <LookForwardChartConfig
-            key={index}
-            {...chart}
-            onChange={(newConfig) => {
-              const newContent = [...content];
-              newContent[index] = { ...newContent[index], ...newConfig };
-              onChange({ content: newContent });
-            }}
-          />
-        ))}
-      </div>
-      <BaseSlideConfig captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
-    </div>
-  );
-};
+import BulletListConfig from './BulletListConfig';
+import LookForwardChartConfig from './LookForwardChartConfig';
+import NestedChartsConfig from './NestedChartsConfig';
 
 interface SlideConfigProps {
   type: SlideType;
@@ -363,6 +194,9 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
         })}
         onTransitionEnd={handleTransitionEnd}
       >
+        <Typography variant="h5" fontWeight="bold" sx={{ py: 2 }}>
+          {formatSlideType(props.type)}
+        </Typography>
         {props.type === SlideType.BULLET_LIST && (
           <BulletListConfig
             content={props.content || []}
