@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Box, Typography, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Box, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { LayoutContext } from './Layout';
+import { useSlides } from '../context/SlideContext';
+import Slide from './Slide';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -20,6 +22,7 @@ const ANIMATION_DURATION = 500; // 500ms for the animation
 const TOTAL_INTERVAL = 2000; // 2000ms (2s) total time between starts of animations
 
 const Dashboard: React.FC = () => {
+  const { slides } = useSlides();
   const [visibleColorIndex, setVisibleColorIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -30,12 +33,12 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setNextColorIndex((visibleColorIndex + 1) % colors.length);
+      setNextColorIndex((visibleColorIndex + 1) % slides.length);
       setIsTransitioning(true);
     }, TOTAL_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [visibleColorIndex]);
+  }, [visibleColorIndex, slides.length]);
 
   useEffect(() => {
     if (isTransitioning) {
@@ -57,17 +60,6 @@ const Dashboard: React.FC = () => {
     const newState = !dashboardControlBarVisible;
     setAppControlBarVisible(newState);
     setDashboardControlBarVisible(newState);
-  };
-
-  const colorBlockStyles = {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    border: 'none',
-    outline: 'none'
   };
 
   return (
@@ -100,12 +92,13 @@ const Dashboard: React.FC = () => {
           backgroundColor: 'rgba(0, 0, 0, 0.2)',
           padding: '16px',
           '&:hover': {
-            backgroundColor: 'rgba(0, 0, 0, 0.3)'
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
           }
         }}
       >
-        <MenuIcon sx={{ fontSize: 32 }} />
+        <MenuIcon />
       </IconButton>
+
       <Drawer
         component="aside"
         aria-label="Dashboard Control Bar"
@@ -116,13 +109,13 @@ const Dashboard: React.FC = () => {
         variant="persistent"
       >
         <List sx={{ width: 250 }}>
-          {colors.map((color, index) => (
+          {slides.map((slide, index) => (
             <ListItem
-              key={color.hex}
+              key={index}
               onClick={() => handleColorClick(index)}
               sx={{
                 '&:hover': {
-                  backgroundColor: `${color.hex}20`
+                  backgroundColor: `${colors[index % colors.length].hex}20`
                 }
               }}
             >
@@ -130,56 +123,31 @@ const Dashboard: React.FC = () => {
                 sx={{
                   width: 20,
                   height: 20,
-                  backgroundColor: color.hex,
+                  backgroundColor: colors[index % colors.length].hex,
                   marginRight: 2,
                   borderRadius: 1
                 }}
               />
-              <ListItemText primary={color.name} />
+              <ListItemText primary={`Slide ${index + 1}: ${slide.type}`} />
             </ListItem>
           ))}
         </List>
       </Drawer>
       {isTransitioning && (
-        <Box
-          sx={{
-            ...colorBlockStyles,
-            backgroundColor: colors[visibleColorIndex].hex,
-            animation: `slideOutLeft ${ANIMATION_DURATION}ms ease-in-out`,
-            '@keyframes slideOutLeft': {
-              '0%': {
-                transform: 'translateX(0)',
-              },
-              '100%': {
-                transform: 'translateX(-100%)',
-              },
-            },
-          }}
-        >
-          <Typography variant="h1" sx={{ color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-            {colors[visibleColorIndex].name}
-          </Typography>
-        </Box>
+        <Slide
+          backgroundColor={colors[visibleColorIndex % colors.length].hex}
+          text={slides[visibleColorIndex].type}
+          isTransitioning={isTransitioning}
+          isOutgoing={true}
+          animationDuration={ANIMATION_DURATION}
+        />
       )}
-      <Box
-        sx={{
-          ...colorBlockStyles,
-          backgroundColor: colors[nextColorIndex].hex,
-          animation: isTransitioning ? `slideInRight ${ANIMATION_DURATION}ms ease-in-out` : 'none',
-          '@keyframes slideInRight': {
-            '0%': {
-              transform: 'translateX(100%)',
-            },
-            '100%': {
-              transform: 'translateX(0)',
-            },
-          },
-        }}
-      >
-        <Typography variant="h1" sx={{ color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-          {colors[nextColorIndex].name}
-        </Typography>
-      </Box>
+      <Slide
+        backgroundColor={colors[nextColorIndex % colors.length].hex}
+        text={slides[nextColorIndex].type}
+        isTransitioning={isTransitioning}
+        animationDuration={ANIMATION_DURATION}
+      />
     </Box>
   );
 };
