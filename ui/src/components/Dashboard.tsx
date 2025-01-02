@@ -3,7 +3,10 @@ import { Box, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/mate
 import MenuIcon from '@mui/icons-material/Menu';
 import { LayoutContext } from './Layout';
 import { useSlides } from '../context/SlideContext';
-import Slide from './Slide';
+import { SlideType } from '../data/slide_interfaces';
+import ChartSlide from './ChartSlide';
+import GallerySlide from './GallerySlide';
+import BulletListSlide from './BulletListSlide';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -60,6 +63,21 @@ const Dashboard: React.FC = () => {
     const newState = !dashboardControlBarVisible;
     setAppControlBarVisible(newState);
     setDashboardControlBarVisible(newState);
+  };
+
+  const renderSlide = (slide: any, props: any) => {
+    switch (slide.type) {
+      case SlideType.CHART:
+        return <ChartSlide slide={slide} {...props} />;
+      case SlideType.NESTED_IMAGES:
+        return <GallerySlide slide={slide} {...props} />;
+      case SlideType.BULLET_LIST:
+      case SlideType.NESTED_BULLET_LIST:
+        return <BulletListSlide slide={slide} {...props} />;
+      default:
+        console.warn(`Unknown slide type: ${slide.type}`);
+        return null;
+    }
   };
 
   return (
@@ -133,21 +151,17 @@ const Dashboard: React.FC = () => {
           ))}
         </List>
       </Drawer>
-      {isTransitioning && (
-        <Slide
-          backgroundColor={colors[visibleColorIndex % colors.length].hex}
-          text={slides[visibleColorIndex].type}
-          isTransitioning={isTransitioning}
-          isOutgoing={true}
-          animationDuration={ANIMATION_DURATION}
-        />
-      )}
-      <Slide
-        backgroundColor={colors[nextColorIndex % colors.length].hex}
-        text={slides[nextColorIndex].type}
-        isTransitioning={isTransitioning}
-        animationDuration={ANIMATION_DURATION}
-      />
+      {isTransitioning && renderSlide(slides[visibleColorIndex], {
+        backgroundColor: colors[visibleColorIndex % colors.length].hex,
+        isTransitioning,
+        isOutgoing: true,
+        animationDuration: ANIMATION_DURATION
+      })}
+      {renderSlide(slides[nextColorIndex], {
+        backgroundColor: colors[nextColorIndex % colors.length].hex,
+        isTransitioning,
+        animationDuration: ANIMATION_DURATION
+      })}
     </Box>
   );
 };
