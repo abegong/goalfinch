@@ -25,3 +25,5 @@ This is a monorepo, containing several different parts of the application and it
 * `server/` : Source code for the API server (node.js and Typescript)
 * `scripts/` : Scripts to connect to the server (python)
 * `site/` : A single-page static site for the project, now deprecated. (html/css)
+
+Everything in here is unfinished and WIP.
