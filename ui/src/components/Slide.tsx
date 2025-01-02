@@ -30,7 +30,6 @@ const captionStyles = {
   fontWeight: 'bold',
   padding: '64px',
   fontSize: '2.4rem',
-  textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
   maxWidth: '40%',
   overflow: 'hidden',
   textOverflow: 'ellipsis',

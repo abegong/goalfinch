@@ -23,6 +23,8 @@ const BulletListSlide: React.FC<BulletListSlideProps> = ({ slide, ...slideProps 
         justifyContent: 'center'
       }}>
         <ul style={{
+          position: 'relative',
+          left: '25%',
           listStyle: 'none',
           padding: 0,
           margin: 0,
@@ -34,8 +36,9 @@ const BulletListSlide: React.FC<BulletListSlideProps> = ({ slide, ...slideProps 
             <li 
               key={index}
               style={{
-                fontSize: '1.5rem',
-                color: 'white',
+                fontSize: '2.0rem',
+                color: 'rgb(255, 255, 255, 0.9)',
+                fontWeight: 'bold',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '16px'
