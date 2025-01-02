@@ -10,6 +10,7 @@ interface SlideProps {
   animationDuration: number;
   children?: React.ReactNode;
   captions?: Captions;
+  direction?: 'left' | 'right';
 }
 
 const colorBlockStyles = {
@@ -42,20 +43,29 @@ const Slide: React.FC<SlideProps> = ({
   isOutgoing = false,
   animationDuration,
   children,
-  captions
+  captions,
+  direction = 'left'
 }) => {
-  const animation = isTransitioning
-    ? isOutgoing
-      ? `slideOutLeft ${animationDuration}ms ease-in-out`
-      : `slideInRight ${animationDuration}ms ease-in-out`
-    : 'none';
+  const getAnimation = () => {
+    if (!isTransitioning) return 'none';
+    
+    if (direction === 'left') {
+      return isOutgoing
+        ? `slideOutLeft ${animationDuration}ms ease-in-out`
+        : `slideInRight ${animationDuration}ms ease-in-out`;
+    } else {
+      return isOutgoing
+        ? `slideOutRight ${animationDuration}ms ease-in-out`
+        : `slideInLeft ${animationDuration}ms ease-in-out`;
+    }
+  };
 
   return (
     <Box
       sx={{
         ...colorBlockStyles,
         backgroundColor,
-        animation,
+        animation: getAnimation(),
         '@keyframes slideOutLeft': {
           '0%': {
             transform: 'translateX(0)',
@@ -67,6 +77,22 @@ const Slide: React.FC<SlideProps> = ({
         '@keyframes slideInRight': {
           '0%': {
             transform: 'translateX(100%)',
+          },
+          '100%': {
+            transform: 'translateX(0)',
+          },
+        },
+        '@keyframes slideOutRight': {
+          '0%': {
+            transform: 'translateX(0)',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
+          },
+        },
+        '@keyframes slideInLeft': {
+          '0%': {
+            transform: 'translateX(-100%)',
           },
           '100%': {
             transform: 'translateX(0)',

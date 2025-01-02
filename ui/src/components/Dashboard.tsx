@@ -29,6 +29,7 @@ const Dashboard: React.FC = () => {
   const [visibleColorIndex, setVisibleColorIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
   const [dashboardControlBarVisible, setDashboardControlBarVisible] = useState(false);
   const { 
     setAppControlBarVisible,
@@ -37,6 +38,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setNextColorIndex((visibleColorIndex + 1) % slides.length);
+      setSlideDirection('left');
       setIsTransitioning(true);
     }, TOTAL_INTERVAL);
 
@@ -60,15 +62,26 @@ const Dashboard: React.FC = () => {
         const newState = !dashboardControlBarVisible;
         setAppControlBarVisible(newState);
         setDashboardControlBarVisible(newState);
+      } else if (event.key === 'ArrowLeft') {
+        const prevIndex = (visibleColorIndex - 1 + slides.length) % slides.length;
+        setNextColorIndex(prevIndex);
+        setSlideDirection('left');
+        setIsTransitioning(true);
+      } else if (event.key === 'ArrowRight') {
+        const nextIndex = (visibleColorIndex + 1) % slides.length;
+        setNextColorIndex(nextIndex);
+        setSlideDirection('right');
+        setIsTransitioning(true);
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [dashboardControlBarVisible, setAppControlBarVisible]);
+  }, [dashboardControlBarVisible, setAppControlBarVisible, visibleColorIndex, slides.length]);
 
   const handleColorClick = (index: number) => {
     setNextColorIndex(index);
+    setSlideDirection('left');
     setIsTransitioning(true);
   };
 
@@ -168,12 +181,14 @@ const Dashboard: React.FC = () => {
         backgroundColor: colors[visibleColorIndex % colors.length].hex,
         isTransitioning,
         isOutgoing: true,
-        animationDuration: ANIMATION_DURATION
+        animationDuration: ANIMATION_DURATION,
+        direction: slideDirection
       })}
       {renderSlide(slides[nextColorIndex], {
         backgroundColor: colors[nextColorIndex % colors.length].hex,
         isTransitioning,
-        animationDuration: ANIMATION_DURATION
+        animationDuration: ANIMATION_DURATION,
+        direction: slideDirection
       })}
     </Box>
   );
