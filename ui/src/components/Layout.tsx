@@ -13,12 +13,12 @@ import {
   useTheme
 } from '@mui/material';
 import {
-  EmojiEvents as GoalIcon,
+  MonitorHeart as GoalIcon,
   EventAvailable as EventIcon,
   Article as ReportIcon,
   CheckCircle as InputIcon,
   Settings as SettingsIcon,
-  MonitorHeart as DashboardIcon,
+  Slideshow as DashboardIcon,
   ExpandCircleDown as ChevronIcon,
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
