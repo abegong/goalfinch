@@ -10,7 +10,7 @@ interface SlideProps {
   animationDuration: number;
   children?: React.ReactNode;
   captions?: Captions;
-  direction?: 'left' | 'right';
+  direction?: 'left' | 'right' | 'up' | 'down';
 }
 
 const colorBlockStyles = {
@@ -53,6 +53,14 @@ const Slide: React.FC<SlideProps> = ({
       return isOutgoing
         ? `slideOutLeft ${animationDuration}ms ease-in-out`
         : `slideInRight ${animationDuration}ms ease-in-out`;
+    } else if (direction === 'up') {
+      return isOutgoing
+        ? `slideOutUp ${animationDuration}ms ease-in-out`
+        : `slideInDown ${animationDuration}ms ease-in-out`;
+    } else if (direction === 'down') {
+      return isOutgoing
+        ? `slideOutDown ${animationDuration}ms ease-in-out`
+        : `slideInUp ${animationDuration}ms ease-in-out`;
     } else {
       return isOutgoing
         ? `slideOutRight ${animationDuration}ms ease-in-out`
@@ -96,6 +104,38 @@ const Slide: React.FC<SlideProps> = ({
           },
           '100%': {
             transform: 'translateX(0)',
+          },
+        },
+        '@keyframes slideOutUp': {
+          '0%': {
+            transform: 'translateY(0)',
+          },
+          '100%': {
+            transform: 'translateY(-100%)',
+          },
+        },
+        '@keyframes slideInDown': {
+          '0%': {
+            transform: 'translateY(-100%)',
+          },
+          '100%': {
+            transform: 'translateY(0)',
+          },
+        },
+        '@keyframes slideOutDown': {
+          '0%': {
+            transform: 'translateY(0)',
+          },
+          '100%': {
+            transform: 'translateY(100%)',
+          },
+        },
+        '@keyframes slideInUp': {
+          '0%': {
+            transform: 'translateY(100%)',
+          },
+          '100%': {
+            transform: 'translateY(0)',
           },
         },
       }}
