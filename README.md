@@ -21,9 +21,8 @@ Features:
 This is a monorepo, containing several different parts of the application and its supporting documentation.
 
 * `ui/` : Source code for the front-end app (React)
-* `docs/` : Technical documentation (mkdocs-material)
 * `server/` : Source code for the API server (node.js and Typescript)
-* `scripts/` : Scripts to connect to the server (python)
-* `site/` : A single-page static site for the project, now deprecated. (html/css)
+* `python/scripts/` : Scripts to connect to the server (python)
+* `python/docs/` : Technical documentation (mkdocs-material)
 
 Everything in here is unfinished and WIP.
