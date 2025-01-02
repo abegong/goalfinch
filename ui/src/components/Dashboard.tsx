@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Box, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Box, Drawer, List, ListItem, ListItemText, IconButton, ListItemIcon } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import SegmentIcon from '@mui/icons-material/Segment';
 import { LayoutContext } from './Layout';
 import { useSlides } from '../context/SlideContext';
-import { SlideType } from '../data/slide_interfaces';
+import { SlideType, Slide, Captions } from '../data/slide_interfaces';
 import ChartSlide from './ChartSlide';
 import GallerySlide from './GallerySlide';
 import BulletListSlide from './BulletListSlide';
+import { Landscape, ShowChart, SsidChart } from '@mui/icons-material';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -94,6 +99,7 @@ const Dashboard: React.FC = () => {
   const renderSlide = (slide: any, props: any) => {
     switch (slide.type) {
       case SlideType.CHART:
+      case SlideType.NESTED_CHARTS:
         return <ChartSlide slide={slide} {...props} />;
       case SlideType.NESTED_IMAGES:
         return <GallerySlide slide={slide} {...props} />;
@@ -151,6 +157,12 @@ const Dashboard: React.FC = () => {
         onClose={() => setDashboardControlBarVisible(false)}
         hideBackdrop={true}
         variant="persistent"
+        sx={{
+          '& .MuiDrawer-paper': {
+            bgcolor: 'rgb(255, 193, 5)',
+            width: 250
+          }
+        }}
       >
         <List sx={{ width: 250 }}>
           {slides.map((slide, index) => (
@@ -159,20 +171,27 @@ const Dashboard: React.FC = () => {
               onClick={() => handleColorClick(index)}
               sx={{
                 '&:hover': {
-                  backgroundColor: `${colors[index % colors.length].hex}20`
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)'
                 }
               }}
             >
-              <Box
+              <ListItemIcon
                 sx={{
-                  width: 20,
-                  height: 20,
-                  backgroundColor: colors[index % colors.length].hex,
-                  marginRight: 2,
-                  borderRadius: 1
+                  minWidth: 48,
+                  '& .MuiSvgIcon-root': {
+                    padding: index === visibleColorIndex ? 1 : 0,
+                    borderRadius: '50%',
+                    backgroundColor: index === visibleColorIndex ? 'rgba(255,255,255,0.5)' : 'transparent'
+                  }
                 }}
-              />
-              <ListItemText primary={`Slide ${index + 1}: ${slide.type}`} />
+              >
+                {slide.type === SlideType.BULLET_LIST && <FormatListBulletedIcon />}
+                {slide.type === SlideType.NESTED_IMAGES && <Landscape />}
+                {slide.type === SlideType.NESTED_CHARTS && <SsidChart />}
+                {slide.type === SlideType.NESTED_BULLET_LIST && <SegmentIcon />}
+                {slide.type === SlideType.CHART && <ShowChart />}
+              </ListItemIcon>
+              <ListItemText primary={slide.getName()} />
             </ListItem>
           ))}
         </List>

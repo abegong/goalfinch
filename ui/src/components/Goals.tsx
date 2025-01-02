@@ -5,6 +5,8 @@ import { Card, CardContent, Typography, Box } from '@mui/material';
 import SlideConfig, { getSlideIcon } from './SlideConfig';
 import { Add } from '@mui/icons-material';
 import { useSlides } from '../context/SlideContext';
+import { BaseSlide } from '../data/BaseSlide';
+
 
 const Goals: React.FC = () => {
   const { slides, setSlides } = useSlides();
@@ -13,7 +15,7 @@ const Goals: React.FC = () => {
 
   const handleSlideChange = (index: number, newConfig: Partial<Slide>) => {
     const newSlides = [...slides];
-    newSlides[index] = { ...newSlides[index], ...newConfig };
+    // newSlides[index] = { ...newSlides[index], ...newConfig };
     setSlides(newSlides);
   };
 
@@ -22,10 +24,7 @@ const Goals: React.FC = () => {
   }, [setSlides]);
 
   const handleAddSlide = () => {
-    const newSlide: Slide = {
-      type: SlideType.NESTED_IMAGES,
-      captions: {}
-    };
+    const newSlide = new BaseSlide(SlideType.NESTED_IMAGES, undefined, {});
     const newSlides = [...slides, newSlide];
     handleSlideOrderChange(newSlides);
     
@@ -66,19 +65,6 @@ const Goals: React.FC = () => {
     newAnimatingItems[index] = false;
     setExpandedItems(newExpandedItems);
     setAnimatingItems(newAnimatingItems);
-  };
-
-  const getSlideName = (slide: Slide) => {
-    if (slide.captions) {
-      // Check all caption fields in order of preference
-      const captionFields: (keyof Captions)[] = ['top_center', 'bottom_center', 'bottom_right', 'bottom_left'];
-      for (const field of captionFields) {
-        if (slide.captions[field]) {
-          return slide.captions[field];
-        }
-      }
-    }
-    return null; // Return empty string if no caption is found or slide has no caption
   };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -147,7 +133,7 @@ const Goals: React.FC = () => {
             }
           }
         },
-        [`& .${timelineOppositeContentClasses.root}`]: {
+        [`& .${TimelineOppositeContent}`]: {
           flex: '0 0 150px',
           maxWidth: '150px',
           padding: '8px 8px',
@@ -165,7 +151,7 @@ const Goals: React.FC = () => {
             onClick={() => toggleExpanded(index)}
             sx={{ cursor: 'pointer' }}
           >
-            {getSlideName(slide) && (
+            {slide.getName && (
               <Typography 
                 variant="body2" 
                 color="text.secondary"
@@ -179,7 +165,7 @@ const Goals: React.FC = () => {
                   transition: 'background-color 0.2s, color 0.2s'
                 }}
               >
-                {getSlideName(slide)}
+                {slide.getName()}
               </Typography>
             )}
           </TimelineOppositeContent>

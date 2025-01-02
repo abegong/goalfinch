@@ -13,14 +13,26 @@ export interface Captions {
   bottom_left?: string;
 }
 
-export interface Slide {
-  type: SlideType;
+export abstract class Slide {
+  type!: SlideType;
   content?: any;
   captions?: Captions;
   url?: string;
   goal?: number;
   rounding?: number;
   units?: string;
+
+  getName(): string | null {
+    if (this.captions) {
+      const captionFields: (keyof Captions)[] = ['top_center', 'bottom_center', 'bottom_right', 'bottom_left'];
+      for (const field of captionFields) {
+        if (this.captions[field]) {
+          return this.captions[field]!;
+        }
+      }
+    }
+    return null;
+  }
 }
 
 export interface ChartSlide extends Slide {
@@ -50,6 +62,6 @@ export interface BulletListSlide extends Slide {
 
 export interface NestedBulletListSlide extends Slide {
     type: SlideType.NESTED_BULLET_LIST;
-    content: string[];
+    content: string[][];
     captions: Captions;
 }

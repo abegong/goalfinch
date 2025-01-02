@@ -8,6 +8,8 @@ import {
   Timeline,
   Delete,
   Build,
+  Segment,
+  SsidChart,
 } from '@mui/icons-material';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
 import styles from './SlideConfig.module.css';
@@ -36,9 +38,9 @@ export const getSlideIcon = (type: SlideType) => {
     case SlideType.NESTED_IMAGES:
       return <Landscape />;
     case SlideType.NESTED_CHARTS:
-      return <ShowChart />;
+      return <SsidChart />;
     case SlideType.NESTED_BULLET_LIST:
-      return <List />;
+      return <Segment />;
     case SlideType.CHART:
       return <Timeline />;
     default:
