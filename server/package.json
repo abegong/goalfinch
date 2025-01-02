@@ -1,0 +1,24 @@
+{
+  "name": "niblings-server",
+  "version": "1.0.0",
+  "description": "Server for Niblings application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.7",
+    "express": "^4.18.2",
+    "json2csv": "^6.0.0-alpha.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.12.0"
+  },
+  "devDependencies": {
+    "node-fetch": "^2.7.0",
+    "nodemon": "^3.0.2"
+  }
+}
