@@ -127,7 +127,7 @@ export default function Layout({ children }: LayoutProps) {
                   >
                     <img 
                       src="/goldfinch-logo.svg" 
-                      alt="Goalfinch Logo" 
+                      alt="Goal Finch Logo" 
                       style={{ 
                         width: '48px',
                         height: '48px',
@@ -136,7 +136,7 @@ export default function Layout({ children }: LayoutProps) {
                   </Box>
                 </ListItemIcon>
                 <ListItemText 
-                  primary="GoalFinch"
+                  primary="Goal Finch"
                   primaryTypographyProps={{
                     variant: 'h6',
                     sx: { 
