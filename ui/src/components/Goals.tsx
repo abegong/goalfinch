@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { slideData, Slide, Captions } from '../data/slide_data';
+import React, { useState, useCallback } from 'react';
+import { slideData, Slide, Captions, SlideType } from '../data/slide_data';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
 import { Card, CardContent, CardHeader, Typography, Box } from '@mui/material';
 import SlideConfig, { getSlideIcon } from './SlideConfig';
+import { Add } from '@mui/icons-material';
 
 const Goals: React.FC = () => {
   const [slides, setSlides] = useState<Slide[]>(slideData);
@@ -13,6 +14,25 @@ const Goals: React.FC = () => {
     const newSlides = [...slides];
     newSlides[index] = { ...newSlides[index], ...newConfig };
     setSlides(newSlides);
+  };
+
+  const handleSlideOrderChange = useCallback((newSlides: Slide[]) => {
+    setSlides(newSlides);
+    // Update slideData to persist the changes
+    Object.assign(slideData, newSlides);
+  }, []);
+
+  const handleAddSlide = () => {
+    const newSlide: Slide = {
+      type: SlideType.NESTED_IMAGES,
+      captions: {}
+    };
+    const newSlides = [...slides, newSlide];
+    handleSlideOrderChange(newSlides);
+    
+    // Update expanded and animating states
+    setExpandedItems([...expandedItems, true]);
+    setAnimatingItems([...animatingItems, true]);
   };
 
   const toggleExpanded = (index: number) => {
@@ -87,7 +107,32 @@ const Goals: React.FC = () => {
     const newSlides = [...slides];
     const [removed] = newSlides.splice(sourceIndex, 1);
     newSlides.splice(targetIndex, 0, removed);
-    setSlides(newSlides);
+    handleSlideOrderChange(newSlides);
+
+    // Update expanded and animating states to match new order
+    const newExpandedItems = [...expandedItems];
+    const newAnimatingItems = [...animatingItems];
+    const [removedExpanded] = newExpandedItems.splice(sourceIndex, 1);
+    const [removedAnimating] = newAnimatingItems.splice(sourceIndex, 1);
+    newExpandedItems.splice(targetIndex, 0, removedExpanded);
+    newAnimatingItems.splice(targetIndex, 0, removedAnimating);
+    setExpandedItems(newExpandedItems);
+    setAnimatingItems(newAnimatingItems);
+  };
+
+  const handleSlideDelete = (index: number) => {
+    const newSlides = [...slides];
+    newSlides.splice(index, 1);
+    handleSlideOrderChange(newSlides);
+    
+    // Update expanded and animating states to match new array length
+    const newExpandedItems = [...expandedItems];
+    const newAnimatingItems = [...animatingItems];
+    newExpandedItems.splice(index, 1);
+    newAnimatingItems.splice(index, 1);
+    
+    setExpandedItems(newExpandedItems);
+    setAnimatingItems(newAnimatingItems);
   };
 
   return (
@@ -195,6 +240,7 @@ const Goals: React.FC = () => {
                     {...slide}
                     onChange={(newConfig) => handleSlideChange(index, newConfig)}
                     onTransitionEnd={() => handleTransitionEnd(index)}
+                    onDelete={() => handleSlideDelete(index)}
                   />
                 </CardContent>
               </Card>
@@ -202,6 +248,39 @@ const Goals: React.FC = () => {
           </TimelineContent>
         </TimelineItem>
       ))}
+      <TimelineItem>
+        <TimelineOppositeContent />
+        <TimelineSeparator>
+          <TimelineDot
+            sx={{
+              p: 0,
+              borderRadius: '6px',
+              width: '50px',
+              height: '50px',
+              justifyContent: 'center',
+              backgroundColor: 'primary.main',
+              cursor: 'pointer',
+              transition: 'transform 0.2s, background-color 0.2s',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                backgroundColor: 'primary.dark'
+              }
+            }}
+            onClick={handleAddSlide}
+          >
+            <Box sx={{
+              fontSize: '42px',
+              '& > svg': {
+                width: '42px',
+                height: '42px'
+              }
+            }}>
+              <Add />
+            </Box>
+          </TimelineDot>
+        </TimelineSeparator>
+        <TimelineContent />
+      </TimelineItem>
     </Timeline>
   );
 };

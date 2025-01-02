@@ -7,8 +7,11 @@ import {
   List, 
   Timeline,
   ExpandMore,
-  ExpandLess
+  ExpandLess,
+  Edit,
+  Delete
 } from '@mui/icons-material';
+import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import styles from './SlideConfig.module.css';
 import clsx from 'clsx';
 
@@ -165,6 +168,7 @@ interface SlideConfigProps {
   rounding?: number;
   units?: string;
   onChange: (config: any) => void;
+  onDelete?: () => void;
   onTransitionEnd?: () => void;
 }
 
@@ -204,6 +208,18 @@ const formatSlideType = (type: SlideType) => {
 
 const SlideConfig: React.FC<SlideConfigProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [speedDialOpen, setSpeedDialOpen] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    title: string;
+    message: string;
+    action: () => void;
+  }>({
+    open: false,
+    title: '',
+    message: '',
+    action: () => {},
+  });
 
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -217,18 +233,122 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
     }
   };
 
-  const renderConfig = () => {
-    switch (props.type) {
-      case SlideType.BULLET_LIST:
-        return (
+  const handleConfirm = () => {
+    confirmDialog.action();
+    setConfirmDialog(prev => ({ ...prev, open: false }));
+    setSpeedDialOpen(false);
+  };
+
+  const handleCancel = () => {
+    setConfirmDialog(prev => ({ ...prev, open: false }));
+    setSpeedDialOpen(false);
+  };
+
+  const showConfirmation = (title: string, message: string, action: () => void) => {
+    setConfirmDialog({
+      open: true,
+      title,
+      message,
+      action,
+    });
+  };
+
+  const handleTypeChange = (newType: SlideType) => {
+    showConfirmation(
+      'Change Slide Type',
+      `Are you sure you want to change this slide to a ${formatSlideType(newType)}? This will reset the slide's content.`,
+      () => props.onChange({ type: newType })
+    );
+  };
+
+  const handleDelete = () => {
+    showConfirmation(
+      'Delete Slide',
+      'Are you sure you want to delete this slide? This action cannot be undone.',
+      () => props.onDelete?.()
+    );
+  };
+
+  const slideTypeActions = [
+    ...Object.values(SlideType).map(type => ({
+      icon: getSlideIcon(type),
+      name: formatSlideType(type),
+      onClick: () => handleTypeChange(type)
+    })),
+    ...(props.onDelete ? [{
+      icon: <Delete />,
+      name: 'Delete Slide',
+      onClick: handleDelete
+    }] : [])
+  ];
+
+  return (
+    <div className={styles['slide-config-wrapper']}>
+      <Dialog
+        open={confirmDialog.open}
+        onClose={handleCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {confirmDialog.title}
+        </DialogTitle>
+        <DialogContent id="alert-dialog-description">
+          {confirmDialog.message}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm} color="primary" autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <SpeedDial
+        ariaLabel="Change slide type"
+        icon={<SpeedDialIcon openIcon={<Edit />} />}
+        open={speedDialOpen}
+        onOpen={() => setSpeedDialOpen(true)}
+        onClose={() => setSpeedDialOpen(false)}
+        direction="left"
+        className={styles['slide-type-speed-dial']}
+      >
+        {slideTypeActions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            onClick={action.onClick}
+          />
+        ))}
+      </SpeedDial>
+      <div
+        className={clsx(styles['slide-config'], {
+          [styles['collapsed']]: isCollapsed,
+        })}
+        onTransitionEnd={handleTransitionEnd}
+      >
+        <div className={styles['slide-config-header']}>
+          <div className={styles['slide-type']}>
+            {getSlideIcon(props.type)}
+            <span>{formatSlideType(props.type)}</span>
+          </div>
+          <button
+            className={styles['collapse-button']}
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            {isCollapsed ? <ExpandMore /> : <ExpandLess />}
+          </button>
+        </div>
+        {props.type === SlideType.BULLET_LIST && (
           <BulletListConfig
             content={props.content || []}
             captions={props.captions}
             onChange={props.onChange}
           />
-        );
-      case SlideType.LOOK_FORWARD_CHART:
-        return (
+        )}
+        {props.type === SlideType.LOOK_FORWARD_CHART && (
           <LookForwardChartConfig
             url={props.url || ''}
             goal={props.goal || 0}
@@ -237,45 +357,14 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
             captions={props.captions}
             onChange={props.onChange}
           />
-        );
-      case SlideType.NESTED_CHARTS:
-        return (
+        )}
+        {props.type === SlideType.NESTED_CHARTS && (
           <NestedChartsConfig
             content={props.content || []}
             captions={props.captions}
             onChange={props.onChange}
           />
-        );
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className={styles['slide-config-card']}>
-      <div 
-        className={styles['slide-config-header']} 
-        onClick={() => setIsCollapsed(!isCollapsed)}
-      >
-        {getSlideIcon(props.type)}
-        <span className={styles['slide-type-text']}>
-          {formatSlideType(props.type)}
-        </span>
-        <ExpandMore 
-          className={clsx(
-            styles['expand-icon'],
-            !isCollapsed && styles['rotated']
-          )} 
-        />
-      </div>
-      <div 
-        className={clsx(
-          styles['slide-config-content'],
-          isCollapsed && styles['collapsed']
         )}
-        onTransitionEnd={handleTransitionEnd}
-      >
-        {renderConfig()}
       </div>
     </div>
   );
