@@ -1,0 +1,36 @@
+sites:
+  - name: goalfinch-site
+    build:
+      base: /
+      command: 
+      publish: site/
+    edge_functions: []
+    functions: {}
+    headers: []
+    redirects: []
+    environment:
+      NODE_VERSION: "18"
+
+  - name: goalfinch-docs
+    build:
+      base: /
+      command: mkdocs build -d build
+      publish: build/
+    edge_functions: []
+    functions: {}
+    headers: []
+    redirects: []
+    environment:
+      NODE_VERSION: "18"
+
+  - name: goalfinch-app
+    build:
+      base: ui/
+      command: npm run build
+      publish: ui/build/
+    edge_functions: []
+    functions: {}
+    headers: []
+    redirects: []
+    environment:
+      NODE_VERSION: "18"
