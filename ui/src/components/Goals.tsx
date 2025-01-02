@@ -15,7 +15,13 @@ const Goals: React.FC = () => {
 
   const handleSlideChange = (index: number, newConfig: Partial<Slide>) => {
     const newSlides = [...slides];
-    // newSlides[index] = { ...newSlides[index], ...newConfig };
+    const currentSlide = newSlides[index];
+    // Preserve the getName method from the current slide
+    newSlides[index] = { 
+      ...currentSlide, 
+      ...newConfig,
+      getName: currentSlide.getName.bind(currentSlide)
+    };
     setSlides(newSlides);
   };
 
