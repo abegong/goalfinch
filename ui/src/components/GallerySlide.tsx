@@ -13,7 +13,6 @@ const GallerySlide: React.FC<GallerySlideProps> = ({ slide, ...slideProps }) => 
       text=""
       captions={slide.captions}
     >
-      {/* TODO: Add image gallery grid component here */}
       <div style={{ 
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
