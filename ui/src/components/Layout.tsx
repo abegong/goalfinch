@@ -26,12 +26,11 @@ import { Link, useLocation } from 'react-router-dom';
 const drawerWidth = 240;
 
 const menuItems = [
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
   { text: 'Goals', icon: <GoalIcon />, path: '/goals' },
   { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
   // { text: 'Events', icon: <EventIcon />, path: '/events' },
   // { text: 'Reports', icon: <ReportIcon />, path: '/reports' },
-  // { text: 'Input', icon: <InputIcon />, path: '/input' },
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
 ];
 
 interface LayoutContextType {
@@ -93,7 +92,7 @@ export default function Layout({ children }: LayoutProps) {
           open={appControlBarVisible}
         >
           <List>
-            <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItem disablePadding sx={{ display: 'block', minHeight: 70 }}>
               <ListItemButton
                 component={Link}
                 to="/"
@@ -154,7 +153,6 @@ export default function Layout({ children }: LayoutProps) {
             <Divider />
             {menuItems.map((item) => (
               <>
-                {item.text === 'Dashboard' && <Divider />}
                 <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
                   <ListItemButton
                     component={Link}
@@ -187,6 +185,7 @@ export default function Layout({ children }: LayoutProps) {
                       }} 
                     />
                   </ListItemButton>
+                  {item.text === 'Dashboard' && <Divider />}
                 </ListItem>
               </>
             ))}
