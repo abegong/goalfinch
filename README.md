@@ -1,35 +1,27 @@
+# Goal Finch
 <img class="logo" src="img/goal-finch-logo.svg" alt="GoalFinch Logo" align="right" style="width: 160px; right:20px; background-color: #FDF6E3; border: 2px solid #F4B942; border-radius: 50%;">
 
-# Goal Finch
-
 A simple, flexible progress tracker for personal goals.
-        
-## Features
 
+Features:
 * Low-key visual reminders to help you stay on track.
 * Simple setup, with a ton of flexibility.
 * You can track virtually anything.
 * Complete control of personal data
 * Open source and extensible
 
-## Developer setup
+## Links
 
-
+* [www.goalfinch.com](www.goalfinch.com): The app is hosted here
+* [docs.goalfinch.com](docs.goalfinch.com): Technical documentation
+* [https://github.com/abegong/goalfinch](https://github.com/abegong/goalfinch): Github repo
 
 ## Code manifest
 
-```
-site/
-docs/
-server/
-ui/
-scripts/
-```
+This is a monorepo, containing several different parts of the application and its supporting documentation.
 
-## Contributing
-
-* MongoDB
-* Server
-* UI CDN
-* Scripts
-
+* `ui/` : Source code for the front-end app (React)
+* `docs/` : Technical documentation (mkdocs-material)
+* `server/` : Source code for the API server (node.js and Typescript)
+* `scripts/` : Scripts to connect to the server (python)
+* `site/` : A single-page static site for the project, now deprecated. (html/css)
