@@ -1,0 +1,15 @@
+[[sites]]
+  name = "goalfinch-app"
+  
+  [sites.build]
+    base = "uix/"
+    command = "npm run build"
+    publish = "ui/build/"
+    ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF ui/"
+    edge_functions = []
+    functions = {}
+    headers = []
+    redirects = []
+  
+  [sites.environment]
+    NODE_VERSION = "20"
