@@ -1,6 +1,6 @@
 import React from 'react';
 import { Captions } from '../data/slide_data';
-import BaseSlideConfig from './BaseSlideConfig';
+import BaseSlideConfig, {CollapsibleSection} from './BaseSlideConfig';
 import styles from './SlideConfig.module.css';
 
 interface BulletListConfigProps {
@@ -18,19 +18,20 @@ export const BulletListConfig: React.FC<BulletListConfigProps> = ({ content, cap
 
   return (
     <div>
+      <CollapsibleSection title="Bullets">
+        <div className={styles['bullet-list-config']}>
+          {content.map((bullet, index) => (
+            <input
+              key={index}
+              type="text"
+              value={bullet}
+              onChange={(e) => handleBulletChange(index, e.target.value)}
+            />
+          ))}
+          <button onClick={() => onChange({ content: [...content, ''] })}>Add Bullet</button>
+        </div>
+      </CollapsibleSection>
       <BaseSlideConfig captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
-      <div className={styles['bullet-list-config']}>
-        <h3>Bullet Points</h3>
-        {content.map((bullet, index) => (
-          <input
-            key={index}
-            type="text"
-            value={bullet}
-            onChange={(e) => handleBulletChange(index, e.target.value)}
-          />
-        ))}
-        <button onClick={() => onChange({ content: [...content, ''] })}>Add Bullet</button>
-      </div>
     </div>
   );
 };

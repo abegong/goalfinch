@@ -22,7 +22,6 @@ export const LookForwardChartConfig: React.FC<LookForwardChartConfigProps> = ({
 }) => {
   return (
     <div>
-      <BaseSlideConfig captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
       <CollapsibleSection title="Chart Settings">
         <div className={styles['form-grid']}>
           <label htmlFor="data-url">Data URL</label>
@@ -56,6 +55,7 @@ export const LookForwardChartConfig: React.FC<LookForwardChartConfigProps> = ({
           />
         </div>
       </CollapsibleSection>
+      <BaseSlideConfig captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
     </div>
   );
 };
