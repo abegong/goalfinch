@@ -1,4 +1,4 @@
-<img class="logo" src="img/goal-finch-logo.svg" alt="GoalFinch Logo" style="width: 160px; right:20px; background-color: #FDF6E3; border: 2px solid #F4B942; border-radius: 50%;">
+<img class="logo" src="img/goal-finch-logo.svg" alt="GoalFinch Logo" align="right" style="width: 160px; right:20px; background-color: #FDF6E3; border: 2px solid #F4B942; border-radius: 50%;">
 
 # Goal Finch
 
