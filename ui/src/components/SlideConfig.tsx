@@ -6,8 +6,6 @@ import {
   ShowChart, 
   List, 
   Timeline,
-  ExpandMore,
-  ExpandLess,
   Delete,
   Build,
 } from '@mui/icons-material';
@@ -194,17 +192,25 @@ const formatSlideType = (type: SlideType) => {
     case SlideType.BULLET_LIST:
       return 'Bullet List';
     case SlideType.NESTED_IMAGES:
-      return 'Nested Images';
+      return 'Gallery';
     case SlideType.NESTED_CHARTS:
       return 'Nested Charts';
     case SlideType.NESTED_BULLET_LIST:
       return 'Nested Bullet List';
     case SlideType.LOOK_FORWARD_CHART:
-      return 'Look Forward Chart';
+      return 'Chart';
     default:
       return '';
   }
 };
+
+const shownSlideTypes = [
+  SlideType.NESTED_IMAGES,
+  SlideType.BULLET_LIST,
+  // SlideType.NESTED_CHARTS,
+  // SlideType.NESTED_BULLET_LIST,
+  SlideType.LOOK_FORWARD_CHART,
+];
 
 const SlideConfig: React.FC<SlideConfigProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -270,7 +276,7 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
   };
 
   const slideTypeActions = [
-    ...Object.values(SlideType).map(type => ({
+    ...Object.values(shownSlideTypes).map(type => ({
       icon: getSlideIcon(type),
       name: formatSlideType(type),
       onClick: () => handleTypeChange(type)
@@ -329,18 +335,6 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
         })}
         onTransitionEnd={handleTransitionEnd}
       >
-        <div className={styles['slide-config-header']}>
-          <div className={styles['slide-type']}>
-            {getSlideIcon(props.type)}
-            <span>{formatSlideType(props.type)}</span>
-          </div>
-          <button
-            className={styles['collapse-button']}
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            {isCollapsed ? <ExpandMore /> : <ExpandLess />}
-          </button>
-        </div>
         {props.type === SlideType.BULLET_LIST && (
           <BulletListConfig
             content={props.content || []}
