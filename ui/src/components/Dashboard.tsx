@@ -12,6 +12,7 @@ import ChartSlide from './ChartSlide';
 import GallerySlide from './GallerySlide';
 import BulletListSlide from './BulletListSlide';
 import { Landscape, ShowChart, SsidChart } from '@mui/icons-material';
+import DashboardControlBar from './DashboardControlBar';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -36,11 +37,14 @@ const Dashboard: React.FC = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
   const [dashboardControlBarVisible, setDashboardControlBarVisible] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const { 
     setAppControlBarVisible,
   } = useContext(LayoutContext);
 
   useEffect(() => {
+    if (isPaused) return;
+
     const interval = setInterval(() => {
       setNextColorIndex((visibleColorIndex + 1) % slides.length);
       setSlideDirection('left');
@@ -48,7 +52,7 @@ const Dashboard: React.FC = () => {
     }, TOTAL_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [visibleColorIndex, slides.length]);
+  }, [visibleColorIndex, slides.length, isPaused]);
 
   useEffect(() => {
     if (isTransitioning) {
@@ -67,6 +71,9 @@ const Dashboard: React.FC = () => {
         const newState = !dashboardControlBarVisible;
         setAppControlBarVisible(newState);
         setDashboardControlBarVisible(newState);
+      } else if (event.key === ' ') {
+        event.preventDefault(); // Prevent page scroll
+        setIsPaused(prev => !prev);
       } else if (event.key === 'ArrowLeft') {
         const prevIndex = (visibleColorIndex - 1 + slides.length) % slides.length;
         setNextColorIndex(prevIndex);
@@ -195,6 +202,12 @@ const Dashboard: React.FC = () => {
             </ListItem>
           ))}
         </List>
+        {dashboardControlBarVisible && (
+          <DashboardControlBar
+            isPaused={isPaused}
+            onPauseChange={setIsPaused}
+          />
+        )}
       </Drawer>
       {isTransitioning && renderSlide(slides[visibleColorIndex], {
         backgroundColor: colors[visibleColorIndex % colors.length].hex,
