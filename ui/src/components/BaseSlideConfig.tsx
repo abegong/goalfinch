@@ -8,7 +8,7 @@ interface BaseSlideConfigProps {
 }
 
 const CollapsibleSection: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   
   return (
     <div className={styles['collapsible-section']}>
