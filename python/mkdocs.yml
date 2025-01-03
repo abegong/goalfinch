@@ -10,6 +10,7 @@ nav:
     # - Set up a self-hosted backend: tutorials/set-up-a-self-hosted-backend.md
     # - Log events via API: tutorials/log-events-via-api.md
   - Architecture:
+    - Domain model: architecture/domain-model.md
     - Deployment patterns: architecture/deployment-patterns.md
     - Frontend: architecture/frontend.md
     # - Backend: architecture/backend.md
