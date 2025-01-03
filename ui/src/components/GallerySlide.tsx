@@ -4,14 +4,17 @@ import { NestedImagesSlide } from '../data/slide_interfaces';
 
 interface GallerySlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slide: NestedImagesSlide;
+  backgroundImage?: string;
 }
 
-const GallerySlide: React.FC<GallerySlideProps> = ({ slide, ...slideProps }) => {
+const GallerySlide: React.FC<GallerySlideProps> = ({ slide, backgroundImage, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
       text=""
       captions={slide.captions}
+      backgroundColor="#000000"
+      backgroundImage={backgroundImage}
     >
       <div style={{ 
         display: 'grid',

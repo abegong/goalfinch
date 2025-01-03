@@ -110,7 +110,11 @@ const Dashboard: React.FC = () => {
       case SlideType.NESTED_CHARTS:
         return <ChartSlide slide={slide} {...props} />;
       case SlideType.NESTED_IMAGES:
-        return <GallerySlide slide={slide} {...props} />;
+        return <GallerySlide
+          slide={slide}
+          backgroundImage={"http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png"}
+          {...props}
+        />;
       case SlideType.BULLET_LIST:
       case SlideType.NESTED_BULLET_LIST:
         return <BulletListSlide slide={slide} {...props} />;

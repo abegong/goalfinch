@@ -3,7 +3,8 @@ import { Box, Typography } from '@mui/material';
 import { Captions } from '../data/slide_interfaces';
 
 interface SlideProps {
-  backgroundColor: string;
+  backgroundColor?: string;
+  backgroundImage?: string;
   text: string;
   isTransitioning: boolean;
   isOutgoing?: boolean;
@@ -21,7 +22,12 @@ const colorBlockStyles = {
   alignItems: 'center',
   justifyContent: 'center',
   border: 'none',
-  outline: 'none'
+  outline: 'none',
+  backgroundSize: 'contain',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
+  backgroundOrigin: 'content-box',
+  backgroundClip: 'content-box'
 };
 
 const captionStyles = {
@@ -37,7 +43,8 @@ const captionStyles = {
 };
 
 const Slide: React.FC<SlideProps> = ({
-  backgroundColor,
+  backgroundColor = 'transparent',
+  backgroundImage,
   text,
   isTransitioning,
   isOutgoing = false,
@@ -73,6 +80,7 @@ const Slide: React.FC<SlideProps> = ({
       sx={{
         ...colorBlockStyles,
         backgroundColor,
+        backgroundImage: backgroundImage ? `url("${backgroundImage}")` : 'none',
         animation: getAnimation(),
         '@keyframes slideOutLeft': {
           '0%': {
