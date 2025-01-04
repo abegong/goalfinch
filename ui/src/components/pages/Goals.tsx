@@ -1,12 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@mui/lab';
-import { Card, CardContent, Typography, Box } from '@mui/material';
+import { Timeline, TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
+import { Box } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useSlides } from '../../context/SlideContext';
-import SlideConfig, { getSlideIcon } from '../slides/SlideConfig';
 import { BaseSlide } from '../../data/BaseSlide';
 import { Slide, SlideType } from '../../data/slide_interfaces';
-
+import SlideGroupTimelineItem from '../timeline/SlideGroupTimelineItem';
 
 const Goals: React.FC = () => {
   const { slides, setSlides } = useSlides();
@@ -123,6 +122,15 @@ const Goals: React.FC = () => {
   return (
     <Timeline
       sx={{
+        left: "0px",
+        marginLeft: "-200px",
+        [`& .${timelineOppositeContentClasses.root}`]: {
+          width: '240px',
+          maxWidth: '240px',
+          padding: '8px 8px',
+          marginTop: 0,
+          marginBottom: 0
+        },
         [`& .MuiTimelineItem-root`]: {
           minHeight: '80px',
           '&:hover': {
@@ -149,95 +157,20 @@ const Goals: React.FC = () => {
       }}
     >
       {slides.map((slide, index) => (
-        <TimelineItem 
+        <SlideGroupTimelineItem
           key={index}
-          sx={{ cursor: 'default' }}
-        >
-          <TimelineOppositeContent
-            onClick={() => toggleExpanded(index)}
-            sx={{ cursor: 'pointer' }}
-          >
-            {slide.getName && (
-              <Typography 
-                variant="body2" 
-                color="text.secondary"
-                className="timeline-text"
-                sx={{
-                  display: 'inline-block',
-                  margin: '1px -24px 0px 0px',
-                  padding: '8px 32px 8px 12px',
-                  borderRadius: '16px',
-                  fontWeight: 'bold',
-                  transition: 'background-color 0.2s, color 0.2s'
-                }}
-              >
-                {slide.getName()}
-              </Typography>
-            )}
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot 
-              draggable
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleExpanded(index);
-              }}
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, index)}
-              sx={{ 
-                cursor: 'pointer',
-                p: 0,
-                borderRadius: '6px',
-                width: '50px',
-                height: '50px',
-                justifyContent: 'center',
-                transition: 'transform 0.2s, background-color 0.2s',
-                backgroundColor: 'text.secondary',
-                '&:active': {
-                  cursor: 'grabbing'
-                }
-              }}
-            >
-              <Box sx={{ 
-                fontSize: '42px',
-                '& > svg': {
-                  width: '42px',
-                  height: '42px'
-                }
-              }}>
-                {getSlideIcon(slide.type)}
-              </Box>
-            </TimelineDot>
-            {index < slides.length - 1 && (
-              <TimelineConnector 
-                sx={{ 
-                  transition: 'background-color 0.2s',
-                  width: '4px',
-                  //rounded edges
-                  borderTopLeftRadius: '4px',
-                  borderTopRightRadius: '4px',
-                  borderBottomRightRadius: '4px',
-                  borderBottomLeftRadius: '4px'
-                }}
-              />
-            )}
-          </TimelineSeparator>
-          <TimelineContent>
-            {expandedItems[index] && (
-              <Card elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
-                <CardContent>
-                  <SlideConfig
-                    {...slide}
-                    onChange={(newConfig) => handleSlideChange(index, newConfig)}
-                    onTransitionEnd={() => handleTransitionEnd(index)}
-                    onDelete={() => handleSlideDelete(index)}
-                  />
-                </CardContent>
-              </Card>
-            )}
-          </TimelineContent>
-        </TimelineItem>
+          slide={slide}
+          index={index}
+          slides={slides}
+          expandedItems={expandedItems}
+          onToggleExpanded={toggleExpanded}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onSlideChange={handleSlideChange}
+          onTransitionEnd={handleTransitionEnd}
+          onDelete={handleSlideDelete}
+        />
       ))}
       <TimelineItem>
         <TimelineOppositeContent />
