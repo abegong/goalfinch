@@ -1,35 +1,33 @@
 import React from 'react';
-import { Captions } from '../../data/slide_interfaces';
-import BaseSlideGroupEditor from './BaseSlideGroupEditor';
-import ChartConfig from './ChartSlideGroupEditor';
+import { BaseSlideGroupEditor } from './BaseSlideGroupEditor';
+import { ChartSlideGroupEditor } from './ChartSlideGroupEditor';
+import { NestedChartsSlideConfig, SlideEditorProps, ChartSlideConfig } from './slide_editor_types';
 import styles from './SlideGroupEditor.module.css';
 
-interface NestedChartsConfigProps {
-  content: any[];
-  captions?: Captions;
-  onChange: (config: any) => void;
-}
+export const NestedChartsSlideGroupEditor: React.FC<SlideEditorProps<NestedChartsSlideConfig>> = ({
+  config,
+  onChange,
+}) => {
+  const handleChartChange = (index: number, chartConfig: Partial<ChartSlideConfig>) => {
+    const newContent = [...config.content];
+    newContent[index] = { ...newContent[index], ...chartConfig };
+    onChange({ ...config, content: newContent });
+  };
 
-export const NestedChartsConfig: React.FC<NestedChartsConfigProps> = ({ content, captions, onChange }) => {
   return (
-    <div>
+    <BaseSlideGroupEditor<NestedChartsSlideConfig> config={config} onChange={onChange}>
       <div className={styles['nested-charts-config']}>
         <h3>Nested Charts</h3>
-        {content.map((chart, index) => (
-          <ChartConfig
+        {config.content.map((chart, index) => (
+          <ChartSlideGroupEditor
             key={index}
-            {...chart}
-            onChange={(newConfig) => {
-              const newContent = [...content];
-              newContent[index] = { ...newContent[index], ...newConfig };
-              onChange({ content: newContent });
-            }}
+            config={chart}
+            onChange={(newConfig) => handleChartChange(index, newConfig)}
           />
         ))}
       </div>
-      <BaseSlideGroupEditor captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
-    </div>
+    </BaseSlideGroupEditor>
   );
 };
 
-export default NestedChartsConfig;
+export default NestedChartsSlideGroupEditor;

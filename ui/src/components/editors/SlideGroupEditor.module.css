@@ -282,3 +282,79 @@ button:hover {
 .bullet-list-config > button {
   align-self: flex-start;
 }
+
+.slide-group-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.caption-config {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.caption-config input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  align-items: center;
+}
+
+.form-grid label {
+  font-weight: 500;
+  color: var(--text-color-secondary);
+}
+
+.form-grid input {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+}
+
+.bullet-list-config {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bullet-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bullet-row input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+}
+
+.bullet-row button {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--surface-color);
+  color: var(--text-color-secondary);
+  cursor: pointer;
+}
+
+.bullet-row button:hover:not(:disabled) {
+  background-color: var(--surface-color-hover);
+}
+
+.bullet-row button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

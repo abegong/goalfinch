@@ -1,28 +1,25 @@
 import React from 'react';
 import { CollapsibleSection } from './CollapsibleSection';
 import { BaseSlideGroupEditor } from './BaseSlideGroupEditor';
-import { Captions } from '../../data/slide_interfaces';
+import { BulletSlideConfig, SlideEditorProps } from './slide_editor_types';
 import styles from './SlideGroupEditor.module.css';
 
-interface BulletListConfigProps {
-  content: string[];
-  captions?: Captions;
-  onChange: (config: any) => void;
-}
-
-export const BulletListConfig: React.FC<BulletListConfigProps> = ({ content, captions, onChange }) => {
+export const BulletSlideGroupEditor: React.FC<SlideEditorProps<BulletSlideConfig>> = ({
+  config,
+  onChange,
+}) => {
   const handleBulletChange = (index: number, value: string) => {
-    const newContent = [...content];
+    const newContent = [...config.content];
     newContent[index] = value;
-    onChange({ content: newContent });
+    onChange({ ...config, content: newContent });
   };
 
   const handleDeleteBullet = (index: number) => {
-    const newContent = content.filter((_, i) => i !== index);
-    onChange({ content: newContent });
+    const newContent = config.content.filter((_, i) => i !== index);
+    onChange({ ...config, content: newContent });
     
     // If we just deleted the last bullet, focus the new last bullet
-    if (index === content.length - 1 && index > 0) {
+    if (index === config.content.length - 1 && index > 0) {
       setTimeout(() => {
         const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
         const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
@@ -38,37 +35,28 @@ export const BulletListConfig: React.FC<BulletListConfigProps> = ({ content, cap
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const newContent = [...content];
+      const newContent = [...config.content];
       newContent.splice(index + 1, 0, '');
-      onChange({ content: newContent });
+      onChange({ ...config, content: newContent });
       // Focus the new input after React re-renders
       setTimeout(() => {
         const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
         const nextInput = inputs[index + 1] as HTMLInputElement;
         if (nextInput) nextInput.focus();
       }, 0);
-    } else if ((e.key === 'Backspace' || e.key === 'Delete') && content[index] === '') {
+    } else if ((e.key === 'Backspace' || e.key === 'Delete') && config.content[index] === '') {
       e.preventDefault();
-      handleDeleteBullet(index);
-    } else if (e.key === 'Tab') {
-      e.preventDefault();
-      const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
-      const targetIndex = e.shiftKey ? index - 1 : index + 1;
-      const targetInput = inputs[targetIndex] as HTMLInputElement;
-      if (targetInput) {
-        targetInput.focus();
-        // Move cursor to end of input
-        const len = targetInput.value.length;
-        targetInput.setSelectionRange(len, len);
+      if (config.content.length > 1) {
+        handleDeleteBullet(index);
       }
     }
   };
 
   return (
-    <div>
+    <BaseSlideGroupEditor<BulletSlideConfig> config={config} onChange={onChange}>
       <CollapsibleSection title="Bullets">
         <div className={styles['bullet-list-config']}>
-          {content.map((bullet, index) => (
+          {config.content.map((bullet, index) => (
             <div key={index} className={styles['bullet-row']}>
               <input
                 type="text"
@@ -76,21 +64,23 @@ export const BulletListConfig: React.FC<BulletListConfigProps> = ({ content, cap
                 onChange={(e) => handleBulletChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
               />
-              <button 
+              <button
                 onClick={() => handleDeleteBullet(index)}
-                className={styles['delete-button']}
-                aria-label="Delete bullet"
+                disabled={config.content.length === 1}
               >
-                ×
+                Remove
               </button>
             </div>
           ))}
-          <button onClick={() => onChange({ content: [...content, ''] })}>Add Bullet</button>
+          <button
+            onClick={() => onChange({ ...config, content: [...config.content, ''] })}
+          >
+            Add Bullet
+          </button>
         </div>
       </CollapsibleSection>
-      <BaseSlideGroupEditor captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
-    </div>
+    </BaseSlideGroupEditor>
   );
 };
 
-export default BulletListConfig;
+export default BulletSlideGroupEditor;

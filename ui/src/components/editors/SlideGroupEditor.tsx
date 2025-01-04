@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SlideType, Captions } from '../../data/slide_interfaces';
+import { SlideType } from '../../data/slide_interfaces';
 import { 
   FormatListBulleted, 
   Landscape, 
@@ -12,19 +12,15 @@ import {
 import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Card, CardContent } from '@mui/material';
 import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
-import BulletListConfig from './BulletSlideGroupEditor';
-import ChartConfig from './ChartSlideGroupEditor';
-import NestedChartsConfig from './NestedChartsSlideGroupEditor';
+import { BulletSlideGroupEditor } from './BulletSlideGroupEditor';
+import { ChartSlideGroupEditor } from './ChartSlideGroupEditor';
+import { NestedChartsSlideGroupEditor } from './NestedChartsSlideGroupEditor';
+import { SlideConfig, BulletSlideConfig, ChartSlideConfig, NestedChartsSlideConfig } from './slide_editor_types';
 
 interface SlideGroupEditorProps {
   type: SlideType;
-  content?: any;
-  captions?: Captions;
-  url?: string;
-  goal?: number;
-  rounding?: number;
-  units?: string;
-  onChange: (config: any) => void;
+  config: SlideConfig;
+  onChange: (config: Partial<SlideConfig>) => void;
   onDelete?: () => void;
   onTransitionEnd?: () => void;
 }
@@ -51,186 +47,167 @@ const formatSlideType = (type: SlideType) => {
     case SlideType.BULLET_LIST:
       return 'Bullet List';
     case SlideType.NESTED_IMAGES:
-      return 'Gallery';
+      return 'Image Gallery';
     case SlideType.NESTED_CHARTS:
-      return 'Nested Charts';
+      return 'Chart Gallery';
     case SlideType.NESTED_BULLET_LIST:
-      return 'Nested Bullet List';
+      return 'Bullet List Gallery';
     case SlideType.CHART:
       return 'Chart';
     default:
-      return '';
+      return type;
   }
 };
 
 const shownSlideTypes = [
   SlideType.NESTED_IMAGES,
   SlideType.BULLET_LIST,
-  // SlideType.NESTED_CHARTS,
-  // SlideType.NESTED_BULLET_LIST,
   SlideType.CHART,
+  SlideType.NESTED_BULLET_LIST,
 ];
 
-const SlideGroupEditor: React.FC<SlideGroupEditorProps> = (props) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [speedDialOpen, setSpeedDialOpen] = useState(false);
-  const [confirmDialog, setConfirmDialog] = useState<{
-    open: boolean;
-    title: string;
-    message: string;
-    action: () => void;
-  }>({
-    open: false,
-    title: '',
-    message: '',
-    action: () => {
-      console.warn('Dialog action was called before being set');
-    },
-  });
+export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
+  type,
+  config,
+  onChange,
+  onDelete,
+  onTransitionEnd,
+}) => {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
 
   useEffect(() => {
-    requestAnimationFrame(() => {
-      setIsCollapsed(false);
-    });
-  }, []);
+    if (onTransitionEnd) {
+      onTransitionEnd();
+    }
+  }, [type, onTransitionEnd]);
 
-  const handleTransitionEnd = (e: React.TransitionEvent) => {
-    if (e.target === e.currentTarget) {
-      props.onTransitionEnd?.();
+  const handleTypeChange = (newType: SlideType) => {
+    let newConfig: SlideConfig;
+    switch (newType) {
+      case SlideType.BULLET_LIST:
+        newConfig = {
+          type: 'bullet',
+          content: [''],
+          captions: config.captions,
+        } as BulletSlideConfig;
+        break;
+      case SlideType.CHART:
+        newConfig = {
+          type: 'chart',
+          url: '',
+          goal: 0,
+          rounding: 0,
+          units: '',
+          captions: config.captions,
+        } as ChartSlideConfig;
+        break;
+      case SlideType.NESTED_CHARTS:
+        newConfig = {
+          type: 'nested-charts',
+          content: [],
+          captions: config.captions,
+        } as NestedChartsSlideConfig;
+        break;
+      default:
+        return;
+    }
+    onChange(newConfig);
+  };
+
+  const renderEditor = () => {
+    switch (type) {
+      case SlideType.BULLET_LIST:
+        return (
+          <BulletSlideGroupEditor
+            config={config as BulletSlideConfig}
+            onChange={onChange}
+          />
+        );
+      case SlideType.CHART:
+        return (
+          <ChartSlideGroupEditor
+            config={config as ChartSlideConfig}
+            onChange={onChange}
+          />
+        );
+      case SlideType.NESTED_CHARTS:
+        return (
+          <NestedChartsSlideGroupEditor
+            config={config as NestedChartsSlideConfig}
+            onChange={onChange}
+          />
+        );
+      default:
+        return null;
     }
   };
 
-  const handleConfirm = () => {
-    confirmDialog.action();
-    setConfirmDialog(prev => ({ ...prev, open: false }));
-    setSpeedDialOpen(false);
-  };
-
-  const handleCancel = () => {
-    setConfirmDialog(prev => ({ ...prev, open: false }));
-    setSpeedDialOpen(false);
-  };
-
-  const showConfirmation = (title: string, message: string, action: () => void) => {
-    setConfirmDialog({
-      open: true,
-      title,
-      message,
-      action,
-    });
-  };
-
-  const handleTypeChange = (newType: SlideType) => {
-    showConfirmation(
-      'Change Slide Type',
-      `Are you sure you want to change this slide to a ${formatSlideType(newType)}? This will reset the slide's content.`,
-      () => props.onChange({ type: newType })
-    );
-  };
-
-  const handleDelete = () => {
-    showConfirmation(
-      'Delete Slide',
-      'Are you sure you want to delete this slide? This action cannot be undone.',
-      () => props.onDelete?.()
-    );
-  };
-
-  const slideTypeActions = [
-    ...Object.values(shownSlideTypes).map(type => ({
-      icon: getSlideIcon(type),
-      name: formatSlideType(type),
-      onClick: () => handleTypeChange(type)
-    })),
-    ...(props.onDelete ? [{
-      icon: <Delete />,
-      name: 'Delete Slide',
-      onClick: handleDelete
-    }] : [])
-  ];
-
   return (
-    <div className={styles['slide-config-wrapper']}>
+    <Card className={styles['slide-group-editor-card']}>
+      <CardContent>
+        <div className={styles['slide-group-editor-header']}>
+          <Typography variant="h6">{formatSlideType(type)}</Typography>
+          <div className={styles['slide-group-editor-actions']}>
+            {onDelete && (
+              <Button
+                startIcon={<Delete />}
+                onClick={() => setIsDeleteDialogOpen(true)}
+                color="error"
+              >
+                Delete
+              </Button>
+            )}
+            <SpeedDial
+              ariaLabel="Change slide type"
+              icon={<SpeedDialIcon icon={<Build />} />}
+              onClose={() => setIsSpeedDialOpen(false)}
+              onOpen={() => setIsSpeedDialOpen(true)}
+              open={isSpeedDialOpen}
+              direction="left"
+              className={styles['slide-type-speed-dial']}
+            >
+              {shownSlideTypes.map((slideType) => (
+                <SpeedDialAction
+                  key={slideType}
+                  icon={getSlideIcon(slideType)}
+                  tooltipTitle={formatSlideType(slideType)}
+                  onClick={() => handleTypeChange(slideType)}
+                  className={clsx({
+                    [styles['active-slide-type']]: type === slideType,
+                  })}
+                />
+              ))}
+            </SpeedDial>
+          </div>
+        </div>
+        {renderEditor()}
+      </CardContent>
       <Dialog
-        open={confirmDialog.open}
-        onClose={handleCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
       >
-        <DialogTitle id="alert-dialog-title">
-          {confirmDialog.title}
-        </DialogTitle>
-        <DialogContent id="alert-dialog-description">
-          {confirmDialog.message}
+        <DialogTitle>Delete Slide Group</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete this slide group? This action cannot be
+            undone.
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleConfirm} color="primary" autoFocus>
-            Confirm
+          <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setIsDeleteDialogOpen(false);
+              if (onDelete) onDelete();
+            }}
+            color="error"
+          >
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
-      <div
-        className={clsx(styles['slide-config'], {
-          [styles['collapsed']]: isCollapsed,
-        })}
-        onTransitionEnd={handleTransitionEnd}
-      >
-        <Card elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
-          <CardContent>
-            <div style={{ display: 'flex', backgroundColor: 'var(--border-color)', justifyContent: 'space-between' }}>
-              <Typography variant="h5" fontWeight="bold" sx={{ py: 2, display: 'inline-block' }}>
-                {formatSlideType(props.type)}
-              </Typography>
-              <SpeedDial
-                ariaLabel="Change slide type"
-                icon={<SpeedDialIcon openIcon={<Build />} icon={<Build />} />}
-                open={speedDialOpen}
-                onOpen={() => setSpeedDialOpen(true)}
-                onClose={() => setSpeedDialOpen(false)}
-                direction="right"
-                className={styles['slide-type-speed-dial']}
-              >
-                {slideTypeActions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={action.onClick}
-                  />
-                ))}
-              </SpeedDial>
-            </div>
-            {props.type === SlideType.BULLET_LIST && (
-              <BulletListConfig
-                content={props.content || []}
-                captions={props.captions}
-                onChange={props.onChange}
-              />
-            )}
-            {props.type === SlideType.CHART && (
-              <ChartConfig
-                url={props.url || ''}
-                goal={props.goal || 0}
-                rounding={props.rounding || 0}
-                units={props.units || ''}
-                captions={props.captions}
-                onChange={props.onChange}
-              />
-            )}
-            {props.type === SlideType.NESTED_CHARTS && (
-              <NestedChartsConfig
-                content={props.content || []}
-                captions={props.captions}
-                onChange={props.onChange}
-              />
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+    </Card>
   );
 };
 
