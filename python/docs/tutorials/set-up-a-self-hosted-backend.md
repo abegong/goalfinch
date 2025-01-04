@@ -2,21 +2,24 @@
 
 Learn how to set up a Goal Finch API server with a connected database.
 
+!!! danger
+
+    This page is under construction
+
 ## Prerequisites
 
-- Docker installed
 - Basic command line knowledge
-- Database management experience
+- Basic devops knowledge
 
-## Setting up the Database
+## Setting up MongoDB Atlas
 
-1. Choose your database
+1. Create a MongoDB accounts
 2. Configure connection settings
 3. Initialize schema
 
 ## Deploying the API Server
 
-1. Configure environment
+1. Create a Vercel or Netlify account
 2. Deploy server
 3. Verify connection
 
@@ -25,16 +28,3 @@ Learn how to set up a Goal Finch API server with a connected database.
 - API authentication
 - Database security
 - Network access
-
-## Example Configuration
-
-```yaml
-server:
-  port: 3000
-  host: 0.0.0.0
-
-database:
-  type: postgresql
-  host: localhost
-  port: 5432
-```

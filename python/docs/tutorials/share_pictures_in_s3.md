@@ -2,6 +2,10 @@
 
 This tutorial explains how to use the `upload_pics_to_s3_bucket.py` script to share pictures in a public S3 bucket using static website hosting.
 
+!!! danger
+
+    This page is under construction
+
 ## Prerequisites
 
 1. AWS account with appropriate permissions:

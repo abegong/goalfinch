@@ -7,13 +7,12 @@ nav:
     - Connect to data in Google Sheets: tutorials/connect-to-data-in-google-sheets.md
     - Use Goal Finch as your new tab background in Chrome: tutorials/use-goalfinch-as-your-new-tab-background-in-chrome.md
     - Share pictures in a public S3 bucket: tutorials/share_pictures_in_s3.md
-    # - Set up a self-hosted backend: tutorials/set-up-a-self-hosted-backend.md
+    - Set up a self-hosted backend: tutorials/set-up-a-self-hosted-backend.md
     # - Log events via API: tutorials/log-events-via-api.md
   - Architecture:
-    - Domain model: architecture/domain-model.md
     - Deployment patterns: architecture/deployment-patterns.md
     - Frontend: architecture/frontend.md
-    # - Backend: architecture/backend.md
+    - Backend: architecture/backend.md
   # - API Reference:
   #   - Authentication: api/authentication.md
   #   - Endpoints: api/endpoints.md
