@@ -3,12 +3,12 @@ import { CollapsibleSection } from './CollapsibleSection';
 import { BulletSlideConfig } from './slide_editor_types';
 import styles from './SlideGroupEditor.module.css';
 
-interface BulletSlideGroupEditorProps {
+interface BulletEditorProps {
   config: BulletSlideConfig;
   onChange: (config: Partial<BulletSlideConfig>) => void;
 }
 
-export const BulletSlideGroupEditor: React.FC<BulletSlideGroupEditorProps> = ({
+export const BulletEditor: React.FC<BulletEditorProps> = ({
   config,
   onChange,
 }) => {
@@ -75,4 +75,4 @@ export const BulletSlideGroupEditor: React.FC<BulletSlideGroupEditorProps> = ({
   );
 };
 
-export default BulletSlideGroupEditor;
+export default BulletEditor;

@@ -1,15 +1,15 @@
 import React from 'react';
-import { ChartSlideGroupEditor } from './ChartSlideGroupEditor';
+import { ChartEditor } from './ChartEditor';
 import { NestedChartsSlideConfig, ChartSlideConfig } from './slide_editor_types';
 import styles from './SlideGroupEditor.module.css';
 import { CollapsibleSection } from './CollapsibleSection';
 
-interface NestedChartsSlideGroupEditorProps {
+interface NestedChartsEditorProps {
   config: NestedChartsSlideConfig;
   onChange: (config: Partial<NestedChartsSlideConfig>) => void;
 }
 
-export const NestedChartsSlideGroupEditor: React.FC<NestedChartsSlideGroupEditorProps> = ({
+export const NestedChartsEditor: React.FC<NestedChartsEditorProps> = ({
   config,
   onChange,
 }) => {
@@ -51,7 +51,7 @@ export const NestedChartsSlideGroupEditor: React.FC<NestedChartsSlideGroupEditor
                 Remove Chart
               </button>
             </div>
-            <ChartSlideGroupEditor
+            <ChartEditor
               config={chart}
               onChange={(newConfig) => handleChartChange(index, newConfig)}
             />
@@ -68,4 +68,4 @@ export const NestedChartsSlideGroupEditor: React.FC<NestedChartsSlideGroupEditor
   );
 };
 
-export default NestedChartsSlideGroupEditor;
+export default NestedChartsEditor;

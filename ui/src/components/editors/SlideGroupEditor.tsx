@@ -12,9 +12,9 @@ import {
 import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Card, CardContent } from '@mui/material';
 import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
-import { BulletSlideGroupEditor } from './BulletSlideGroupEditor';
-import { ChartSlideGroupEditor } from './ChartSlideGroupEditor';
-import { NestedChartsSlideGroupEditor } from './NestedChartsSlideGroupEditor';
+import { BulletEditor } from './BulletEditor';
+import { ChartEditor } from './ChartEditor';
+import { NestedChartsEditor } from './NestedChartsEditor';
 import { SlideConfig, BulletSlideConfig, ChartSlideConfig, NestedChartsSlideConfig } from './slide_editor_types';
 import { CollapsibleSection } from './CollapsibleSection';
 
@@ -120,21 +120,21 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
     switch (type) {
       case SlideType.BULLET_LIST:
         return (
-          <BulletSlideGroupEditor
+          <BulletEditor
             config={config as BulletSlideConfig}
             onChange={onChange}
           />
         );
       case SlideType.CHART:
         return (
-          <ChartSlideGroupEditor
+          <ChartEditor
             config={config as ChartSlideConfig}
             onChange={onChange}
           />
         );
       case SlideType.NESTED_CHARTS:
         return (
-          <NestedChartsSlideGroupEditor
+          <NestedChartsEditor
             config={config as NestedChartsSlideConfig}
             onChange={onChange}
           />
