@@ -2,7 +2,7 @@ import React from 'react';
 import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@mui/lab';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import { Slide } from '../data/slide_interfaces';
-import SlideConfig, { getSlideIcon } from './editor/SlideGroupEditor';
+import SlideGroupEditor, { getSlideIcon } from './editor/SlideGroupEditor';
 
 interface SlideGroupTimelineItemProps {
   slide: Slide;
@@ -109,7 +109,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         {expandedItems[index] && (
           <Card elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
             <CardContent>
-              <SlideConfig
+              <SlideGroupEditor
                 {...slide}
                 onChange={(newConfig) => onSlideChange(index, newConfig)}
                 onTransitionEnd={() => onTransitionEnd(index)}

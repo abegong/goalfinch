@@ -10,13 +10,13 @@ import {
   SsidChart,
 } from '@mui/icons-material';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
-import styles from './SlideConfig.module.css';
+import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
 import BulletListConfig from './BulletSlideGroupEditor';
 import ChartConfig from './ChartSlideGroupEditor';
 import NestedChartsConfig from './NestedChartsSlideGroupEditor';
 
-interface SlideConfigProps {
+interface SlideGroupEditorProps {
   type: SlideType;
   content?: any;
   captions?: Captions;
@@ -71,7 +71,7 @@ const shownSlideTypes = [
   SlideType.CHART,
 ];
 
-const SlideConfig: React.FC<SlideConfigProps> = (props) => {
+const SlideGroupEditor: React.FC<SlideGroupEditorProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [speedDialOpen, setSpeedDialOpen] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -228,4 +228,4 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
   );
 };
 
-export default SlideConfig;
+export default SlideGroupEditor;

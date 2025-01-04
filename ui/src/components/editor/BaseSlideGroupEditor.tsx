@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Captions } from '../../data/slide_interfaces';
-import styles from './SlideConfig.module.css';
+import styles from './SlideGroupEditor.module.css';
 
-interface BaseSlideConfigProps {
+interface BaseSlideGroupEditorProps {
   captions?: Captions;
   onChange: (config: any) => void;
 }
@@ -28,7 +28,7 @@ const CollapsibleSection: React.FC<{ title: string; children: React.ReactNode }>
   );
 };
 
-export const BaseSlideConfig: React.FC<BaseSlideConfigProps> = ({ captions, onChange }) => {
+export const BaseSlideGroupEditor: React.FC<BaseSlideGroupEditorProps> = ({ captions, onChange }) => {
   return (
     <div className={styles['slide-config']}>
       <CollapsibleSection title="Captions">
@@ -64,4 +64,4 @@ export const BaseSlideConfig: React.FC<BaseSlideConfigProps> = ({ captions, onCh
 };
 
 export { CollapsibleSection };
-export default BaseSlideConfig;
+export default BaseSlideGroupEditor;

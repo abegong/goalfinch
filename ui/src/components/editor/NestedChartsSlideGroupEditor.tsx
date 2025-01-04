@@ -1,8 +1,8 @@
 import React from 'react';
 import { Captions } from '../../data/slide_interfaces';
-import BaseSlideConfig from './BaseSlideGroupEditor';
+import BaseSlideGroupEditor from './BaseSlideGroupEditor';
 import ChartConfig from './ChartSlideGroupEditor';
-import styles from './SlideConfig.module.css';
+import styles from './SlideGroupEditor.module.css';
 
 interface NestedChartsConfigProps {
   content: any[];
@@ -27,7 +27,7 @@ export const NestedChartsConfig: React.FC<NestedChartsConfigProps> = ({ content,
           />
         ))}
       </div>
-      <BaseSlideConfig captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
+      <BaseSlideGroupEditor captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
     </div>
   );
 };

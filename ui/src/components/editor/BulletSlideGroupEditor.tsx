@@ -1,7 +1,7 @@
 import React from 'react';
 import { Captions } from '../../data/slide_interfaces';
-import BaseSlideConfig, {CollapsibleSection} from './BaseSlideGroupEditor';
-import styles from './SlideConfig.module.css';
+import BaseSlideGroupEditor, {CollapsibleSection} from './BaseSlideGroupEditor';
+import styles from './SlideGroupEditor.module.css';
 
 interface BulletListConfigProps {
   content: string[];
@@ -87,7 +87,7 @@ export const BulletListConfig: React.FC<BulletListConfigProps> = ({ content, cap
           <button onClick={() => onChange({ content: [...content, ''] })}>Add Bullet</button>
         </div>
       </CollapsibleSection>
-      <BaseSlideConfig captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
+      <BaseSlideGroupEditor captions={captions} onChange={(newCaptions) => onChange({ captions: newCaptions })} />
     </div>
   );
 };
