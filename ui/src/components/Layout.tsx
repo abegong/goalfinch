@@ -60,11 +60,6 @@ export default function Layout({ children }: LayoutProps) {
             marginLeft: `0px`,
           }}
         >
-          <DashboardToggleButton 
-            appControlBarVisible={appControlBarVisible}
-            appControlBarOpen={appControlBarOpen}
-            setAppControlBarOpen={setAppControlBarOpen}
-          />
           {children}
         </Box>
       </Box>
