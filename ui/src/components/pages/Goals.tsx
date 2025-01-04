@@ -9,8 +9,7 @@ import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
 
 const Goals: React.FC = () => {
   const { slides, setSlides } = useSlides();
-  const [expandedItems, setExpandedItems] = useState<boolean[]>(new Array(slides.length).fill(false));
-  const [animatingItems, setAnimatingItems] = useState<boolean[]>(new Array(slides.length).fill(false));
+  const [expandedItems, setExpandedItems] = useState<boolean[]>([]);
 
   const handleSlideChange = (index: number, newConfig: Partial<Slide>) => {
     const newSlides = [...slides];
@@ -35,42 +34,15 @@ const Goals: React.FC = () => {
     
     // Update expanded and animating states
     setExpandedItems([...expandedItems, false]);
-    setAnimatingItems([...animatingItems, false]);
   };
 
-  const toggleExpanded = (index: number) => {
-    if (animatingItems[index]) return; // Prevent toggling while animating
-
-    const newExpandedItems = [...expandedItems];
-    const newAnimatingItems = [...animatingItems];
-    
-    if (expandedItems[index]) {
-      // Start collapsing animation
-      newExpandedItems[index] = false;
-      // newAnimatingItems[index] = true;
-    } else {
-      // Immediately show and start expanding animation
-      newExpandedItems[index] = true;
-      // newAnimatingItems[index] = true;
-    }
-
-    setExpandedItems(newExpandedItems);
-    setAnimatingItems(newAnimatingItems);
-};
-
-  const handleTransitionEnd = (index: number) => {
-    const newExpandedItems = [...expandedItems];
-    const newAnimatingItems = [...animatingItems];
-    
-    if (!expandedItems[index]) {
-      // If we were collapsing, now remove the component
-      newExpandedItems[index] = false;
-    }
-    
-    newAnimatingItems[index] = false;
-    setExpandedItems(newExpandedItems);
-    setAnimatingItems(newAnimatingItems);
-  };
+  const toggleExpanded = useCallback((index: number) => {
+    setExpandedItems(prevExpandedItems => {
+      const newExpandedItems = [...prevExpandedItems];
+      newExpandedItems[index] = !newExpandedItems[index];
+      return newExpandedItems;
+    });
+  }, []);
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     e.dataTransfer.setData('text/plain', index.toString());
@@ -95,13 +67,9 @@ const Goals: React.FC = () => {
 
     // Update expanded and animating states to match new order
     const newExpandedItems = [...expandedItems];
-    const newAnimatingItems = [...animatingItems];
     const [removedExpanded] = newExpandedItems.splice(sourceIndex, 1);
-    const [removedAnimating] = newAnimatingItems.splice(sourceIndex, 1);
     newExpandedItems.splice(targetIndex, 0, removedExpanded);
-    newAnimatingItems.splice(targetIndex, 0, removedAnimating);
     setExpandedItems(newExpandedItems);
-    setAnimatingItems(newAnimatingItems);
   };
 
   const handleSlideDelete = (index: number) => {
@@ -111,12 +79,9 @@ const Goals: React.FC = () => {
     
     // Update expanded and animating states to match new array length
     const newExpandedItems = [...expandedItems];
-    const newAnimatingItems = [...animatingItems];
     newExpandedItems.splice(index, 1);
-    newAnimatingItems.splice(index, 1);
     
     setExpandedItems(newExpandedItems);
-    setAnimatingItems(newAnimatingItems);
   };
 
   return (
@@ -168,7 +133,6 @@ const Goals: React.FC = () => {
           onDragOver={handleDragOver}
           onDrop={handleDrop}
           onSlideChange={handleSlideChange}
-          onTransitionEnd={handleTransitionEnd}
           onDelete={handleSlideDelete}
         />
       ))}

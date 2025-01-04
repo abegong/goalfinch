@@ -1,8 +1,10 @@
 import React from 'react';
-import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@mui/lab';
+import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineOppositeContent } from '@mui/lab';
 import { Typography, Box } from '@mui/material';
-import { Slide } from '../data/slide_interfaces';
+import { Slide, SlideType } from '../data/slide_interfaces';
 import SlideGroupEditor, { getSlideIcon } from './editors/SlideGroupEditor';
+import { SlideConfig } from './editors/slide_editor_types';
+import CustomTimelineDot from './CustomTimelineDot';
 
 interface SlideGroupTimelineItemProps {
   slide: Slide;
@@ -14,7 +16,6 @@ interface SlideGroupTimelineItemProps {
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, index: number) => void;
   onSlideChange: (index: number, newConfig: Partial<Slide>) => void;
-  onTransitionEnd: (index: number) => void;
   onDelete: (index: number) => void;
 }
 
@@ -28,9 +29,37 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   onDragOver,
   onDrop,
   onSlideChange,
-  onTransitionEnd,
   onDelete,
 }) => {
+  const slideConfig: SlideConfig = {
+    type: slide.type === SlideType.BULLET_LIST ? 'bullet' :
+          slide.type === SlideType.CHART ? 'chart' :
+          slide.type === SlideType.NESTED_CHARTS ? 'nested-charts' :
+          'bullet',
+    captions: slide.captions || { top_center: '', bottom_center: '' },
+    ...(slide.type === SlideType.BULLET_LIST ? {
+      content: slide.content || [],
+    } : slide.type === SlideType.CHART ? {
+      url: slide.url || '',
+      goal: slide.goal || 0,
+      rounding: slide.rounding || 0,
+      units: slide.units || '',
+    } : slide.type === SlideType.NESTED_CHARTS ? {
+      content: slide.content || [],
+    } : {}),
+  } as SlideConfig;
+
+  const handleConfigChange = (newConfig: Partial<SlideConfig>) => {
+    const updatedSlide: Partial<Slide> = {
+      ...newConfig,
+      type: newConfig.type === 'bullet' ? SlideType.BULLET_LIST :
+            newConfig.type === 'chart' ? SlideType.CHART :
+            newConfig.type === 'nested-charts' ? SlideType.NESTED_CHARTS :
+            slide.type,
+    };
+    onSlideChange(index, updatedSlide);
+  };
+
   return (
     <TimelineItem 
       key={index}
@@ -49,9 +78,10 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
               display: 'inline-block',
               margin: '1px -24px 0px 0px',
               padding: '8px 32px 8px 12px',
-              borderRadius: '16px',
-              fontWeight: 'bold',
-              transition: 'background-color 0.2s, color 0.2s'
+              borderRadius: '4px',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              }
             }}
           >
             {slide.getName()}
@@ -59,39 +89,12 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         )}
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot 
-          draggable
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleExpanded(index);
-          }}
-          onDragStart={(e) => onDragStart(e, index)}
-          onDragOver={onDragOver}
-          onDrop={(e) => onDrop(e, index)}
-          sx={{ 
-            cursor: 'pointer',
-            p: 0,
-            borderRadius: '6px',
-            width: '50px',
-            height: '50px',
-            justifyContent: 'center',
-            transition: 'transform 0.2s, background-color 0.2s',
-            backgroundColor: 'text.secondary',
-            '&:active': {
-              cursor: 'grabbing'
-            }
-          }}
+        <CustomTimelineDot
+          onClick={() => onToggleExpanded(index)}
+          isExpanded={expandedItems[index]}
         >
-          <Box sx={{ 
-            fontSize: '42px',
-            '& > svg': {
-              width: '42px',
-              height: '42px'
-            }
-          }}>
-            {getSlideIcon(slide.type)}
-          </Box>
-        </TimelineDot>
+          {getSlideIcon(slide.type)}
+        </CustomTimelineDot>
         {index < slides.length - 1 && (
           <TimelineConnector 
             sx={{ 
@@ -108,9 +111,9 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       <TimelineContent>
         {expandedItems[index] && (
           <SlideGroupEditor
-            {...slide}
-            onChange={(newConfig) => onSlideChange(index, newConfig)}
-            onTransitionEnd={() => onTransitionEnd(index)}
+            type={slide.type}
+            config={slideConfig}
+            onChange={handleConfigChange}
             onDelete={() => onDelete(index)}
           />
         )}
