@@ -8,23 +8,23 @@ import {
   Typography,
 } from '@mui/material';
 
-interface SettingsData {
+interface ConfigureConnectionsData {
   serverUrl: string;
   serverPassword: string;
   unsplashApiToken: string;
   personalPhotosUrl: string;
 }
 
-const Settings: React.FC = () => {
-  const [settings, setSettings] = useState<SettingsData>({
+const ConfigureConnections: React.FC = () => {
+  const [connections, setConnections] = useState<ConfigureConnectionsData>({
     serverUrl: '',
     serverPassword: '',
     unsplashApiToken: '',
     personalPhotosUrl: '',
   });
 
-  const handleChange = (field: keyof SettingsData) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings(prev => ({
+  const handleChange = (field: keyof ConfigureConnectionsData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConnections(prev => ({
       ...prev,
       [field]: event.target.value
     }));
@@ -39,7 +39,7 @@ const Settings: React.FC = () => {
         }}
         title={
           <Typography variant="h5" fontWeight="bold">
-            Settings
+            Configure Connections
           </Typography>
         }
       />
@@ -48,31 +48,27 @@ const Settings: React.FC = () => {
           <TextField
             label="Server URL"
             fullWidth
-            value={settings.serverUrl}
+            value={connections.serverUrl}
             onChange={handleChange('serverUrl')}
-            placeholder="Enter server URL"
           />
           <TextField
             label="Server Password"
             fullWidth
             type="password"
-            value={settings.serverPassword}
+            value={connections.serverPassword}
             onChange={handleChange('serverPassword')}
-            placeholder="Enter server password"
           />
           <TextField
             label="Unsplash API Token"
             fullWidth
-            value={settings.unsplashApiToken}
+            value={connections.unsplashApiToken}
             onChange={handleChange('unsplashApiToken')}
-            placeholder="Enter Unsplash API token"
           />
           <TextField
             label="Personal Photos URL"
             fullWidth
-            value={settings.personalPhotosUrl}
+            value={connections.personalPhotosUrl}
             onChange={handleChange('personalPhotosUrl')}
-            placeholder="Enter personal photos URL"
           />
         </Stack>
       </CardContent>
@@ -80,4 +76,4 @@ const Settings: React.FC = () => {
   );
 };
 
-export default Settings;
+export default ConfigureConnections;

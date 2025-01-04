@@ -24,7 +24,7 @@ const drawerWidth = 240;
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
   { text: 'Goals', icon: <GoalIcon />, path: '/goals' },
-  { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
+  { text: 'Configure Connections', icon: <SettingsIcon />, path: '/settings' },
 ];
 
 interface AppControlBarProps {

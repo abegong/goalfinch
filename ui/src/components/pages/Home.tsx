@@ -40,7 +40,7 @@ const Home: React.FC = () => {
         <p>Click the <ExpandCircleDown sx={{ position: "relative", top: "10px", fontSize: "32px", rotate: "-90deg" }}></ExpandCircleDown> button in the lower left corner to expand the menu and see your options.</p>
         <p style={{ margin: "0px 0px 0px 40px" }}>Check out the dashboard here: <a href="/dashboard"><Slideshow sx={{ position: "relative", top: "10px", fontSize: "32px" }}/></a></p>
         <p style={{ margin: "0px 0px 0px 40px" }}>Set up your dashboard here: <a href="/goals"><MonitorHeart sx={{ position: "relative", top: "10px", fontSize: "32px" }}/></a></p>
-        <p style={{ margin: "0px 0px 0px 40px" }}>Configure connections here: <a href="/settings"><Settings sx={{ position: "relative", top: "10px", fontSize: "32px" }}/></a></p>
+        <p style={{ margin: "0px 0px 0px 40px" }}>Configure integrations here: <a href="/settings"><Settings sx={{ position: "relative", top: "10px", fontSize: "32px" }}/></a></p>
         <p style={{ marginTop: "20px" }}>Your data is private. In quickstart mode, all data stays in your browser.</p>
         <p style={{ marginTop: "20px" }}>You can read more in the <a href="https://docs.goalfinch.com" target="_blank" rel="noopener noreferrer">technical documentation</a>.</p>
 
