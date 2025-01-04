@@ -1,10 +1,9 @@
 import React from 'react';
-import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineOppositeContent } from '@mui/lab';
+import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineDot, TimelineContent, TimelineOppositeContent } from '@mui/lab';
 import { Typography, Box } from '@mui/material';
 import { Slide, SlideType } from '../data/slide_interfaces';
 import SlideGroupEditor, { getSlideIcon } from './editors/SlideGroupEditor';
 import { SlideConfig } from './editors/slide_editor_types';
-import CustomTimelineDot from './CustomTimelineDot';
 
 interface SlideGroupTimelineItemProps {
   slide: Slide;
@@ -89,12 +88,11 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         )}
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <CustomTimelineDot
+        <TimelineDot
           onClick={() => onToggleExpanded(index)}
-          isExpanded={expandedItems[index]}
         >
           {getSlideIcon(slide.type)}
-        </CustomTimelineDot>
+        </TimelineDot>
         {index < slides.length - 1 && (
           <TimelineConnector 
             sx={{ 
