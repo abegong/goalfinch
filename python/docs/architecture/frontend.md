@@ -12,7 +12,7 @@ In order to populate the different kinds of Slides, users can configure several 
 
 ### State and persistence
 
-At the highest level, the app tracks three kinds of state: `DashboardConfig`, `ConnectionsConfig`, and `AppConfig`. These objects are singletons, managed through a Provider pattern and persisted via local storage. When the SHB is available, state will also be synced to the backend.
+At the highest level, the app tracks three kinds of state: `DashboardConfig`, `ConnectionsConfig`, and `AppConfig`. These objects are singletons, managed through a Context called `ConfigContext`. The are persisted via local storage. When the SHB is available, state will also be synced to the backend.
 
 * The DashboardConfig contains all the information necessary to populate SlideGroups. This information is stored in `SlideGroupConfigs`, with subclasses `PictureGroupConfig`, `ChartGroupConfig`, and `BulletGroupConfig`. In turn, these objects can contain `PictureConfig`s, `ChartConfig`s, and `BulletListConfig`s.
 * The ConnectionConfig stores information such as URLs, API keys, etc. for connecting to services that provide data for charts (Ex: self-hosted backend, online CSVs, Google sheets) and pictures (Ex: Unsplash API, picture manifests).
@@ -24,7 +24,7 @@ Aside from these top-level objects, specific components may manage their own int
 
 # Navigation and Pages
 
-Navigation in the app is strcutured around `Pages`. Each Page corresponds to a top-level nav item, and has a persistent URL. In addition, some Pages allow deeper linking via anchors. Each Page is implemented as a React component, passed as the element to a top-level Route in App.tsx.
+Navigation in the app is structured around `Pages`. Each Page corresponds to a top-level nav item, and has a persistent URL. In addition, some Pages allow deeper linking via anchors. Each Page is implemented as a React component, passed as the element to a top-level Route in App.tsx.
 
 Here's the list of Pages:
 
