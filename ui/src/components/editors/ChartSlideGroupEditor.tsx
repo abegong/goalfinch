@@ -1,6 +1,7 @@
 import React from 'react';
 import { Captions } from '../../data/slide_interfaces';
-import BaseSlideGroupEditor, { CollapsibleSection } from './BaseSlideGroupEditor';
+import BaseSlideGroupEditor from './BaseSlideGroupEditor';
+import { CollapsibleSection } from './CollapsibleSection';
 import styles from './SlideGroupEditor.module.css';
 
 interface ChartConfigProps {

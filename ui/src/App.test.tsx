@@ -1,9 +1,11 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders Goal Finch logo in AppControlBar', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const appControlBar = screen.getByLabelText('App Control Bar');
+  const logoElement = within(appControlBar).getByRole('img', { name: 'Goal Finch Logo' });
+  expect(logoElement).toBeInTheDocument();
+  expect(logoElement.getAttribute('src')).toBe('/goldfinch-logo.svg');
 });
