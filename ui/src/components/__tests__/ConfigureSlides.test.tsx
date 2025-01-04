@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Goals from '../pages/Goals';
+import ConfigureSlides from '../pages/ConfigureSlides';
 
 // Mock the SlideContext module
 jest.mock('../../context/SlideContext', () => ({
@@ -38,7 +38,7 @@ describe('Goals Component', () => {
   });
 
   test('clicking TimelineDot should not cause infinite updates', () => {
-    render(<Goals />);
+    render(<ConfigureSlides />);
     
     // Find all timeline dots and click the first one (the slide dot, not the add button)
     const timelineDots = screen.getAllByTestId('timeline-dot');

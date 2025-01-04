@@ -7,7 +7,7 @@ import { BaseSlide } from '../../data/BaseSlide';
 import { Slide, SlideType } from '../../data/slide_interfaces';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
 
-const Goals: React.FC = () => {
+const ConfigureSlides: React.FC = () => {
   const { slides, setSlides } = useSlides();
   const [expandedItems, setExpandedItems] = useState<boolean[]>([]);
 
@@ -173,4 +173,4 @@ const Goals: React.FC = () => {
   );
 };
 
-export default Goals;
+export default ConfigureSlides;
