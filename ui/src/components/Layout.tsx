@@ -17,10 +17,12 @@ interface LayoutContextType {
 
 export const LayoutContext = createContext<LayoutContextType>({
   appControlBarOpen: true,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setAppControlBarOpen: (open: boolean) => {
     console.warn('setAppControlBarOpen was called before Provider was initialized');
   },
   appControlBarVisible: true,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setAppControlBarVisible: (visible: boolean) => {
     console.warn('setAppControlBarVisible was called before Provider was initialized');
   },
@@ -33,22 +35,22 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [appControlBarOpen, setAppControlBarOpen] = useState(false);
   const [appControlBarVisible, setAppControlBarVisible] = useState(location.pathname !== '/dashboard');
   
   return (
     <LayoutContext.Provider value={{ 
-      appControlBarOpen: open,
-      setAppControlBarOpen: setOpen,
+      appControlBarOpen,
+      setAppControlBarOpen,
       appControlBarVisible,
       setAppControlBarVisible
     }}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppControlBar 
-          open={open}
-          setOpen={setOpen}
-          appControlBarVisible={appControlBarVisible}
+          open={appControlBarOpen}
+          setOpen={setAppControlBarOpen}
+          visible={appControlBarVisible}
         />
         <Box
           component="main"
@@ -58,7 +60,9 @@ export default function Layout({ children }: LayoutProps) {
             marginLeft: `0px`,
           }}
         >
-          <Box sx={{ 
+          <Box
+            id="dashboard-toggle-button"
+            sx={{ 
             display: 'flex', 
             alignItems: 'center', 
             padding: theme.spacing(1),
@@ -67,9 +71,9 @@ export default function Layout({ children }: LayoutProps) {
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={() => setOpen(true)}
+              onClick={() => setAppControlBarOpen(true)}
               edge="start"
-              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              sx={{ mr: 2, ...(appControlBarOpen && { display: 'none' }) }}
             >
             </IconButton>
           </Box>

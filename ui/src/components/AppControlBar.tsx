@@ -30,10 +30,10 @@ const menuItems = [
 interface AppControlBarProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  appControlBarVisible: boolean;
+  visible: boolean;
 }
 
-export default function AppControlBar({ open, setOpen, appControlBarVisible }: AppControlBarProps) {
+export default function AppControlBar({ open, setOpen, visible }: AppControlBarProps) {
   const location = useLocation();
   const theme = useTheme();
   
@@ -53,7 +53,7 @@ export default function AppControlBar({ open, setOpen, appControlBarVisible }: A
           [theme.breakpoints.up('sm')]: {
             width: open ? drawerWidth : theme.spacing(9),
           },
-          transform: appControlBarVisible ? 'none' : 'translateX(-100%)',
+          transform: visible ? 'none' : 'translateX(-100%)',
           transition: theme.transitions.create(['transform', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
@@ -61,7 +61,7 @@ export default function AppControlBar({ open, setOpen, appControlBarVisible }: A
         },
       }}
       variant="persistent"
-      open={appControlBarVisible}
+      open={visible}
     >
       <List>
         <ListItem disablePadding sx={{ display: 'block', minHeight: 70 }}>
