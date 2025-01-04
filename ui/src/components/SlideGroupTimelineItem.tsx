@@ -1,8 +1,8 @@
 import React from 'react';
 import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@mui/lab';
 import { Card, CardContent, Typography, Box } from '@mui/material';
-import { Slide } from '../../data/slide_interfaces';
-import SlideConfig, { getSlideIcon } from '../slides/SlideConfig';
+import { Slide } from '../data/slide_interfaces';
+import SlideConfig, { getSlideIcon } from './editor/SlideGroupEditor';
 
 interface SlideGroupTimelineItemProps {
   slide: Slide;

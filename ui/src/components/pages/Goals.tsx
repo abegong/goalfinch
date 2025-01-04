@@ -5,7 +5,7 @@ import { Add } from '@mui/icons-material';
 import { useSlides } from '../../context/SlideContext';
 import { BaseSlide } from '../../data/BaseSlide';
 import { Slide, SlideType } from '../../data/slide_interfaces';
-import SlideGroupTimelineItem from '../timeline/SlideGroupTimelineItem';
+import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
 
 const Goals: React.FC = () => {
   const { slides, setSlides } = useSlides();

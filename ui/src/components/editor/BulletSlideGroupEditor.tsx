@@ -1,6 +1,6 @@
 import React from 'react';
 import { Captions } from '../../data/slide_interfaces';
-import BaseSlideConfig, {CollapsibleSection} from './BaseSlideConfig';
+import BaseSlideConfig, {CollapsibleSection} from './BaseSlideGroupEditor';
 import styles from './SlideConfig.module.css';
 
 interface BulletListConfigProps {

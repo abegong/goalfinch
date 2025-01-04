@@ -12,9 +12,9 @@ import {
 import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
 import styles from './SlideConfig.module.css';
 import clsx from 'clsx';
-import BulletListConfig from './BulletListConfig';
-import ChartConfig from './ChartConfig';
-import NestedChartsConfig from './NestedChartsConfig';
+import BulletListConfig from './BulletSlideGroupEditor';
+import ChartConfig from './ChartSlideGroupEditor';
+import NestedChartsConfig from './NestedChartsSlideGroupEditor';
 
 interface SlideConfigProps {
   type: SlideType;

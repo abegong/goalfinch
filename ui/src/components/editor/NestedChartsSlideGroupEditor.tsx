@@ -1,7 +1,7 @@
 import React from 'react';
 import { Captions } from '../../data/slide_interfaces';
-import BaseSlideConfig from './BaseSlideConfig';
-import ChartConfig from './ChartConfig';
+import BaseSlideConfig from './BaseSlideGroupEditor';
+import ChartConfig from './ChartSlideGroupEditor';
 import styles from './SlideConfig.module.css';
 
 interface NestedChartsConfigProps {
