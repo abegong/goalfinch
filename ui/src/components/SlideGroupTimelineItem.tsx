@@ -2,7 +2,7 @@ import React from 'react';
 import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@mui/lab';
 import { Typography, Box } from '@mui/material';
 import { Slide } from '../data/slide_interfaces';
-import SlideGroupEditor, { getSlideIcon } from './editor/SlideGroupEditor';
+import SlideGroupEditor, { getSlideIcon } from './editors/SlideGroupEditor';
 
 interface SlideGroupTimelineItemProps {
   slide: Slide;

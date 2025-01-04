@@ -37,7 +37,11 @@ Source code for Page components is in the `src/components/pages` directory.
 
 # Slides
 
-The other important type of component is `Slides`, stored in the `src/components/slides` directory. There is a different Slide component for each SlideType, responsible for fetching and displaying the appropriate content. Slide components can also have logic for updating state (if the user clicks a checkbox on a Bullet slide), and transition animations between slides.
+The other important type of components are `Slides` and `SlideEditors`.
+
+Components for viewing Slides are stored in the `src/components/slides` directory. There is a different Slide component for each SlideType, responsible for fetching and displaying the appropriate content. Slide components can also have logic for updating state (if the user clicks a checkbox on a Bullet slide), and transition animations between slides.
+
+Components for editing Slides are stored in the `src/components/editors` directory. Instead of displaying the content of the Slide, these components allow the user to configure the Slide. Configuration is handled at the SlideGroup level.
 
 # Other Components
 
