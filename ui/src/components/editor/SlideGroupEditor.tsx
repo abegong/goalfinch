@@ -9,7 +9,7 @@ import {
   Segment,
   SsidChart,
 } from '@mui/icons-material';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Card, CardContent } from '@mui/material';
 import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
 import BulletListConfig from './BulletSlideGroupEditor';
@@ -196,33 +196,37 @@ const SlideGroupEditor: React.FC<SlideGroupEditorProps> = (props) => {
         })}
         onTransitionEnd={handleTransitionEnd}
       >
-        <Typography variant="h5" fontWeight="bold" sx={{ py: 2 }}>
-          {formatSlideType(props.type)}
-        </Typography>
-        {props.type === SlideType.BULLET_LIST && (
-          <BulletListConfig
-            content={props.content || []}
-            captions={props.captions}
-            onChange={props.onChange}
-          />
-        )}
-        {props.type === SlideType.CHART && (
-          <ChartConfig
-            url={props.url || ''}
-            goal={props.goal || 0}
-            rounding={props.rounding || 0}
-            units={props.units || ''}
-            captions={props.captions}
-            onChange={props.onChange}
-          />
-        )}
-        {props.type === SlideType.NESTED_CHARTS && (
-          <NestedChartsConfig
-            content={props.content || []}
-            captions={props.captions}
-            onChange={props.onChange}
-          />
-        )}
+        <Card elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
+          <CardContent>
+            <Typography variant="h5" fontWeight="bold" sx={{ py: 2 }}>
+              {formatSlideType(props.type)}
+            </Typography>
+            {props.type === SlideType.BULLET_LIST && (
+              <BulletListConfig
+                content={props.content || []}
+                captions={props.captions}
+                onChange={props.onChange}
+              />
+            )}
+            {props.type === SlideType.CHART && (
+              <ChartConfig
+                url={props.url || ''}
+                goal={props.goal || 0}
+                rounding={props.rounding || 0}
+                units={props.units || ''}
+                captions={props.captions}
+                onChange={props.onChange}
+              />
+            )}
+            {props.type === SlideType.NESTED_CHARTS && (
+              <NestedChartsConfig
+                content={props.content || []}
+                captions={props.captions}
+                onChange={props.onChange}
+              />
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
