@@ -4,12 +4,21 @@
     * Note: if something in that doc looks wrong, please check it with me.
     * Any time this doc informs a specific choice you make, please explain how.
 
-
 # Tools
 
 * For the React app in ui/, I'm using yarn, not npm.
 * When running tests, use `yarn test (whatever) --watchAll=false` to avoid the watch mode.
 
+# Testing
+
+* After any change to code, run the test suite to verify that nothing has broken.
+* Also, think through whether tests need to be added or changed. Be conservative: we don't need exhaustive testing for this application.
+* Check with me before you add any tests. Propose the gist of the test(s) you want to add, and get confirmation from me before you start to implement the test(s).
+
+# Documentation
+
+* Similarly, think through whether documentation needs to be added or changed.
+* Check with me before you add any documentation. Propose the gist of the doc(s) you want to add, and get confirmation from me before you start to implement the doc(s).
 
 # Style guide for copy
 

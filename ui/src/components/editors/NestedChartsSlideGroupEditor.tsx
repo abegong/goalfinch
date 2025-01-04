@@ -1,10 +1,15 @@
 import React from 'react';
-import { BaseSlideGroupEditor } from './BaseSlideGroupEditor';
 import { ChartSlideGroupEditor } from './ChartSlideGroupEditor';
-import { NestedChartsSlideConfig, SlideEditorProps, ChartSlideConfig } from './slide_editor_types';
+import { NestedChartsSlideConfig, ChartSlideConfig } from './slide_editor_types';
 import styles from './SlideGroupEditor.module.css';
+import { CollapsibleSection } from './CollapsibleSection';
 
-export const NestedChartsSlideGroupEditor: React.FC<SlideEditorProps<NestedChartsSlideConfig>> = ({
+interface NestedChartsSlideGroupEditorProps {
+  config: NestedChartsSlideConfig;
+  onChange: (config: Partial<NestedChartsSlideConfig>) => void;
+}
+
+export const NestedChartsSlideGroupEditor: React.FC<NestedChartsSlideGroupEditorProps> = ({
   config,
   onChange,
 }) => {
@@ -14,19 +19,52 @@ export const NestedChartsSlideGroupEditor: React.FC<SlideEditorProps<NestedChart
     onChange({ ...config, content: newContent });
   };
 
+  const handleAddChart = () => {
+    const newChart: ChartSlideConfig = {
+      type: 'chart',
+      url: '',
+      goal: 0,
+      rounding: 0,
+      units: '',
+      captions: {},
+    };
+    onChange({ ...config, content: [...config.content, newChart] });
+  };
+
+  const handleRemoveChart = (index: number) => {
+    const newContent = config.content.filter((_, i) => i !== index);
+    onChange({ ...config, content: newContent });
+  };
+
   return (
-    <BaseSlideGroupEditor<NestedChartsSlideConfig> config={config} onChange={onChange}>
-      <div className={styles['nested-charts-config']}>
-        <h3>Nested Charts</h3>
+    <CollapsibleSection title="Nested Charts">
+      <div className={styles['nested-charts']}>
         {config.content.map((chart, index) => (
-          <ChartSlideGroupEditor
-            key={index}
-            config={chart}
-            onChange={(newConfig) => handleChartChange(index, newConfig)}
-          />
+          <div key={index} className={styles['nested-chart']}>
+            <div className={styles['nested-chart-header']}>
+              <h4>Chart {index + 1}</h4>
+              <button 
+                onClick={() => handleRemoveChart(index)}
+                disabled={config.content.length === 1}
+                className={styles['remove-chart-button']}
+              >
+                Remove Chart
+              </button>
+            </div>
+            <ChartSlideGroupEditor
+              config={chart}
+              onChange={(newConfig) => handleChartChange(index, newConfig)}
+            />
+          </div>
         ))}
+        <button 
+          onClick={handleAddChart}
+          className={styles['add-chart-button']}
+        >
+          Add Chart
+        </button>
       </div>
-    </BaseSlideGroupEditor>
+    </CollapsibleSection>
   );
 };
 

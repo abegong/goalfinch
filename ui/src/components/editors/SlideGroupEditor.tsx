@@ -16,6 +16,7 @@ import { BulletSlideGroupEditor } from './BulletSlideGroupEditor';
 import { ChartSlideGroupEditor } from './ChartSlideGroupEditor';
 import { NestedChartsSlideGroupEditor } from './NestedChartsSlideGroupEditor';
 import { SlideConfig, BulletSlideConfig, ChartSlideConfig, NestedChartsSlideConfig } from './slide_editor_types';
+import { CollapsibleSection } from './CollapsibleSection';
 
 interface SlideGroupEditorProps {
   type: SlideType;
@@ -149,64 +150,86 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         <div className={styles['slide-group-editor-header']}>
           <Typography variant="h6">{formatSlideType(type)}</Typography>
           <div className={styles['slide-group-editor-actions']}>
-            {onDelete && (
-              <Button
-                startIcon={<Delete />}
-                onClick={() => setIsDeleteDialogOpen(true)}
-                color="error"
-              >
-                Delete
-              </Button>
-            )}
             <SpeedDial
-              ariaLabel="Change slide type"
+              ariaLabel="Slide group actions"
               icon={<SpeedDialIcon icon={<Build />} />}
               onClose={() => setIsSpeedDialOpen(false)}
               onOpen={() => setIsSpeedDialOpen(true)}
               open={isSpeedDialOpen}
               direction="left"
-              className={styles['slide-type-speed-dial']}
+              className={styles['speed-dial']}
             >
-              {shownSlideTypes.map((slideType) => (
+              {shownSlideTypes
+                .filter((t) => t !== type)
+                .map((t) => (
+                  <SpeedDialAction
+                    key={t}
+                    icon={getSlideIcon(t)}
+                    tooltipTitle={formatSlideType(t)}
+                    onClick={() => handleTypeChange(t)}
+                  />
+                ))}
+              {onDelete && (
                 <SpeedDialAction
-                  key={slideType}
-                  icon={getSlideIcon(slideType)}
-                  tooltipTitle={formatSlideType(slideType)}
-                  onClick={() => handleTypeChange(slideType)}
-                  className={clsx({
-                    [styles['active-slide-type']]: type === slideType,
-                  })}
+                  icon={<Delete />}
+                  tooltipTitle="Delete"
+                  onClick={() => setIsDeleteDialogOpen(true)}
                 />
-              ))}
+              )}
             </SpeedDial>
           </div>
         </div>
+
         {renderEditor()}
+
+        <CollapsibleSection title="Captions">
+          <div className={styles['caption-config']}>
+            <input
+              type="text"
+              placeholder="Top Center"
+              value={config.captions?.top_center || ''}
+              onChange={(e) => onChange({ captions: { ...config.captions, top_center: e.target.value } })}
+            />
+            <input
+              type="text"
+              placeholder="Bottom Center"
+              value={config.captions?.bottom_center || ''}
+              onChange={(e) => onChange({ captions: { ...config.captions, bottom_center: e.target.value } })}
+            />
+            <input
+              type="text"
+              placeholder="Bottom Right"
+              value={config.captions?.bottom_right || ''}
+              onChange={(e) => onChange({ captions: { ...config.captions, bottom_right: e.target.value } })}
+            />
+          </div>
+        </CollapsibleSection>
+
+        <Dialog
+          open={isDeleteDialogOpen}
+          onClose={() => setIsDeleteDialogOpen(false)}
+        >
+          <DialogTitle>Delete Slide Group</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to delete this slide group? This action cannot be
+              undone.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+            <Button
+              onClick={() => {
+                setIsDeleteDialogOpen(false);
+                if (onDelete) onDelete();
+              }}
+              color="error"
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </CardContent>
-      <Dialog
-        open={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-      >
-        <DialogTitle>Delete Slide Group</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete this slide group? This action cannot be
-            undone.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
-          <Button
-            onClick={() => {
-              setIsDeleteDialogOpen(false);
-              if (onDelete) onDelete();
-            }}
-            color="error"
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Card>
   );
 };

@@ -1,10 +1,14 @@
 import React from 'react';
 import { CollapsibleSection } from './CollapsibleSection';
-import { BaseSlideGroupEditor } from './BaseSlideGroupEditor';
-import { BulletSlideConfig, SlideEditorProps } from './slide_editor_types';
+import { BulletSlideConfig } from './slide_editor_types';
 import styles from './SlideGroupEditor.module.css';
 
-export const BulletSlideGroupEditor: React.FC<SlideEditorProps<BulletSlideConfig>> = ({
+interface BulletSlideGroupEditorProps {
+  config: BulletSlideConfig;
+  onChange: (config: Partial<BulletSlideConfig>) => void;
+}
+
+export const BulletSlideGroupEditor: React.FC<BulletSlideGroupEditorProps> = ({
   config,
   onChange,
 }) => {
@@ -53,33 +57,21 @@ export const BulletSlideGroupEditor: React.FC<SlideEditorProps<BulletSlideConfig
   };
 
   return (
-    <BaseSlideGroupEditor<BulletSlideConfig> config={config} onChange={onChange}>
-      <CollapsibleSection title="Bullets">
-        <div className={styles['bullet-list-config']}>
-          {config.content.map((bullet, index) => (
-            <div key={index} className={styles['bullet-row']}>
-              <input
-                type="text"
-                value={bullet}
-                onChange={(e) => handleBulletChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-              />
-              <button
-                onClick={() => handleDeleteBullet(index)}
-                disabled={config.content.length === 1}
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-          <button
-            onClick={() => onChange({ ...config, content: [...config.content, ''] })}
-          >
-            Add Bullet
-          </button>
-        </div>
-      </CollapsibleSection>
-    </BaseSlideGroupEditor>
+    <CollapsibleSection title="Bullet List">
+      <div className={styles['bullet-list']}>
+        {config.content.map((bullet, index) => (
+          <div key={index} className={styles['bullet-row']}>
+            <input
+              type="text"
+              value={bullet}
+              onChange={(e) => handleBulletChange(index, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(index, e)}
+              placeholder={`Bullet ${index + 1}`}
+            />
+          </div>
+        ))}
+      </div>
+    </CollapsibleSection>
   );
 };
 
