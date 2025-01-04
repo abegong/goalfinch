@@ -2,7 +2,6 @@ import React, { useState, createContext } from 'react';
 import { 
   Box, 
   CssBaseline,
-  IconButton,
   useTheme
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';

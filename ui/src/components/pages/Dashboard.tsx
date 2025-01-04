@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Box, Drawer, List, ListItem, ListItemText, IconButton, ListItemIcon, Typography } from '@mui/material';
-import { Landscape, ShowChart, SsidChart, Menu, FormatListBulleted, Segment } from '@mui/icons-material';
+import { Box, IconButton } from '@mui/material';
+import { Menu } from '@mui/icons-material';
 import { LayoutContext } from '../Layout';
 import { useSlides } from '../../context/SlideContext';
 import { SlideType } from '../../data/slide_interfaces';
@@ -155,72 +155,19 @@ const Dashboard: React.FC = () => {
         <Menu />
       </IconButton>
 
-      <Drawer
-        component="aside"
-        aria-label="Dashboard Control Bar"
-        anchor="right"
-        open={dashboardControlBarVisible}
-        onClose={() => setDashboardControlBarVisible(false)}
-        hideBackdrop={true}
-        variant="persistent"
-        sx={{
-          '& .MuiDrawer-paper': {
-            bgcolor: 'rgb(255, 193, 5)',
-            width: 240,
-            padding: '10px',
-          }
-        }}
-      >
-        <Typography variant="h4" sx={{ ml: '20px', mt: '20px', mb: '20px' }}>
-          Slides
-        </Typography>
-        <List sx={{ width: 220, borderTop: '1px solid rgba(0, 0, 0, 0.1)', borderBottom: '1px solid rgba(0, 0, 0, 0.1)', margin: '10px' }}>
-          {slides.map((slide, index) => (
-            <ListItem
-              key={index}
-              onClick={() => handleColorClick(index)}
-              sx={{
-                cursor: 'pointer',
-                m: 0,
-                p: '6px',
-                '&:hover': {
-                  backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                }
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 48,
-                  color: index === visibleColorIndex ? 'white' : 'black',
-                  borderRadius: '16px',
-                  backgroundColor: index === visibleColorIndex ? 'rgba(255,255,255,0.5)' : 'rgba(0, 0, 0, 0.1)',
-                  mr: '6px',
-                }}
-              >
-                {slide.type === SlideType.BULLET_LIST && <FormatListBulleted />}
-                {slide.type === SlideType.NESTED_IMAGES && <Landscape />}
-                {slide.type === SlideType.NESTED_CHARTS && <SsidChart />}
-                {slide.type === SlideType.NESTED_BULLET_LIST && <Segment />}
-                {slide.type === SlideType.CHART && <ShowChart />}
-              </ListItemIcon>
-              <ListItemText primary={slide.getName()} />
-            </ListItem>
-          ))}
-        </List>
-        {dashboardControlBarVisible && (
-          <DashboardControlBar
-            isPaused={isPaused}
-            onPauseChange={setIsPaused}
-          />
-        )}
-      </Drawer>
       {isTransitioning && renderSlide(slides[visibleColorIndex], {
         backgroundColor: colors[visibleColorIndex % colors.length].hex,
-        isTransitioning,
-        isOutgoing: true,
-        animationDuration: ANIMATION_DURATION,
-        direction: slideDirection
+        position: 'absolute',
+        transform: `translateX(${slideDirection === 'left' ? '-100%' : '100%'})`,
+        opacity: 0,
       })}
+      <DashboardControlBar 
+        visible={dashboardControlBarVisible}
+        onClose={() => setDashboardControlBarVisible(false)}
+        slides={slides}
+        visibleColorIndex={visibleColorIndex}
+        onSlideClick={handleColorClick}
+      />
       {renderSlide(slides[nextColorIndex], {
         backgroundColor: colors[nextColorIndex % colors.length].hex,
         isTransitioning,
