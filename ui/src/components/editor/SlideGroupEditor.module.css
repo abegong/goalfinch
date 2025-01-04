@@ -117,31 +117,33 @@ button:hover {
 }
 
 .slide-type-speed-dial {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  height: 32px !important;
+  /* display: inline-block; */
+  /* width: 302px !important; */
+  /* min-width: 320px !important; */
+  /* margin-left: 20px; */
 }
 
 .slide-type-speed-dial > button {
   width: 32px !important;
   height: 32px !important;
-  background-color: #339af0 !important;
+  background-color: rgba(0,0,0,.5);
   color: white !important;
+  box-shadow: none;
 }
 
 .slide-type-speed-dial > button:hover {
-  background-color: #228be6 !important;
+  background-color: rgba(0,0,0,.7);
 }
 
 /* Style the Speed Dial actions */
 .slide-type-speed-dial :global(.MuiSpeedDial-actions) button {
-  background-color: #339af0 !important;
+
+  background-color: rgba(0,0,0,.5);
   color: white !important;
 }
 
 .slide-type-speed-dial :global(.MuiSpeedDial-actions) button:hover {
-  background-color: #228be6 !important;
+  background-color: rgba(0,0,0,.7);
 }
 
 .slide-type-speed-dial svg {

@@ -172,24 +172,6 @@ const SlideGroupEditor: React.FC<SlideGroupEditorProps> = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <SpeedDial
-        ariaLabel="Change slide type"
-        icon={<SpeedDialIcon openIcon={<Build />} icon={<Build />} />}
-        open={speedDialOpen}
-        onOpen={() => setSpeedDialOpen(true)}
-        onClose={() => setSpeedDialOpen(false)}
-        direction="left"
-        className={styles['slide-type-speed-dial']}
-      >
-        {slideTypeActions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            onClick={action.onClick}
-          />
-        ))}
-      </SpeedDial>
       <div
         className={clsx(styles['slide-config'], {
           [styles['collapsed']]: isCollapsed,
@@ -198,9 +180,29 @@ const SlideGroupEditor: React.FC<SlideGroupEditorProps> = (props) => {
       >
         <Card elevation={2} sx={{ '&:hover': { elevation: 4 } }}>
           <CardContent>
-            <Typography variant="h5" fontWeight="bold" sx={{ py: 2 }}>
-              {formatSlideType(props.type)}
-            </Typography>
+            <div style={{ display: 'flex', backgroundColor: 'var(--border-color)', justifyContent: 'space-between' }}>
+              <Typography variant="h5" fontWeight="bold" sx={{ py: 2, display: 'inline-block' }}>
+                {formatSlideType(props.type)}
+              </Typography>
+              <SpeedDial
+                ariaLabel="Change slide type"
+                icon={<SpeedDialIcon openIcon={<Build />} icon={<Build />} />}
+                open={speedDialOpen}
+                onOpen={() => setSpeedDialOpen(true)}
+                onClose={() => setSpeedDialOpen(false)}
+                direction="right"
+                className={styles['slide-type-speed-dial']}
+              >
+                {slideTypeActions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                    onClick={action.onClick}
+                  />
+                ))}
+              </SpeedDial>
+            </div>
             {props.type === SlideType.BULLET_LIST && (
               <BulletListConfig
                 content={props.content || []}
