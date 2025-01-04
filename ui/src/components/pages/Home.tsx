@@ -9,13 +9,13 @@ const Home: React.FC = () => {
         <img src="/goldfinch-logo.svg" alt="Goal Finch Logo" style={{
             width: '160px', height: 'auto', float: 'right',
             backgroundColor: 'white',
-            border: '4px solid #F4B942',
+            border: '4px solid var(--border-color)',
             borderRadius: '50%'
         }} />
         <Typography variant="h3" component="h2" gutterBottom>
           Goal Finch
         </Typography>
-        <hr style={{ height: '4px', backgroundColor: '#F4B942', border: 'none' }}></hr>
+        <hr style={{ height: '4px', backgroundColor: 'var(--border-color)', border: 'none' }}></hr>
         <Typography variant="h5" color="text.secondary" paragraph>
           A simple, flexible progress tracker for personal goals.
         </Typography>
