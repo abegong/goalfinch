@@ -5,7 +5,6 @@ import {
   BulletListSlide,
   NestedBulletListSlide,
   SlideType,
-  Captions
 } from './slide_interfaces';
 import { BaseSlide } from './BaseSlide';
 

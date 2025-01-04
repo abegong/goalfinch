@@ -50,7 +50,7 @@ module.exports = [
       'react-hooks/exhaustive-deps': 'warn',
       'react/react-in-jsx-scope': 'off', // Not needed in React 17+
       '@typescript-eslint/no-explicit-any': 'warn', // Downgrade to warning
-      '@typescript-eslint/no-unused-vars': 'warn', // Downgrade to warning
+      // '@typescript-eslint/no-unused-vars': 'warn', // Downgrade to warning
     },
     settings: {
       react: {

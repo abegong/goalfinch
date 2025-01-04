@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { Slide, Captions, SlideType } from '../data/slide_interfaces';
-import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
+import { Slide, SlideType } from '../data/slide_interfaces';
+import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@mui/lab';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import SlideConfig, { getSlideIcon } from './SlideConfig';
 import { Add } from '@mui/icons-material';

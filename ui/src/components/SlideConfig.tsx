@@ -3,8 +3,6 @@ import { SlideType, Captions } from '../data/slide_interfaces';
 import { 
   FormatListBulleted, 
   Landscape, 
-  ShowChart, 
-  List, 
   Timeline,
   Delete,
   Build,

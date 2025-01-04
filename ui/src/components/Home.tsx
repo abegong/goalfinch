@@ -1,17 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Typography, Button, Container, Grid, Paper, List, ListItem, IconButton, Icon, Slide } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { Dashboard, ExpandCircleDown, MonitorHeart, Settings, Slideshow } from '@mui/icons-material';
-
-const FeatureBox = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  textAlign: 'center',
-}));
+import { Box, Typography, Container, List, ListItem } from '@mui/material';
+import { ExpandCircleDown, MonitorHeart, Settings, Slideshow } from '@mui/icons-material';
 
 const Home: React.FC = () => {
   return (
