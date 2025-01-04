@@ -6,7 +6,6 @@ import {
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import AppControlBar from './AppControlBar';
-import { DashboardToggleButton } from './DashboardToggleButton';
 
 interface LayoutContextType {
   appControlBarOpen: boolean;
