@@ -46,3 +46,26 @@ Components for editing Slides are stored in the `src/components/editors` directo
 # Other Components
 
 A few other component types are stored in `src/components/`. In general, I avoid creating specific types, unless they are reused with inheritance (like Slides) or are so big and complex that they need to be pulled into files of their own (like Pages).
+
+# Component documentation
+
+Each of the component subdirectories contains a markdown file (ex: `src/components/editors/editors.md`) that documents the purpose, behavior, and general shape of implementation of the components.These documentation files serve as living documentation that should be kept up to date as components evolve.
+
+# Testing
+
+The app uses React Testing Library for component tests, focusing on user-centric behavior rather than implementation details. Tests are co-located with their components (ex: `Home.test.tsx` alongside `Home.tsx`).
+
+Key testing areas:
+* Critical user flows (dashboard navigation, slide transitions)
+* Complex state management (config updates, connection status)
+* Reusable components (slides, editors)
+
+Integration tests verify that major features work together correctly, particularly around configuration persistence and data loading. We avoid testing implementation details or maintaining high test coverage for simple UI components.
+
+# Type Definitions
+
+Type definitions are centralized in `src/types/`, with separate files for major domain concepts (ex: `slides.ts`, `connections.ts`). We use Zod schemas to validate runtime data, with TypeScript types derived from these schemas using `z.infer<typeof Schema>`.
+
+Component props are defined inline with their components unless they're shared across multiple files. Shared prop types are placed in the relevant domain type file.
+
+External API responses are typed using interfaces that match the exact shape of the JSON. These are kept in `src/types/api.ts` and transformed into our domain types where needed.
