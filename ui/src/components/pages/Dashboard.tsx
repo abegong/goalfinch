@@ -3,15 +3,15 @@ import { Box, Drawer, List, ListItem, ListItemText, IconButton, ListItemIcon } f
 import MenuIcon from '@mui/icons-material/Menu';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import SegmentIcon from '@mui/icons-material/Segment';
-import { LayoutContext } from './Layout';
-import { useSlides } from '../context/SlideContext';
-import { SlideType } from '../data/slide_interfaces';
-import ChartSlide from './ChartSlide';
-import GallerySlide from './GallerySlide';
-import BulletListSlide from './BulletListSlide';
 import { Landscape, ShowChart, SsidChart } from '@mui/icons-material';
-import DashboardControlBar from './DashboardControlBar';
 import { Typography } from '@mui/material';
+import { LayoutContext } from '../Layout';
+import { useSlides } from '../../context/SlideContext';
+import { SlideType } from '../../data/slide_interfaces';
+import ChartSlide from '../slides/ChartSlide';
+import GallerySlide from '../slides/GallerySlide';
+import BulletListSlide from '../slides/BulletListSlide';
+import DashboardControlBar from '../DashboardControlBar';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },

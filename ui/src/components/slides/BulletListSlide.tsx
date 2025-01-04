@@ -1,6 +1,6 @@
 import React from 'react';
 import Slide from './Slide';
-import { BulletListSlide as BulletListSlideType } from '../data/slide_interfaces';
+import { BulletListSlide as BulletListSlideType } from '../../data/slide_interfaces';
 
 interface BulletListSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slide: BulletListSlideType;

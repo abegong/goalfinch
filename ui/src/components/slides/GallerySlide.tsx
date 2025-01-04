@@ -1,6 +1,6 @@
 import React from 'react';
 import Slide from './Slide';
-import { NestedImagesSlide } from '../data/slide_interfaces';
+import { NestedImagesSlide } from '../../data/slide_interfaces';
 
 interface GallerySlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slide: NestedImagesSlide;

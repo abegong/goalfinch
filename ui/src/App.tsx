@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
-import Settings from './components/Settings';
-import Dashboard from './components/Dashboard';
-import Goals from './components/Goals';
-import Home from './components/Home';
+import Settings from './components/pages/Settings';
+import Dashboard from './components/pages/Dashboard';
+import Goals from './components/pages/Goals';
+import Home from './components/pages/Home';
 import { SlideProvider } from './context/SlideContext';
 import './App.css';
 

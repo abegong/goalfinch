@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Slide, SlideType } from '../data/slide_interfaces';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from '@mui/lab';
 import { Card, CardContent, Typography, Box } from '@mui/material';
-import SlideConfig, { getSlideIcon } from './SlideConfig';
 import { Add } from '@mui/icons-material';
-import { useSlides } from '../context/SlideContext';
-import { BaseSlide } from '../data/BaseSlide';
+import { useSlides } from '../../context/SlideContext';
+import SlideConfig, { getSlideIcon } from '../slides/SlideConfig';
+import { BaseSlide } from '../../data/BaseSlide';
+import { Slide, SlideType } from '../../data/slide_interfaces';
 
 
 const Goals: React.FC = () => {

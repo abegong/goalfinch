@@ -1,6 +1,6 @@
 import React from 'react';
 import Slide from './Slide';
-import { ChartSlide as ChartSlideType } from '../data/slide_interfaces';
+import { ChartSlide as ChartSlideType } from '../../data/slide_interfaces';
 
 interface ChartSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slide: ChartSlideType;

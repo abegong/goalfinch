@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Captions } from '../data/slide_interfaces';
+import { Captions } from '../../data/slide_interfaces';
 import styles from './SlideConfig.module.css';
 
 interface BaseSlideConfigProps {
