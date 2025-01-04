@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Box, Drawer, List, ListItem, ListItemText, IconButton, ListItemIcon } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import SegmentIcon from '@mui/icons-material/Segment';
-import { Landscape, ShowChart, SsidChart } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import { Box, Drawer, List, ListItem, ListItemText, IconButton, ListItemIcon, Typography } from '@mui/material';
+import { Landscape, ShowChart, SsidChart, Menu, FormatListBulleted, Segment } from '@mui/icons-material';
 import { LayoutContext } from '../Layout';
 import { useSlides } from '../../context/SlideContext';
 import { SlideType } from '../../data/slide_interfaces';
@@ -156,7 +152,7 @@ const Dashboard: React.FC = () => {
           }
         }}
       >
-        <MenuIcon />
+        <Menu />
       </IconButton>
 
       <Drawer
@@ -201,10 +197,10 @@ const Dashboard: React.FC = () => {
                   mr: '6px',
                 }}
               >
-                {slide.type === SlideType.BULLET_LIST && <FormatListBulletedIcon />}
+                {slide.type === SlideType.BULLET_LIST && <FormatListBulleted />}
                 {slide.type === SlideType.NESTED_IMAGES && <Landscape />}
                 {slide.type === SlideType.NESTED_CHARTS && <SsidChart />}
-                {slide.type === SlideType.NESTED_BULLET_LIST && <SegmentIcon />}
+                {slide.type === SlideType.NESTED_BULLET_LIST && <Segment />}
                 {slide.type === SlideType.CHART && <ShowChart />}
               </ListItemIcon>
               <ListItemText primary={slide.getName()} />
