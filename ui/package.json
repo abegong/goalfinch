@@ -53,8 +53,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
     "@babel/plugin-syntax-flow": "^7.21.0",
+    "@babel/plugin-transform-private-property-in-object": "^7.25.9",
     "@babel/plugin-transform-react-jsx": "^7.21.0",
     "@babel/runtime": "^7.21.0",
     "eslint": "^9.17.0",

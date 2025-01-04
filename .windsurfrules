@@ -1,2 +1,15 @@
-* When working on the react app in ui/, refer to @. Not everything in this file is fully implemented, or implemented correctly, but it's the direction we want things to go. (Note: if something in that doc looks wrong, please check it with me.)
-* In user-facing copy adn documentation, "Goal Finch" is always capitalized with a space between the words. Bad: "Goal finch", "Goalfinch" or "goalfinch".
+# Architecture
+
+* When working on the react app in ui/, refer to @ui/python/docs/architecture/frontend.md. Not everything in this file is fully implemented, or implemented correctly, but it's the direction we want things to go. (Note: if something in that doc looks wrong, please check it with me.)
+
+
+
+# Tools
+
+* For the React app in ui/, I'm using yarn, not npm.
+
+
+
+# Style guide for copy
+
+* In user-facing copy and documentation, "Goal Finch" is always capitalized with a space between the words. Bad: "Goal finch", "Goalfinch" or "goalfinch".
