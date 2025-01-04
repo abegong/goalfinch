@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import AppControlBar from './AppControlBar';
+import { DashboardToggleButton } from './DashboardToggleButton';
 
 interface LayoutContextType {
   appControlBarOpen: boolean;
@@ -60,23 +61,11 @@ export default function Layout({ children }: LayoutProps) {
             marginLeft: `0px`,
           }}
         >
-          <Box
-            id="dashboard-toggle-button"
-            sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            padding: theme.spacing(1),
-            ...(appControlBarVisible && location.pathname !== '/dashboard' ? {} : { display: 'none' })
-          }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={() => setAppControlBarOpen(true)}
-              edge="start"
-              sx={{ mr: 2, ...(appControlBarOpen && { display: 'none' }) }}
-            >
-            </IconButton>
-          </Box>
+          <DashboardToggleButton 
+            appControlBarVisible={appControlBarVisible}
+            appControlBarOpen={appControlBarOpen}
+            setAppControlBarOpen={setAppControlBarOpen}
+          />
           {children}
         </Box>
       </Box>
