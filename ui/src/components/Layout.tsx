@@ -42,9 +42,13 @@ interface LayoutContextType {
 
 export const LayoutContext = createContext<LayoutContextType>({
   appControlBarOpen: true,
-  setAppControlBarOpen: () => {},
+  setAppControlBarOpen: (open: boolean) => {
+    console.warn('setAppControlBarOpen was called before Provider was initialized');
+  },
   appControlBarVisible: true,
-  setAppControlBarVisible: () => {},
+  setAppControlBarVisible: (visible: boolean) => {
+    console.warn('setAppControlBarVisible was called before Provider was initialized');
+  },
 });
 
 interface LayoutProps {

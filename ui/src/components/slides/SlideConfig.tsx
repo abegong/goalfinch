@@ -83,7 +83,9 @@ const SlideConfig: React.FC<SlideConfigProps> = (props) => {
     open: false,
     title: '',
     message: '',
-    action: () => {},
+    action: () => {
+      console.warn('Dialog action was called before being set');
+    },
   });
 
   useEffect(() => {
