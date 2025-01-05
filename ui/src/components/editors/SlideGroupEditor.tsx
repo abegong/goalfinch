@@ -70,7 +70,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   }, [type, onTransitionEnd]);
 
   const handleTypeChange = (newType: SlideType) => {
-    let newConfig: SlideGroupConfig;
+    let newConfig: Partial<SlideGroupConfig>;
     switch (newType) {
       case SlideType.BULLETS:
         newConfig = {
@@ -78,9 +78,8 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           slides: [{
             type: SlideType.BULLETS,
             content: [''],
-          }]
-          // captions: config.captions,
-        } as BulletSlideGroupConfig;
+          }],
+        };
         break;
       case SlideType.CHART:
         newConfig = {
@@ -94,20 +93,19 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               units: '',
             }
           }],
-          // captions: config.captions,
-        } as ChartSlideGroupConfig;
+        };
         break;
       case SlideType.PICTURE:
         newConfig = {
           type: SlideType.PICTURE,
           slide_count: 1,
-          // captions: config.captions,
-        } as PictureSlideGroupConfig;
+        };
         break;
       default:
-        return;
+        throw new Error(`Unsupported slide type: ${newType}`);
     }
     onChange(newConfig);
+    setIsSpeedDialOpen(false);
   };
 
   const renderEditor = () => {

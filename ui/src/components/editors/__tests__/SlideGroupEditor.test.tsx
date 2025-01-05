@@ -8,12 +8,7 @@ const defaultConfig = {
   type: SlideType.BULLETS,
   slides: [{
     type: SlideType.BULLETS,
-    content: ['Test bullet point'],
-    captions: {
-      top_center: '',
-      bottom_center: '',
-      bottom_right: ''
-    }
+    content: ['Test bullet point']
   }],
   captions: {
     top_center: '',
@@ -47,12 +42,7 @@ describe('SlideGroupEditor', () => {
     expect(onChange).toHaveBeenCalledWith({
       slides: [{
         type: SlideType.BULLETS,
-        content: ['Test bullet point updated'],
-        captions: {
-          top_center: '',
-          bottom_center: '',
-          bottom_right: ''
-        }
+        content: ['Test bullet point updated']
       }]
     });
   });
@@ -133,7 +123,7 @@ describe('SlideGroupEditor', () => {
       type: SlideType.BULLETS,
       config: {
         ...defaultConfig,
-        content: [],
+        slides: [],
       },
     };
     render(<SlideGroupEditor {...props} onChange={jest.fn()} />);
