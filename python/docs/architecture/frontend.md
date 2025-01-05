@@ -18,7 +18,7 @@ At the highest level, the app tracks three kinds of state: `DashboardConfig`, `C
 * The ConnectionConfig stores information such as URLs, API keys, etc. for connecting to services that provide data for charts (Ex: self-hosted backend, online CSVs, Google sheets) and pictures (Ex: Unsplash API, picture manifests).
 * The AppConfig stores UI preferences, such as whether to start on the Home page or Dashboard page.
 
-All of these config objects strongly typed and validated with zod. Most of the information passed among Components is contained in these types, interfaces, and classes. See `src/types` for source code.
+All of these config objects are strongly typed. Most of the information passed among Components is contained in these types, interfaces, and classes. See `src/types` for source code.
 
 Aside from these top-level objects, specific components may manage their own internal state, usually relating to things like UI elements, animations, etc.
 
@@ -64,7 +64,7 @@ Integration tests verify that major features work together correctly, particular
 
 # Type Definitions
 
-Type definitions are centralized in `src/types/`, with separate files for major domain concepts (ex: `slides.ts`, `connections.ts`). We use Zod schemas to validate runtime data, with TypeScript types derived from these schemas using `z.infer<typeof Schema>`.
+Type definitions are centralized in `src/types/`, with separate files for major domain concepts (ex: `slides.ts`, `connections.ts`). 
 
 Component props are defined inline with their components unless they're shared across multiple files. Shared prop types are placed in the relevant domain type file.
 

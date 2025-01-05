@@ -14,7 +14,7 @@ The application's state is managed through three main configuration objects, all
 2. **ConnectionsConfig**
    - Stores external service configurations (URLs, API keys)
    - Used by slides to fetch data and images
-   - Validated at runtime using Zod schemas
+   - Validated at runtime
 
 3. **AppConfig**
    - Contains UI preferences and application settings
@@ -64,14 +64,13 @@ Each SlideGroup contains:
 ### Editor Components
 - Receive current configuration and update callbacks
 - Follow controlled component pattern
-- Validate changes using Zod schemas before propagating updates
+- Validate changes before propagating updates
 
 ## Type Safety
 
-1. All configuration objects are validated using Zod schemas
-2. TypeScript types are derived from Zod schemas using `z.infer<typeof Schema>`
-3. External API responses are typed separately in `api.ts`
-4. Discriminated unions are used for type-safe handling of different slide types
+1. All configuration objects are strongly typed and validated at runtime
+2. External API responses are typed separately in `api.ts`
+3. Discriminated unions are used for type-safe handling of different slide types
 
 ## Best Practices
 
