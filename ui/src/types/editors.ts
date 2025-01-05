@@ -55,26 +55,3 @@ export type SlideGroupConfig =
   | BulletSlideGroupConfig 
   | ChartSlideGroupConfig 
   | PictureSlideGroupConfig;
-
-/**
- * Maps a specific SlideConfig type to its corresponding string type literal.
- * Enables type-safe discrimination of slide types.
- */
-export type SlideGroupConfigType<T extends SlideGroupConfig> = T['type'];
-
-/**
- * Props interface for the base slide group editor component.
- */
-export interface BaseSlideGroupEditorProps<T extends SlideGroupConfig> {
-  config: T;
-  onChange: (config: Partial<T>) => void;
-  children?: ReactNode;
-}
-
-/**
- * Props interface for specific slide editor components.
- */
-export interface SlideEditorProps<T extends SlideGroupConfig> {
-  config: T;
-  onChange: (config: Partial<T>) => void;
-}
