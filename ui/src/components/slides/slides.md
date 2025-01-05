@@ -31,34 +31,6 @@ Each slide type has its own component that implements the base functionality thr
   - Handles multiple picture layouts
   - Provides image transitions
 
-## State Management
-
-As described in the frontend architecture, slides use:
-- Props from DashboardConfig for content and configuration
-- Local state for UI elements (animations, transitions)
-- Context for shared functionality (navigation, interaction)
-
-## Type Safety
-
-Each slide uses TypeScript discriminated unions aligned with the config types:
-```typescript
-type SlideContent = 
-  | { type: 'bullets', items: string[], checkable?: boolean }
-  | { type: 'chart', data: any, target?: number }
-  | { type: 'picture', urls: string[] }
-```
-
-## Component Composition
-
-Following React best practices, slides use composition over inheritance:
-```typescript
-const ChartSlide = (props) => (
-  <SlideBase>
-    <ChartContent {...props} />
-  </SlideBase>
-)
-```
-
 ## Data Fetching
 
 Slides that require external data (charts, pictures) handle:
