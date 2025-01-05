@@ -31,9 +31,9 @@ export const demoData: SlideGroupConfig[] = [
     type: SlideType.BULLETS,
     slides: [{
       content: [
-        "Personal growth goal #1",
-        "Personal growth goal #2",
-        "Professional goal #1"
+        "Become a wizard-level swordsman",
+        "Find the six-fingered man",
+        "Avenge my father"
       ],
     } as BulletSlideConfig],
     captions: {
@@ -47,43 +47,67 @@ export const demoData: SlideGroupConfig[] = [
   {
     type: SlideType.CHART,
     captions: {
-      bottom_right: "health"
+      bottom_right: "Practice technique"
     },
     slides: [
       {
         type: SlideType.CHART,
         content: {
           url: "SPREADSHEET_URL_1",
-          goal: 80,
+          goal: 40,
           rounding: 0,
-          units: "km"
+          units: "hours"
         },
         captions: {
-          top_center: "Cardio Activity 1",
+          top_center: "Bonetti",
         }
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
         content: {
           url: "SPREADSHEET_URL_2",
-          goal: 31*2,
+          goal: 40,
           rounding: 0,
-          units: "",
+          units: "hours",
         },
         captions: {
-          top_center: "Strength Training",
+          top_center: "Thibault",
         }
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
         content: {
           url: "SPREADSHEET_URL_3",
-          goal: 31*80,
+          goal: 40,
           rounding: 0,
-          units: " min"
+          units: "hours"
         },
         captions: {
-          top_center: "Sleep Schedule",
+          top_center: "McBone",
+        }
+      } as ChartSlideConfig,
+      {
+        type: SlideType.CHART,
+        content: {
+          url: "SPREADSHEET_URL_3",
+          goal: 40,
+          rounding: 0,
+          units: "hours"
+        },
+        captions: {
+          top_center: "Agrippa",
+        }
+      } as ChartSlideConfig,
+      {
+        type: SlideType.CHART,
+        content: {
+          url: "SPREADSHEET_URL_3",
+          goal: 40,
+          rounding: 0,
+          units: "hours"
+        },
+        captions: {
+          top_center: "Capo Ferro",
         }
       } as ChartSlideConfig,
     ]
