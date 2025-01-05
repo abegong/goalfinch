@@ -164,7 +164,7 @@ const Dashboard: React.FC = () => {
         visibleColorIndex={slideGroupIndex}
         onSlideClick={handleColorClick}
       />
-      {renderSlideGroup(slideGroups[slideGroupIndex], {
+      {slideGroups.length > 0 && renderSlideGroup(slideGroups[slideGroupIndex], {
         backgroundColor: colors[slideGroupIndex % colors.length].hex,
         isTransitioning,
         animationDuration: ANIMATION_DURATION,
