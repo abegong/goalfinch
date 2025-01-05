@@ -4,13 +4,40 @@ import { ChartSlideConfig } from '../../types/slides';
 import { Captions } from '../../types/slide_groups';
 import styles from './SlideGroupEditor.module.css';
 
-interface ChartConfigProps {
+interface ChartEditorProps {
+  configs: ChartSlideConfig[];
+  captions?: Captions;
+  onChange: (configs: ChartSlideConfig[]) => void;
+}
+
+export const ChartEditor: React.FC<ChartEditorProps> = ({ configs, captions, onChange }) => {
+  const handleSlideChange = (index: number, update: Partial<ChartSlideConfig>) => {
+    const newConfigs = [...configs];
+    newConfigs[index] = { ...configs[index], ...update };
+    onChange(newConfigs);
+  };
+
+  return (
+    <div>
+      {configs.map((config, index) => (
+        <ChartSlideEditor
+          key={index}
+          config={config}
+          captions={captions}
+          onChange={(update) => handleSlideChange(index, update)}
+        />
+      ))}
+    </div>
+  );
+};
+
+interface ChartSlideEditorProps {
   config: ChartSlideConfig;
   captions?: Captions;
   onChange: (config: Partial<ChartSlideConfig>) => void;
 }
 
-export const ChartEditor: React.FC<ChartConfigProps> = ({
+export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
   config,
   onChange,
 }) => {
@@ -21,35 +48,36 @@ export const ChartEditor: React.FC<ChartConfigProps> = ({
   return (
     <CollapsibleSection title="Chart Settings">
       <div className={styles['form-grid']}>
-        {/* <label htmlFor="data-url">Data URL</label>
+        <label htmlFor="data-url">Data URL</label>
         <input
           id="data-url"
           type="text"
-          value={config.url}
-          onChange={(e) => handleChange({ url: e.target.value })}
+          value={config.content.url}
+          onChange={(e) => handleChange({ content: { ...config.content, url: e.target.value } })}
         />
-        <label htmlFor="goal-value">Goal</label>
+        <label htmlFor="goal">Goal Value</label>
         <input
-          id="goal-value"
+          id="goal"
           type="number"
-          value={config.goal}
-          onChange={(e) => handleChange({ goal: parseFloat(e.target.value) })}
+          value={config.content.goal}
+          onChange={(e) => handleChange({ content: { ...config.content, goal: Number(e.target.value) } })}
         />
-        <label htmlFor="rounding-digits">Decimals</label>
+        <label htmlFor="rounding">Decimal Places</label>
         <input
-          id="rounding-digits"
+          id="rounding"
           type="number"
           min="0"
-          value={config.rounding}
-          onChange={(e) => handleChange({ rounding: parseInt(e.target.value, 10) })}
+          max="10"
+          value={config.content.rounding}
+          onChange={(e) => handleChange({ content: { ...config.content, rounding: Number(e.target.value) } })}
         />
         <label htmlFor="units">Units</label>
         <input
           id="units"
           type="text"
-          value={config.units}
-          onChange={(e) => handleChange({ units: e.target.value })}
-        /> */}
+          value={config.content.units}
+          onChange={(e) => handleChange({ content: { ...config.content, units: e.target.value } })}
+        />
       </div>
     </CollapsibleSection>
   );

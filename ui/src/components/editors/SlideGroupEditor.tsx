@@ -112,20 +112,24 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 
   const renderEditor = () => {
     switch (type) {
-      // case SlideType.BULLETS:
-      //   return (
-      //     <BulletEditor
-      //       config={config as BulletSlideGroupConfig}
-      //       onChange={onChange}
-      //     />
-      //   );
-      // case SlideType.CHART:
-      //   return (
-      //     <ChartEditor
-      //       config={config as ChartSlideGroupConfig}
-      //       onChange={onChange}
-      //     />
-      //   );
+      case SlideType.BULLETS:
+        return (
+          <BulletEditor
+            config={config as BulletSlideGroupConfig}
+            onChange={onChange}
+          />
+        );
+      case SlideType.CHART:
+        return (
+          <ChartEditor
+            configs={(config as ChartSlideGroupConfig).slides}
+            onChange={(newSlides) => {
+              onChange({
+                slides: newSlides
+              } as Partial<SlideGroupConfig>);
+            }}
+          />
+        );
       case SlideType.PICTURE:
         return (
           <PictureEditor
