@@ -1,7 +1,7 @@
 import React from 'react';
-import { Captions } from '../../data/slide_interfaces';
 import { CollapsibleSection } from './CollapsibleSection';
-import { ChartSlideConfig, SlideEditorProps } from './slide_editor_types';
+import { ChartSlideConfig } from '../../types/slides';
+import { Captions } from '../../types/editors';
 import styles from './SlideGroupEditor.module.css';
 
 interface ChartConfigProps {
@@ -21,7 +21,7 @@ export const ChartEditor: React.FC<ChartConfigProps> = ({
   return (
     <CollapsibleSection title="Chart Settings">
       <div className={styles['form-grid']}>
-        <label htmlFor="data-url">Data URL</label>
+        {/* <label htmlFor="data-url">Data URL</label>
         <input
           id="data-url"
           type="text"
@@ -49,7 +49,7 @@ export const ChartEditor: React.FC<ChartConfigProps> = ({
           type="text"
           value={config.units}
           onChange={(e) => handleChange({ units: e.target.value })}
-        />
+        /> */}
       </div>
     </CollapsibleSection>
   );

@@ -1,21 +1,18 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SlideGroupEditor from '../SlideGroupEditor';
-import { SlideType } from '../../../data/slide_interfaces';
-import { BulletSlideConfig } from '../slide_editor_types';
+import { SlideType } from '../../../types/slides';
+import { BulletSlideGroupConfig } from '../../../types/editors';
 
 const defaultProps = {
-  type: SlideType.BULLET_LIST,
-  config: {
-    type: 'bullet',
+  type: SlideType.BULLETS,
+  slides: [{
+    type: SlideType.BULLETS,
     content: ['Test bullet point'],
-    captions: {
-      top_center: '',
-      bottom_center: '',
-    },
-  } as BulletSlideConfig,
+  }],
+  captions: {},
   onChange: jest.fn(),
-};
+} as BulletSlideGroupConfig;
 
 describe('SlideGroupEditor', () => {
   beforeEach(() => {

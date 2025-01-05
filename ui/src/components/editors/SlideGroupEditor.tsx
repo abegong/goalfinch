@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SlideType } from '../../data/slide_interfaces';
+import { SlideType, slideTypes } from '../../types/slides';
 import { 
   FormatListBulleted, 
   Landscape, 
@@ -14,9 +14,10 @@ import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
 import { BulletEditor } from './BulletEditor';
 import { ChartEditor } from './ChartEditor';
-import { NestedChartsEditor } from './NestedChartsEditor';
-import { SlideConfig, BulletSlideConfig, ChartSlideConfig, NestedChartsSlideConfig } from './slide_editor_types';
+import { SlideConfig, PictureSlideConfig, BulletSlideConfig, ChartSlideConfig } from '../../types/slides';
 import { CollapsibleSection } from './CollapsibleSection';
+import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/editors';
+import PictureEditor from './PictureEditor';
 
 interface SlideGroupEditorProps {
   type: SlideType;
@@ -28,14 +29,10 @@ interface SlideGroupEditorProps {
 
 export const getSlideIcon = (type: SlideType) => {
   switch (type) {
-    case SlideType.BULLET_LIST:
+    case SlideType.BULLETS:
       return <FormatListBulleted />;
-    case SlideType.NESTED_IMAGES:
+    case SlideType.PICTURE:
       return <Landscape />;
-    case SlideType.NESTED_CHARTS:
-      return <SsidChart />;
-    case SlideType.NESTED_BULLET_LIST:
-      return <Segment />;
     case SlideType.CHART:
       return <Timeline />;
     default:
@@ -45,27 +42,16 @@ export const getSlideIcon = (type: SlideType) => {
 
 const formatSlideType = (type: SlideType) => {
   switch (type) {
-    case SlideType.BULLET_LIST:
+    case SlideType.BULLETS:
       return 'Bullet List';
-    case SlideType.NESTED_IMAGES:
-      return 'Image Gallery';
-    case SlideType.NESTED_CHARTS:
-      return 'Chart Gallery';
-    case SlideType.NESTED_BULLET_LIST:
-      return 'Bullet List Gallery';
+    case SlideType.PICTURE:
+      return 'Image';
     case SlideType.CHART:
       return 'Chart';
     default:
       return type;
   }
 };
-
-const shownSlideTypes = [
-  SlideType.NESTED_IMAGES,
-  SlideType.BULLET_LIST,
-  SlideType.CHART,
-  SlideType.NESTED_BULLET_LIST,
-];
 
 export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   type,
@@ -84,31 +70,39 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   }, [type, onTransitionEnd]);
 
   const handleTypeChange = (newType: SlideType) => {
-    let newConfig: SlideConfig;
+    let newConfig: SlideGroupConfig;
     switch (newType) {
-      case SlideType.BULLET_LIST:
+      case SlideType.BULLETS:
         newConfig = {
-          type: 'bullet',
-          content: [''],
-          captions: config.captions,
-        } as BulletSlideConfig;
+          type: SlideType.BULLETS,
+          slides: [{
+            type: SlideType.BULLETS,
+            content: [''],
+          }]
+          // captions: config.captions,
+        } as BulletSlideGroupConfig;
         break;
       case SlideType.CHART:
         newConfig = {
-          type: 'chart',
-          url: '',
-          goal: 0,
-          rounding: 0,
-          units: '',
-          captions: config.captions,
-        } as ChartSlideConfig;
+          type: SlideType.CHART,
+          slides: [{
+            type: SlideType.CHART,
+            content: {
+              url: '',
+              goal: 0,
+              rounding: 0,
+              units: '',
+            }
+          }],
+          // captions: config.captions,
+        } as ChartSlideGroupConfig;
         break;
-      case SlideType.NESTED_CHARTS:
+      case SlideType.PICTURE:
         newConfig = {
-          type: 'nested-charts',
-          content: [],
-          captions: config.captions,
-        } as NestedChartsSlideConfig;
+          type: SlideType.PICTURE,
+          slide_count: 1,
+          // captions: config.captions,
+        } as PictureSlideGroupConfig;
         break;
       default:
         return;
@@ -118,24 +112,24 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 
   const renderEditor = () => {
     switch (type) {
-      case SlideType.BULLET_LIST:
+      // case SlideType.BULLETS:
+      //   return (
+      //     <BulletEditor
+      //       config={config as BulletSlideGroupConfig}
+      //       onChange={onChange}
+      //     />
+      //   );
+      // case SlideType.CHART:
+      //   return (
+      //     <ChartEditor
+      //       config={config as ChartSlideGroupConfig}
+      //       onChange={onChange}
+      //     />
+      //   );
+      case SlideType.PICTURE:
         return (
-          <BulletEditor
-            config={config as BulletSlideConfig}
-            onChange={onChange}
-          />
-        );
-      case SlideType.CHART:
-        return (
-          <ChartEditor
-            config={config as ChartSlideConfig}
-            onChange={onChange}
-          />
-        );
-      case SlideType.NESTED_CHARTS:
-        return (
-          <NestedChartsEditor
-            config={config as NestedChartsSlideConfig}
+          <PictureEditor
+            config={config as PictureSlideGroupConfig}
             onChange={onChange}
           />
         );
@@ -159,7 +153,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               direction="left"
               className={styles['speed-dial']}
             >
-              {shownSlideTypes
+              {slideTypes
                 .filter((t) => t !== type)
                 .map((t) => (
                   <SpeedDialAction
@@ -182,7 +176,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 
         {renderEditor()}
 
-        <CollapsibleSection title="Captions">
+        {/* <CollapsibleSection title="Captions">
           <div className={styles['caption-config']}>
             <input
               type="text"
@@ -203,7 +197,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               onChange={(e) => onChange({ captions: { ...config.captions, bottom_right: e.target.value } })}
             />
           </div>
-        </CollapsibleSection>
+        </CollapsibleSection> */}
 
         <Dialog
           open={isDeleteDialogOpen}

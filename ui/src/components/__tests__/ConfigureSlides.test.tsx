@@ -5,7 +5,7 @@ import ConfigureSlides from '../pages/ConfigureSlides';
 
 // Mock the SlideContext module
 jest.mock('../../context/SlideContext', () => ({
-  useSlides: () => ({
+  useSlideGroups: () => ({
     slides: [{
       type: 'NESTED_IMAGES',
       content: undefined,

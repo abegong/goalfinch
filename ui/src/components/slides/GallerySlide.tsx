@@ -1,18 +1,18 @@
 import React from 'react';
 import Slide from './Slide';
-import { NestedImagesSlide } from '../../data/slide_interfaces';
+import { PictureSlideGroupConfig } from '../../types/editors';
 
 interface GallerySlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
-  slide: NestedImagesSlide;
+  slideGroup: PictureSlideGroupConfig;
   backgroundImage?: string;
 }
 
-const GallerySlide: React.FC<GallerySlideProps> = ({ slide, backgroundImage, ...slideProps }) => {
+const PictureSlideGroup: React.FC<GallerySlideProps> = ({ slideGroup, backgroundImage, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
       text=""
-      captions={slide.captions}
+      // captions={slideGroup.captions}
       backgroundColor="#000000"
       backgroundImage={backgroundImage}
     >
@@ -25,7 +25,7 @@ const GallerySlide: React.FC<GallerySlideProps> = ({ slide, backgroundImage, ...
         height: '100%',
         boxSizing: 'border-box'
       }}>
-        {slide.content?.map((imageUrl: string, index: number) => (
+        {/* {slideGroup.slides[0].content?.map((imageUrl: string, index: number) => (
           <div 
             key={index}
             style={{
@@ -46,10 +46,10 @@ const GallerySlide: React.FC<GallerySlideProps> = ({ slide, backgroundImage, ...
               }}
             />
           </div>
-        ))}
+        ))} */}
       </div>
     </Slide>
   );
 };
 
-export default GallerySlide;
+export default PictureSlideGroup;

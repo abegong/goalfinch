@@ -1,28 +1,28 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Slide } from '../data/slide_interfaces';
-import { slideData } from '../data/slide_data';
+import { SlideGroupConfig } from '../types/editors';
+import { demoData } from '../data/demo_data';
 
 interface SlideContextType {
-  slides: Slide[];
-  setSlides: React.Dispatch<React.SetStateAction<Slide[]>>;
+  slideGroups: SlideGroupConfig[];
+  setSlideGroups: React.Dispatch<React.SetStateAction<SlideGroupConfig[]>>;
 }
 
 const SlideContext = createContext<SlideContextType | undefined>(undefined);
 
 export const SlideProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [slides, setSlides] = useState<Slide[]>(slideData);
+  const [slideGroups, setSlideGroups] = useState<SlideGroupConfig[]>(demoData);
 
   return (
-    <SlideContext.Provider value={{ slides, setSlides }}>
+    <SlideContext.Provider value={{ slideGroups, setSlideGroups }}>
       {children}
     </SlideContext.Provider>
   );
 };
 
-export const useSlides = () => {
+export const useSlideGroups = () => {
   const context = useContext(SlideContext);
   if (context === undefined) {
-    throw new Error('useSlides must be used within a SlideProvider');
+    throw new Error('useSlideGroups must be used within a SlideProvider');
   }
   return context;
 };

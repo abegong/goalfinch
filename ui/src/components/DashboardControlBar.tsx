@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
 import { Landscape, ShowChart, SsidChart, FormatListBulleted, Segment } from '@mui/icons-material';
-import { SlideType } from '../data/slide_interfaces';
+import { SlideType } from '../types/slides';
 
 interface DashboardControlBarProps {
   visible: boolean;
@@ -61,13 +61,14 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
                 mr: '6px',
               }}
             >
-              {slide.type === SlideType.BULLET_LIST && <FormatListBulleted />}
-              {slide.type === SlideType.NESTED_IMAGES && <Landscape />}
-              {slide.type === SlideType.NESTED_CHARTS && <SsidChart />}
-              {slide.type === SlideType.NESTED_BULLET_LIST && <Segment />}
+              {slide.type === SlideType.BULLETS && <FormatListBulleted />}
+              {slide.type === SlideType.PICTURE && <Landscape />}
+              {/* {slide.type === SlideType.NESTED_CHARTS && <SsidChart />} */}
+              {/* {slide.type === SlideType.NESTED_BULLET_LIST && <Segment />} */}
               {slide.type === SlideType.CHART && <ShowChart />}
             </ListItemIcon>
-            <ListItemText primary={slide.getName()} />
+            {/* <ListItemText primary={slide.getName()} /> */}
+            <ListItemText primary={"slide-name-goes-here"} />
           </ListItem>
         ))}
       </List>

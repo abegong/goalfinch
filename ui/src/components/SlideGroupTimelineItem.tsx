@@ -1,63 +1,62 @@
 import React from 'react';
 import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineDot, TimelineContent, TimelineOppositeContent } from '@mui/lab';
 import { Typography, Box } from '@mui/material';
-import { Slide, SlideType } from '../data/slide_interfaces';
+import { SlideConfig, SlideType } from '../types/slides';
 import SlideGroupEditor, { getSlideIcon } from './editors/SlideGroupEditor';
-import { SlideConfig } from './editors/slide_editor_types';
+import { SlideGroupConfig } from '../types/editors';
 
 interface SlideGroupTimelineItemProps {
-  slide: Slide;
+  slideGroup: SlideGroupConfig;
   index: number;
-  slides: Slide[];
+  slideGroups: SlideGroupConfig[];
   expandedItems: boolean[];
   onToggleExpanded: (index: number) => void;
   onDragStart: (e: React.DragEvent, index: number) => void;
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, index: number) => void;
-  onSlideChange: (index: number, newConfig: Partial<Slide>) => void;
+  onSlideGroupChange: (index: number, newConfig: Partial<SlideGroupConfig>) => void;
   onDelete: (index: number) => void;
 }
 
 const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
-  slide,
+  slideGroup,
   index,
-  slides,
+  slideGroups,
   expandedItems,
   onToggleExpanded,
   onDragStart,
   onDragOver,
   onDrop,
-  onSlideChange,
+  onSlideGroupChange,
   onDelete,
 }) => {
-  const slideConfig: SlideConfig = {
-    type: slide.type === SlideType.BULLET_LIST ? 'bullet' :
-          slide.type === SlideType.CHART ? 'chart' :
-          slide.type === SlideType.NESTED_CHARTS ? 'nested-charts' :
-          'bullet',
-    captions: slide.captions || { top_center: '', bottom_center: '' },
-    ...(slide.type === SlideType.BULLET_LIST ? {
-      content: slide.content || [],
-    } : slide.type === SlideType.CHART ? {
-      url: slide.url || '',
-      goal: slide.goal || 0,
-      rounding: slide.rounding || 0,
-      units: slide.units || '',
-    } : slide.type === SlideType.NESTED_CHARTS ? {
-      content: slide.content || [],
+  const slideGroupConfig: SlideGroupConfig = {
+    type: slideGroup.type === SlideType.BULLETS ? 'bullet' :
+          slideGroup.type === SlideType.CHART ? 'chart' :
+          slideGroup.type === SlideType.PICTURE ? 'picture' : 'bullet',
+    captions: { top_center: '', bottom_center: '' },
+    ...(slideGroup.type === SlideType.BULLETS ? {
+      content: slideGroup.slides[0].content || [],
+    } : slideGroup.type === SlideType.CHART ? {
+      url: slideGroup.slides[0].content.url || '',
+      goal: slideGroup.slides[0].content.goal || 0,
+      rounding: slideGroup.slides[0].content.rounding || 0,
+      units: slideGroup.slides[0].content.units || '',
+    } : slideGroup.type === SlideType.PICTURE ? {
+      content: {},
     } : {}),
-  } as SlideConfig;
+  } as SlideGroupConfig;
 
-  const handleConfigChange = (newConfig: Partial<SlideConfig>) => {
-    const updatedSlide: Partial<Slide> = {
-      ...newConfig,
-      type: newConfig.type === 'bullet' ? SlideType.BULLET_LIST :
-            newConfig.type === 'chart' ? SlideType.CHART :
-            newConfig.type === 'nested-charts' ? SlideType.NESTED_CHARTS :
-            slide.type,
-    };
-    onSlideChange(index, updatedSlide);
-  };
+  // const handleConfigChange = (newConfig: Partial<SlideGroupConfig>) => {
+  //   const updatedSlideGroupConfig: Partial<SlideGroupConfig> = {
+  //     ...newConfig,
+  //     type: newConfig.type === 'bullets' ? SlideType.BULLETS :
+  //           newConfig.type === 'chart' ? SlideType.CHART :
+  //           newConfig.type === 'picture' ? SlideType.PICTURE :
+  //           slideGroup.type,
+  //   };
+  //   onSlideGroupChange(index, updatedSlideGroupConfig);
+  // };
 
   return (
     <TimelineItem 
@@ -68,7 +67,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         onClick={() => onToggleExpanded(index)}
         sx={{ cursor: 'pointer' }}
       >
-        {slide.getName && (
+        {/* {slideGroup.getName && ( */}
           <Typography 
             variant="body2" 
             color="text.secondary"
@@ -83,17 +82,18 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
               }
             }}
           >
-            {slide.getName()}
+            {/* {slideGroup.getName()} */}
+            slide-name-goes-here
           </Typography>
-        )}
+        {/* )} */}
       </TimelineOppositeContent>
       <TimelineSeparator>
         <TimelineDot
           onClick={() => onToggleExpanded(index)}
         >
-          {getSlideIcon(slide.type)}
+          {getSlideIcon(slideGroup.type)}
         </TimelineDot>
-        {index < slides.length - 1 && (
+        {index < slideGroups.length - 1 && (
           <TimelineConnector 
             sx={{ 
               transition: 'background-color 0.2s',
@@ -107,14 +107,14 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         )}
       </TimelineSeparator>
       <TimelineContent>
-        {expandedItems[index] && (
+        {/* {expandedItems[index] && (
           <SlideGroupEditor
-            type={slide.type}
-            config={slideConfig}
+            type={slideGroup.type}
+            config={slideGroupConfig}
             onChange={handleConfigChange}
             onDelete={() => onDelete(index)}
           />
-        )}
+        )} */}
       </TimelineContent>
     </TimelineItem>
   );

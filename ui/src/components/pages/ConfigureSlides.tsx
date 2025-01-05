@@ -2,35 +2,39 @@ import React, { useState, useCallback } from 'react';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
 import { Box } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useSlides } from '../../context/SlideContext';
-import { BaseSlide } from '../../data/BaseSlide';
-import { Slide, SlideType } from '../../data/slide_interfaces';
+import { useSlideGroups } from '../../context/SlideContext';
+import { SlideConfig, SlideType } from '../../types/slides';
+// import { BaseSlide, Slide } from '../slides/Slide';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
+import { PictureSlideGroupConfig, SlideGroupConfig } from '../../types/editors';
 
 const ConfigureSlides: React.FC = () => {
-  const { slides, setSlides } = useSlides();
+  const { slideGroups, setSlideGroups } = useSlideGroups();
   const [expandedItems, setExpandedItems] = useState<boolean[]>([]);
 
-  const handleSlideChange = (index: number, newConfig: Partial<Slide>) => {
-    const newSlides = [...slides];
-    const currentSlide = newSlides[index];
+  const handleSlideGroupChange = (index: number, newConfig: Partial<SlideGroupConfig>) => {
+    const newSlideGroups = [...slideGroups];
+    const currentSlideGroup = newSlideGroups[index];
     // Preserve the getName method from the current slide
-    newSlides[index] = { 
-      ...currentSlide, 
-      ...newConfig,
-      getName: currentSlide.getName.bind(currentSlide)
-    };
-    setSlides(newSlides);
+    // newSlideGroups[index] = { 
+    //   ...currentSlideGroup, 
+    //   ...newConfig,
+    //   getName: currentSlideGroup.getName.bind(currentSlideGroup)
+    // };
+    setSlideGroups(newSlideGroups);
   };
 
-  const handleSlideOrderChange = useCallback((newSlides: Slide[]) => {
-    setSlides(newSlides);
-  }, [setSlides]);
+  const handleSlideGroupOrderChange = useCallback((newSlideGroupConfigs: SlideGroupConfig[]) => {
+    setSlideGroups(newSlideGroupConfigs);
+  }, [setSlideGroups]);
 
   const handleAddSlide = () => {
-    const newSlide = new BaseSlide(SlideType.NESTED_IMAGES, undefined, {});
-    const newSlides = [...slides, newSlide];
-    handleSlideOrderChange(newSlides);
+    const newSlideGroupConfig = {
+      type : SlideType.PICTURE,
+      slide_count: 3,
+    } as PictureSlideGroupConfig;
+    const newSlideGroups = [...slideGroups, newSlideGroupConfig];
+    handleSlideGroupOrderChange(newSlideGroups);
     
     // Update expanded and animating states
     setExpandedItems([...expandedItems, false]);
@@ -60,10 +64,10 @@ const ConfigureSlides: React.FC = () => {
     const sourceIndex = parseInt(e.dataTransfer.getData('text/plain'));
     if (sourceIndex === targetIndex) return;
 
-    const newSlides = [...slides];
-    const [removed] = newSlides.splice(sourceIndex, 1);
-    newSlides.splice(targetIndex, 0, removed);
-    handleSlideOrderChange(newSlides);
+    const newSlideGroups = [...slideGroups];
+    const [removed] = newSlideGroups.splice(sourceIndex, 1);
+    newSlideGroups.splice(targetIndex, 0, removed);
+    handleSlideGroupOrderChange(newSlideGroups);
 
     // Update expanded and animating states to match new order
     const newExpandedItems = [...expandedItems];
@@ -72,10 +76,10 @@ const ConfigureSlides: React.FC = () => {
     setExpandedItems(newExpandedItems);
   };
 
-  const handleSlideDelete = (index: number) => {
-    const newSlides = [...slides];
-    newSlides.splice(index, 1);
-    handleSlideOrderChange(newSlides);
+  const handleSlideGroupDelete = (index: number) => {
+    const newSlideGroups = [...slideGroups];
+    newSlideGroups.splice(index, 1);
+    handleSlideGroupOrderChange(newSlideGroups);
     
     // Update expanded and animating states to match new array length
     const newExpandedItems = [...expandedItems];
@@ -121,19 +125,19 @@ const ConfigureSlides: React.FC = () => {
         },
       }}
     >
-      {slides.map((slide, index) => (
+      {slideGroups.map((slideGroup, index) => (
         <SlideGroupTimelineItem
           key={index}
-          slide={slide}
+          slideGroup={slideGroup}
           index={index}
-          slides={slides}
+          slideGroups={slideGroups}
           expandedItems={expandedItems}
           onToggleExpanded={toggleExpanded}
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          onSlideChange={handleSlideChange}
-          onDelete={handleSlideDelete}
+          onSlideGroupChange={handleSlideGroupChange}
+          onDelete={handleSlideGroupDelete}
         />
       ))}
       <TimelineItem>

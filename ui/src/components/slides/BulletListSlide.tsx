@@ -1,17 +1,17 @@
 import React from 'react';
 import Slide from './Slide';
-import { BulletListSlide as BulletListSlideType } from '../../data/slide_interfaces';
+import { BulletSlideGroupConfig } from '../../types/editors';
 
 interface BulletListSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
-  slide: BulletListSlideType;
+  slideGroup: BulletSlideGroupConfig;
 }
 
-const BulletListSlide: React.FC<BulletListSlideProps> = ({ slide, ...slideProps }) => {
+const BulletSlide: React.FC<BulletListSlideProps> = ({ slideGroup, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
       text=""
-      captions={slide.captions}
+      // captions={slideGroup.captions}
     >
       <div style={{ 
         padding: '48px',
@@ -32,7 +32,7 @@ const BulletListSlide: React.FC<BulletListSlideProps> = ({ slide, ...slideProps 
           flexDirection: 'column',
           gap: '16px'
         }}>
-          {slide.content?.map((item: string, index: number) => (
+          {/* {slideGroup.slides[0].content?.map((item: string, index: number) => (
             <li 
               key={index}
               style={{
@@ -53,11 +53,11 @@ const BulletListSlide: React.FC<BulletListSlideProps> = ({ slide, ...slideProps 
               }}/>
               {item}
             </li>
-          ))}
+          ))} */}
         </ul>
       </div>
     </Slide>
   );
 };
 
-export default BulletListSlide;
+export default BulletSlide;
