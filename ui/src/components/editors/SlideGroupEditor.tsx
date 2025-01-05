@@ -16,7 +16,7 @@ import { BulletEditor } from './BulletEditor';
 import { ChartEditor } from './ChartEditor';
 import { SlideConfig, PictureSlideConfig, BulletSlideConfig, ChartSlideConfig } from '../../types/slides';
 import { CollapsibleSection } from './CollapsibleSection';
-import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/editors';
+import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
 import PictureEditor from './PictureEditor';
 
 interface SlideGroupEditorProps {

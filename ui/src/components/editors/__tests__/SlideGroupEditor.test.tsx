@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SlideGroupEditor from '../SlideGroupEditor';
 import { SlideType } from '../../../types/slides';
-import { BulletSlideGroupConfig } from '../../../types/editors';
+import { BulletSlideGroupConfig } from '../../../types/slide_groups';
 
 const defaultProps = {
   type: SlideType.BULLETS,

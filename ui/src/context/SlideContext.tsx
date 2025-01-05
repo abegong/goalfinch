@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { SlideGroupConfig } from '../types/editors';
+import { SlideGroupConfig } from '../types/slide_groups';
 import { demoData } from '../data/demo_data';
 
 interface SlideContextType {

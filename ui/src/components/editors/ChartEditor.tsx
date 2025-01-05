@@ -1,7 +1,7 @@
 import React from 'react';
 import { CollapsibleSection } from './CollapsibleSection';
 import { ChartSlideConfig } from '../../types/slides';
-import { Captions } from '../../types/editors';
+import { Captions } from '../../types/slide_groups';
 import styles from './SlideGroupEditor.module.css';
 
 interface ChartConfigProps {

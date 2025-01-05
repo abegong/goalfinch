@@ -1,6 +1,6 @@
 import React from 'react';
 import Slide from './Slide';
-import { PictureSlideGroupConfig } from '../../types/editors';
+import { PictureSlideGroupConfig } from '../../types/slide_groups';
 
 interface GallerySlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slideGroup: PictureSlideGroupConfig;

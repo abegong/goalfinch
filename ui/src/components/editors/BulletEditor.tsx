@@ -2,7 +2,7 @@ import React from 'react';
 import { CollapsibleSection } from './CollapsibleSection';
 // import { BulletSlideConfig } from './slide_editor_types';
 import styles from './SlideGroupEditor.module.css';
-import { BulletSlideGroupConfig } from '../../types/editors';
+import { BulletSlideGroupConfig } from '../../types/slide_groups';
 
 interface BulletEditorProps {
   config: BulletSlideGroupConfig;

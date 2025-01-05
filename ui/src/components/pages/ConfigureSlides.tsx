@@ -6,7 +6,7 @@ import { useSlideGroups } from '../../context/SlideContext';
 import { SlideConfig, SlideType } from '../../types/slides';
 // import { BaseSlide, Slide } from '../slides/Slide';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
-import { PictureSlideGroupConfig, SlideGroupConfig } from '../../types/editors';
+import { PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
 
 const ConfigureSlides: React.FC = () => {
   const { slideGroups, setSlideGroups } = useSlideGroups();

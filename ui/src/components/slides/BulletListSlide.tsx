@@ -1,6 +1,6 @@
 import React from 'react';
 import Slide from './Slide';
-import { BulletSlideGroupConfig } from '../../types/editors';
+import { BulletSlideGroupConfig } from '../../types/slide_groups';
 
 interface BulletListSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slideGroup: BulletSlideGroupConfig;

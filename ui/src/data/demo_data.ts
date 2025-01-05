@@ -8,7 +8,7 @@ import {
   BulletSlideGroupConfig,
   ChartSlideGroupConfig,
   PictureSlideGroupConfig
-} from '../types/editors';
+} from '../types/slide_groups';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const preprocessRowCounts = (data: any[]) => {

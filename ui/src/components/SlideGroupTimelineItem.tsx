@@ -3,7 +3,7 @@ import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineDot, Timeli
 import { Typography, Box } from '@mui/material';
 import { SlideConfig, SlideType } from '../types/slides';
 import SlideGroupEditor, { getSlideIcon } from './editors/SlideGroupEditor';
-import { SlideGroupConfig } from '../types/editors';
+import { SlideGroupConfig } from '../types/slide_groups';
 
 interface SlideGroupTimelineItemProps {
   slideGroup: SlideGroupConfig;

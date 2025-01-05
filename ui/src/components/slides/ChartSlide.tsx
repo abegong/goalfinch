@@ -1,6 +1,6 @@
 import React from 'react';
 import Slide from './Slide';
-import { ChartSlideGroupConfig } from '../../types/editors';
+import { ChartSlideGroupConfig } from '../../types/slide_groups';
 
 interface ChartSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slideGroup: ChartSlideGroupConfig;

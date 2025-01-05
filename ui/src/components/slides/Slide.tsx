@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { Captions } from '../../types/editors';
+import { Captions } from '../../types/slide_groups';
 
 interface SlideProps {
   backgroundColor?: string;
