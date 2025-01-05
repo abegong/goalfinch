@@ -5,7 +5,7 @@ import { LayoutContext } from '../Layout';
 import { useSlideGroups } from '../../context/SlideContext';
 import { SlideType } from '../../types/slides';
 import DashboardControlBar from '../DashboardControlBar';
-import { ChartSlideGroupConfig } from '../../types/editors';
+import { ChartSlideGroupConfig, SlideGroupConfig } from '../../types/editors';
 import { PictureSlideGroupConfig } from '../../types/editors';
 import { BulletSlideGroupConfig } from '../../types/editors';
 import ChartSlideGroup from '../slides/ChartSlide';
@@ -30,7 +30,7 @@ const TOTAL_INTERVAL = 2000; // 2000ms (2s) total time between starts of animati
 
 const Dashboard: React.FC = () => {
   const { slideGroups } = useSlideGroups();
-  const [visibleColorIndex, setVisibleColorIndex] = useState(0);
+  const [slideGroupIndex, setSlideGroupIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
@@ -44,18 +44,18 @@ const Dashboard: React.FC = () => {
     if (isPaused) return;
 
     const interval = setInterval(() => {
-      setNextColorIndex((visibleColorIndex + 1) % slideGroups.length);
+      setNextColorIndex((slideGroupIndex + 1) % slideGroups.length);
       setSlideDirection('left');
       setIsTransitioning(true);
     }, TOTAL_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [visibleColorIndex, slideGroups.length, isPaused]);
+  }, [slideGroupIndex, slideGroups.length, isPaused]);
 
   useEffect(() => {
     if (isTransitioning) {
       const timer = setTimeout(() => {
-        setVisibleColorIndex(nextColorIndex);
+        setSlideGroupIndex(nextColorIndex);
         setIsTransitioning(false);
       }, ANIMATION_DURATION);
 
@@ -73,13 +73,13 @@ const Dashboard: React.FC = () => {
         event.preventDefault(); // Prevent page scroll
         setIsPaused(prev => !prev);
       } else if (event.key === 'ArrowLeft') {
-        const prevIndex = (visibleColorIndex - 1 + slideGroups.length) % slideGroups.length;
-        setNextColorIndex(prevIndex);
+        const prevIndex = (slideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
+        setSlideGroupIndex(prevIndex);
         setSlideDirection('right');
         setIsTransitioning(true);
       } else if (event.key === 'ArrowRight') {
-        const nextIndex = (visibleColorIndex + 1) % slideGroups.length;
-        setNextColorIndex(nextIndex);
+        const nextIndex = (slideGroupIndex + 1) % slideGroups.length;
+        setSlideGroupIndex(nextIndex);
         setSlideDirection('left');
         setIsTransitioning(true);
       }
@@ -87,10 +87,10 @@ const Dashboard: React.FC = () => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [dashboardControlBarVisible, setAppControlBarVisible, visibleColorIndex, slideGroups.length]);
+  }, [dashboardControlBarVisible, setAppControlBarVisible, slideGroupIndex, slideGroups.length]);
 
   const handleColorClick = (index: number) => {
-    setNextColorIndex(index);
+    setSlideGroupIndex(index);
     setSlideDirection('left');
     setIsTransitioning(true);
   };
@@ -101,21 +101,18 @@ const Dashboard: React.FC = () => {
     setDashboardControlBarVisible(newState);
   };
 
-  const renderSlide = (slide: any, props: any) => {
-    switch (slide.type) {
+  const renderSlideGroup = (config: SlideGroupConfig, props: any) => {
+    switch (config.type) {
       case SlideType.CHART:
-        return <ChartSlideGroup slide={slide} {...props} />;
+        return <ChartSlideGroup slide={config} {...props} />;
       case SlideType.PICTURE:
         return <PictureSlideGroup
-          slide={slide}
+          slide={config}
           backgroundImage={"http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png"}
           {...props}
         />;
       case SlideType.BULLETS:
-        return <BulletListSlideGroup slide={slide} {...props} />;
-      default:
-        console.warn(`Unknown slide type: ${slide.type}`);
-        return null;
+        return <BulletListSlideGroup slide={config} {...props} />;
     }
   };
 
@@ -156,8 +153,8 @@ const Dashboard: React.FC = () => {
         <Menu />
       </IconButton>
 
-      {isTransitioning && renderSlide(slideGroups[visibleColorIndex], {
-        backgroundColor: colors[visibleColorIndex % colors.length].hex,
+      {isTransitioning && renderSlideGroup(slideGroups[slideGroupIndex], {
+        backgroundColor: colors[slideGroupIndex % colors.length].hex,
         position: 'absolute',
         transform: `translateX(${slideDirection === 'left' ? '-100%' : '100%'})`,
         opacity: 0,
@@ -166,11 +163,11 @@ const Dashboard: React.FC = () => {
         visible={dashboardControlBarVisible}
         onClose={() => setDashboardControlBarVisible(false)}
         slides={slideGroups}
-        visibleColorIndex={visibleColorIndex}
+        visibleColorIndex={slideGroupIndex}
         onSlideClick={handleColorClick}
       />
-      {renderSlide(slideGroups[nextColorIndex], {
-        backgroundColor: colors[nextColorIndex % colors.length].hex,
+      {renderSlideGroup(slideGroups[slideGroupIndex], {
+        backgroundColor: colors[slideGroupIndex % colors.length].hex,
         isTransitioning,
         animationDuration: ANIMATION_DURATION,
         direction: slideDirection

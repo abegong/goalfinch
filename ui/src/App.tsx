@@ -15,9 +15,9 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/goals" element={<ConfigureSlides />} />
-            <Route path="/settings" element={<ConfigureConnections />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/slides" element={<ConfigureSlides />} />
+            <Route path="/connections" element={<ConfigureConnections />} />
           </Routes>
         </Layout>
       </SlideProvider>
