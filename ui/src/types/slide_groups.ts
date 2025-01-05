@@ -1,5 +1,10 @@
 /**
- * Type definitions for editor components and their configurations in Goal Finch.
+ * This file defines the type hierarchy for slide group configurations in Goal Finch.
+ * There are three key parts to this system:
+ * 
+ * 1. BaseSlideGroupConfig - The base interface that all slide group configurations extend from
+ * 2. Specific slide group configs (Bullet, Chart, etc.) - Extensions of BaseSlideGroupConfig with type-specific fields
+ * 3. SlideGroupConfigType - A type utility for type-safe discrimination of slide group types
  */
 
 import { SlideType, BulletSlideConfig, ChartSlideConfig, PictureSlideConfig } from './slides';

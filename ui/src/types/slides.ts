@@ -1,7 +1,11 @@
 /**
  * Type definitions for slides and slide-related concepts.
+ * 
+ * 1. `SlideType` is an enum of all possible slide types
+ * 2. `slideTypes` is array of all valid slide types.
+ * 3. The `BaseSlideConfig` interface defines the structure of a slide config that all specific slide types must implement.
+ * 4. The `BulletSlideConfig`, `PictureSlideConfig`, and `ChartSlideConfig` interfaces extend `BaseSlideConfig` with type-specific fields.
  */
-
 
 /**
  * Enumeration of all possible slide types supported by Goal Finch.

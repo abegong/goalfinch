@@ -13,9 +13,11 @@ The main container component that:
 - Provides caption configuration through composition
 - Manages collapsible sections
 
+Note: Components based on SlideGroupEditor provide control at the SlideGroup level. For components where it's necessary, individual slides are configured in subcomponents.
+
 ## Type-Specific Editors
 
-Each slide type has its own editor component that extends the base functionality through composition:
+Each slide group type has its own editor component that extends the base functionality through composition:
 
 - `BulletEditor`: Configuration for bullet slide groups
   - Bullet point management
