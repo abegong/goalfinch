@@ -30,33 +30,6 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   onSlideGroupChange,
   onDelete,
 }) => {
-  const slideGroupConfig: SlideGroupConfig = {
-    type: slideGroup.type === SlideType.BULLETS ? 'bullet' :
-          slideGroup.type === SlideType.CHART ? 'chart' :
-          slideGroup.type === SlideType.PICTURE ? 'picture' : 'bullet',
-    captions: { top_center: '', bottom_center: '' },
-    ...(slideGroup.type === SlideType.BULLETS ? {
-      content: slideGroup.slides[0].content || [],
-    } : slideGroup.type === SlideType.CHART ? {
-      url: slideGroup.slides[0].content.url || '',
-      goal: slideGroup.slides[0].content.goal || 0,
-      rounding: slideGroup.slides[0].content.rounding || 0,
-      units: slideGroup.slides[0].content.units || '',
-    } : slideGroup.type === SlideType.PICTURE ? {
-      content: {},
-    } : {}),
-  } as SlideGroupConfig;
-
-  // const handleConfigChange = (newConfig: Partial<SlideGroupConfig>) => {
-  //   const updatedSlideGroupConfig: Partial<SlideGroupConfig> = {
-  //     ...newConfig,
-  //     type: newConfig.type === 'bullets' ? SlideType.BULLETS :
-  //           newConfig.type === 'chart' ? SlideType.CHART :
-  //           newConfig.type === 'picture' ? SlideType.PICTURE :
-  //           slideGroup.type,
-  //   };
-  //   onSlideGroupChange(index, updatedSlideGroupConfig);
-  // };
 
   return (
     <TimelineItem 
@@ -107,14 +80,14 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         )}
       </TimelineSeparator>
       <TimelineContent>
-        {/* {expandedItems[index] && (
+        {expandedItems[index] && (
           <SlideGroupEditor
             type={slideGroup.type}
-            config={slideGroupConfig}
-            onChange={handleConfigChange}
+            config={slideGroup}
+            onChange={onSlideGroupChange.bind(null, index)}
             onDelete={() => onDelete(index)}
           />
-        )} */}
+        )}
       </TimelineContent>
     </TimelineItem>
   );

@@ -21,8 +21,8 @@ import PictureEditor from './PictureEditor';
 
 interface SlideGroupEditorProps {
   type: SlideType;
-  config: SlideConfig;
-  onChange: (config: Partial<SlideConfig>) => void;
+  config: SlideGroupConfig;
+  onChange: (config: Partial<SlideGroupConfig>) => void;
   onDelete?: () => void;
   onTransitionEnd?: () => void;
 }
@@ -176,7 +176,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 
         {renderEditor()}
 
-        {/* <CollapsibleSection title="Captions">
+        <CollapsibleSection title="Captions">
           <div className={styles['caption-config']}>
             <input
               type="text"
@@ -197,7 +197,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               onChange={(e) => onChange({ captions: { ...config.captions, bottom_right: e.target.value } })}
             />
           </div>
-        </CollapsibleSection> */}
+        </CollapsibleSection>
 
         <Dialog
           open={isDeleteDialogOpen}
