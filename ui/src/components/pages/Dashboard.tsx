@@ -73,11 +73,13 @@ const Dashboard: React.FC = () => {
       } else if (event.key === 'ArrowLeft') {
         const prevIndex = (slideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
         setSlideGroupIndex(prevIndex);
+        setNextColorIndex(prevIndex);
         setSlideDirection('right');
         setIsTransitioning(true);
       } else if (event.key === 'ArrowRight') {
         const nextIndex = (slideGroupIndex + 1) % slideGroups.length;
         setSlideGroupIndex(nextIndex);
+        setNextColorIndex(nextIndex);
         setSlideDirection('left');
         setIsTransitioning(true);
       }
