@@ -3,7 +3,7 @@ import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineDot, Timeli
 import { Typography, Box } from '@mui/material';
 import { SlideConfig, SlideType } from '../types/slides';
 import SlideGroupEditor, { getSlideIcon } from './editors/SlideGroupEditor';
-import { SlideGroupConfig } from '../types/slide_groups';
+import { SlideGroupConfig, getSlideGroupName } from '../types/slide_groups';
 
 interface SlideGroupTimelineItemProps {
   slideGroup: SlideGroupConfig;
@@ -40,25 +40,22 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         onClick={() => onToggleExpanded(index)}
         sx={{ cursor: 'pointer' }}
       >
-        {/* {slideGroup.getName && ( */}
-          <Typography 
-            variant="body2" 
-            color="text.secondary"
-            className="timeline-text"
-            sx={{
-              display: 'inline-block',
-              margin: '1px -24px 0px 0px',
-              padding: '8px 32px 8px 12px',
-              borderRadius: '4px',
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              }
-            }}
-          >
-            {/* {slideGroup.getName()} */}
-            slide-name-goes-here
-          </Typography>
-        {/* )} */}
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          className="timeline-text"
+          sx={{
+            display: 'inline-block',
+            margin: '1px -24px 0px 0px',
+            padding: '8px 32px 8px 12px',
+            borderRadius: '4px',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            }
+          }}
+        >
+          {getSlideGroupName(slideGroup)}
+        </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
         <TimelineDot
