@@ -2,14 +2,14 @@ import React, { useState, useCallback } from 'react';
 import { Timeline, TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
 import { Box } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useSlideGroups } from '../../context/SlideContext';
+import { useConfig } from '../../context/ConfigContext';
 import { SlideConfig, SlideType } from '../../types/slides';
 // import { BaseSlide, Slide } from '../slides/Slide';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
 import { PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
 
 const ConfigureSlides: React.FC = () => {
-  const { slideGroups, setSlideGroups } = useSlideGroups();
+  const { slideGroups, setSlideGroups } = useConfig();
   const [expandedItems, setExpandedItems] = useState<boolean[]>([]);
 
   const handleSlideGroupChange = (index: number, newConfig: Partial<SlideGroupConfig>) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Dashboard from '../Dashboard';
-import { SlideProvider } from '../../../context/SlideContext';
+import { ConfigProvider } from '../../../context/ConfigContext';
 import { LayoutContext } from '../../Layout';
 import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig } from '../../../types/slide_groups';
 import { SlideType } from '../../../types/slides';
@@ -57,10 +57,9 @@ const mockSlideGroups = [
   }
 ];
 
-// Mock the useSlideGroups hook
-jest.mock('../../../context/SlideContext', () => ({
-  ...jest.requireActual('../../../context/SlideContext'),
-  useSlideGroups: () => ({
+// Mock the useConfig hook
+jest.mock('../../../context/ConfigContext', () => ({
+  useConfig: () => ({
     slideGroups: mockSlideGroups,
   }),
 }));
@@ -73,9 +72,9 @@ describe('Dashboard', () => {
   it('renders all slide types correctly', () => {
     render(
       <LayoutContext.Provider value={mockLayoutContext}>
-        <SlideProvider>
+        <ConfigProvider>
           <Dashboard />
-        </SlideProvider>
+        </ConfigProvider>
       </LayoutContext.Provider>
     );
 
@@ -85,15 +84,15 @@ describe('Dashboard', () => {
 
   it('renders with empty slide groups', () => {
     // Override the mock to return empty slide groups
-    jest.spyOn(require('../../../context/SlideContext'), 'useSlideGroups').mockReturnValue({
+    jest.spyOn(require('../../../context/ConfigContext'), 'useConfig').mockReturnValue({
       slideGroups: [],
     });
 
     render(
       <LayoutContext.Provider value={mockLayoutContext}>
-        <SlideProvider>
+        <ConfigProvider>
           <Dashboard />
-        </SlideProvider>
+        </ConfigProvider>
       </LayoutContext.Provider>
     );
 

@@ -5,13 +5,13 @@ import Dashboard from './components/pages/Dashboard';
 import Home from './components/pages/Home';
 import ConfigureSlides from './components/pages/ConfigureSlides';
 import ConfigureConnections from './components/pages/ConfigureConnections';
-import { SlideProvider } from './context/SlideContext';
+import { ConfigProvider } from './context/ConfigContext';
 import './App.css';
 
 function App() {
   return (
     <Router>
-      <SlideProvider>
+      <ConfigProvider>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -20,7 +20,7 @@ function App() {
             <Route path="/connections" element={<ConfigureConnections />} />
           </Routes>
         </Layout>
-      </SlideProvider>
+      </ConfigProvider>
     </Router>
   );
 }

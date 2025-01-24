@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Box, IconButton } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 import { LayoutContext } from '../Layout';
-import { useSlideGroups } from '../../context/SlideContext';
+import { useConfig } from '../../context/ConfigContext';
 import { SlideType } from '../../types/slides';
 import DashboardControlBar from '../DashboardControlBar';
 import { SlideGroupConfig } from '../../types/slide_groups';
@@ -27,7 +27,7 @@ const ANIMATION_DURATION = 500; // 500ms for the animation
 const TOTAL_INTERVAL = 2000; // 2000ms (2s) total time between starts of animations
 
 const Dashboard: React.FC = () => {
-  const { slideGroups } = useSlideGroups();
+  const { slideGroups } = useConfig();
   const [slideGroupIndex, setSlideGroupIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
