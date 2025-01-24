@@ -103,10 +103,6 @@ const Dashboard: React.FC = () => {
     setDashboardControlBarVisible(newState);
   };
 
-  const renderSlideGroup = (config: SlideGroupConfig, props: any) => {
-    return <SlideGroup config={config} {...props} />;
-  };
-
   return (
     <Box 
       component="div"
@@ -144,12 +140,8 @@ const Dashboard: React.FC = () => {
         <Menu />
       </IconButton>
 
-      {isTransitioning && renderSlideGroup(slideGroups[slideGroupIndex], {
-        backgroundColor: colors[slideGroupIndex % colors.length].hex,
-        position: 'absolute',
-        transform: `translateX(${slideDirection === 'left' ? '-100%' : '100%'})`,
-        opacity: 0,
-      })}
+      <SlideGroup config={slideGroups[slideGroupIndex]}/>
+
       <DashboardControlBar 
         visible={dashboardControlBarVisible}
         onClose={() => setDashboardControlBarVisible(false)}
@@ -157,12 +149,6 @@ const Dashboard: React.FC = () => {
         visibleColorIndex={slideGroupIndex}
         onSlideClick={handleColorClick}
       />
-      {slideGroups.length > 0 && renderSlideGroup(slideGroups[slideGroupIndex], {
-        backgroundColor: colors[slideGroupIndex % colors.length].hex,
-        isTransitioning,
-        animationDuration: ANIMATION_DURATION,
-        direction: slideDirection
-      })}
     </Box>
   );
 };
