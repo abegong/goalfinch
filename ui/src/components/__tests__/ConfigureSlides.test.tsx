@@ -2,18 +2,20 @@ import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ConfigureSlides from '../pages/ConfigureSlides';
+import { SlideGroupConfig } from '../../types/slide_groups';
 
-// Mock the SlideContext module
-jest.mock('../../context/SlideContext', () => ({
-  useSlideGroups: () => ({
-    slideGroups: [{
-      type: 'NESTED_IMAGES',
-      content: undefined,
-      captions: {},
-      getName: () => 'Test Slide'
-    }],
-    setSlideGroups: jest.fn()
-  })
+// Mock the ConfigContext module
+jest.mock('../../context/ConfigContext', () => ({
+  useConfig: () => ({
+    dashboard: {
+      slideGroups: [{ 
+        type: 'NESTED_IMAGES',
+        slide_count: 3,
+        captions: {}
+      }],
+    },
+    setDashboard: jest.fn(),
+  }),
 }));
 
 // Mock MUI Lab components
@@ -46,5 +48,11 @@ describe('Goals Component', () => {
     
     // The state should be updated without infinite loops
     expect(timelineDots[0]).toBeInTheDocument();
+  });
+
+  test('renders ConfigureSlides', () => {
+    render(<ConfigureSlides />);
+    const addButton = screen.getByTestId('AddIcon');
+    expect(addButton).toBeInTheDocument();
   });
 });
