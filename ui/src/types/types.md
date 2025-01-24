@@ -14,7 +14,6 @@ The application's state is managed through three main configuration objects, all
 2. **ConnectionsConfig**
    - Stores external service configurations (URLs, API keys)
    - Used by slides to fetch data and images
-   - Validated at runtime
 
 3. **AppConfig**
    - Contains UI preferences and application settings
@@ -68,9 +67,8 @@ Each SlideGroup contains:
 
 ## Type Safety
 
-1. All configuration objects are strongly typed and validated at runtime
-2. External API responses are typed separately in `api.ts`
-3. Discriminated unions are used for type-safe handling of different slide types
+1. All configuration objects are strongly typed
+2. Discriminated unions are used for type-safe handling of different slide types
 
 ## Best Practices
 
@@ -86,6 +84,5 @@ Each SlideGroup contains:
 - `slide_groups.ts`: SlideGroup configurations
 - `connections.ts`: Connection and API configuration types
 - `config.ts`: Core configuration types
-- `api.ts`: External API response types
 
 This organization aligns with the frontend architecture document by maintaining clear separation of concerns and supporting the component hierarchy described there.

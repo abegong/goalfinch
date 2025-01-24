@@ -1,33 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { demoData } from '../data/demo_data';
-import { SlideGroupConfig } from '../types/slide_groups';
-
-export interface DashboardConfig {
-  slideGroups: SlideGroupConfig[];
-}
-
-export interface ConnectionConfig {
-  type: 'GOOGLE_SHEETS' | 'AIRTABLE';
-  name: string;
-  apiKey?: string;
-  sheetId?: string;
-  baseId?: string;
-  tableId?: string;
-}
-
-export interface ConnectionsConfig {
-  connections: ConnectionConfig[];
-}
-
-export interface AppConfig {
-  appControlBar: {
-    open: boolean;
-    visible: boolean;
-  };
-  theme: {
-    mode: 'light' | 'dark';
-  };
-}
+import { DashboardConfig, AppConfig } from '../types/config';
+import { ConnectionsConfig } from '../types/connections';
 
 interface ConfigContextType {
   dashboard: DashboardConfig;
