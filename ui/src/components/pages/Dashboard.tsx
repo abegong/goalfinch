@@ -163,7 +163,7 @@ const Dashboard: React.FC = () => {
       <DashboardControlBar 
         visible={dashboardControlBarVisible}
         onClose={() => setDashboardControlBarVisible(false)}
-        slides={slideGroups}
+        slideGroups={slideGroups}
         visibleColorIndex={slideGroupIndex}
         onSlideClick={handleColorClick}
       />

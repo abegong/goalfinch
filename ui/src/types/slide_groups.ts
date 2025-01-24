@@ -60,3 +60,11 @@ export type SlideGroupConfig =
   | BulletSlideGroupConfig 
   | ChartSlideGroupConfig 
   | PictureSlideGroupConfig;
+
+/**
+ * Gets a display name for a slide group based on its type and captions
+ */
+export function getSlideGroupName(config: BaseSlideGroupConfig): string {
+  // Safely access captions.top_center with fallback to slide type
+  return config.captions?.top_center || config.type;
+}
