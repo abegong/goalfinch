@@ -9,6 +9,7 @@ import { SlideGroupConfig } from '../../types/slide_groups';
 import ChartSlideGroup from '../slides/ChartSlide';
 import PictureSlideGroup from '../slides/PictureSlide';
 import BulletSlideGroup from '../slides/BulletSlide';
+import SlideGroup from '../slides/SlideGroup';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -103,18 +104,7 @@ const Dashboard: React.FC = () => {
   };
 
   const renderSlideGroup = (config: SlideGroupConfig, props: any) => {
-    switch (config.type) {
-      case SlideType.CHART:
-        return <ChartSlideGroup slide={config} {...props} />;
-      case SlideType.PICTURE:
-        return <PictureSlideGroup
-          slide={config}
-          backgroundImage={"http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png"}
-          {...props}
-        />;
-      case SlideType.BULLETS:
-        return <BulletSlideGroup slide={config} {...props} />;
-    }
+    return <SlideGroup config={config} {...props} />;
   };
 
   return (

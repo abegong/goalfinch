@@ -154,49 +154,6 @@ const Slide: React.FC<SlideProps> = ({
         </Typography>
       )}
       {children}
-      
-      {/* Captions */}
-      {captions?.top_center && (
-        <Typography sx={{ 
-          ...captionStyles, 
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center'
-        }}>
-          {captions.top_center}
-        </Typography>
-      )}
-      {captions?.bottom_center && (
-        <Typography sx={{ 
-          ...captionStyles, 
-          bottom: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center'
-        }}>
-          {captions.bottom_center}
-        </Typography>
-      )}
-      {captions?.bottom_left && (
-        <Typography sx={{ 
-          ...captionStyles, 
-          bottom: 0,
-          left: 0
-        }}>
-          {captions.bottom_left}
-        </Typography>
-      )}
-      {captions?.bottom_right && (
-        <Typography sx={{ 
-          ...captionStyles, 
-          bottom: 0,
-          right: 0,
-          textAlign: 'right'
-        }}>
-          {captions.bottom_right}
-        </Typography>
-      )}
     </Box>
   );
 };

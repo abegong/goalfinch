@@ -7,7 +7,6 @@ interface BulletSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'tex
 }
 
 const BulletSlide: React.FC<BulletSlideProps> = ({ slideGroup, ...slideProps }) => {
-  // console.log(slideGroup);
   return (
     <Slide
       {...slideProps}

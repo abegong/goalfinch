@@ -48,6 +48,7 @@ export const demoData: SlideGroupConfig[] = [
       {} as PictureSlideConfig,
       {} as PictureSlideConfig
     ],
+    captions: {}
   } as PictureSlideGroupConfig,
   {
     type: SlideType.CHART,
