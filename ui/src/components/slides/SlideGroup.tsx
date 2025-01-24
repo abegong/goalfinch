@@ -5,7 +5,7 @@ import { SlideGroupConfig, BaseSlideGroupConfig } from '../../types/slide_groups
 import { SlideType, SlideConfig } from '../../types/slides';
 import BulletListSlide from './BulletListSlide';
 import ChartSlide from './ChartSlide';
-import GallerySlide from './GallerySlide';
+import PictureSlide from './GallerySlide';
 
 interface SlideGroupProps {
   config: SlideGroupConfig;
@@ -22,7 +22,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [direction, setDirection] = useState<'left' | 'right'>('right');
 
-  const totalSlides = 'slides' in config ? config.slides.length : config.slide_count;
+  const totalSlides = config.slides.length;
   const animationDuration = 500; // ms
 
   const goToNextSlide = useCallback(() => {
@@ -57,7 +57,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
 
   const renderSlide = () => {
     if (!('slides' in config)) {
-      return <GallerySlide 
+      return <PictureSlide
         isTransitioning={isTransitioning}
         animationDuration={animationDuration}
         direction={direction}
@@ -72,17 +72,35 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
       direction,
     };
 
+    // switch (config.type) {
+    //   case SlideType.CHART:
+    //     return <ChartSlideGroup slide={config} {...props} />;
+    //   case SlideType.PICTURE:
+    //     return <PictureSlideGroup
+    //       slide={config}
+    //       backgroundImage={"http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png"}
+    //       {...props}
+    //     />;
+    //   case SlideType.BULLETS:
+    //     return <BulletListSlideGroup slide={config} {...props} />;
+    // }
     switch (config.type) {
       case SlideType.BULLETS:
         return <BulletListSlide {...commonProps} slideGroup={config} />;
+
       case SlideType.CHART:
         return <ChartSlide {...commonProps} slideGroup={config} />;
-      default:
-        return null;
+
+      case SlideType.PICTURE:
+        return <PictureSlide
+          slideGroup={config}
+          backgroundImage={"http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png"}
+          {...commonProps}
+        />;  
     }
   };
 
-  return (
+  return (    
     <Card
       sx={{
         position: 'relative',
@@ -94,7 +112,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
     >
       {renderSlide()}
       
-      {totalSlides > 1 && (
+      {/* {totalSlides > 1 && (
         <>
           <IconButton
             onClick={goToPrevSlide}
@@ -129,7 +147,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
             <ChevronRight />
           </IconButton>
         </>
-      )}
+      )} */}
     </Card>
   );
 };

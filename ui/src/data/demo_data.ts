@@ -1,7 +1,8 @@
 import { 
   SlideType,
   ChartSlideConfig,
-  BulletSlideConfig
+  BulletSlideConfig,
+  PictureSlideConfig
 } from '../types/slides';
 import {
   SlideGroupConfig,
@@ -37,17 +38,21 @@ export const demoData: SlideGroupConfig[] = [
       ],
     } as BulletSlideConfig],
     captions: {
-      bottom_right: "life goals"
+      bottom_right: "Life goals"
     }
   } as BulletSlideGroupConfig,
   {
     type: SlideType.PICTURE,
-    slide_count: 3,
+    slides: [
+      {} as PictureSlideConfig,
+      {} as PictureSlideConfig,
+      {} as PictureSlideConfig
+    ],
   } as PictureSlideGroupConfig,
   {
     type: SlideType.CHART,
     captions: {
-      bottom_right: "Practice technique"
+      bottom_right: "Practice fencing techniques"
     },
     slides: [
       {

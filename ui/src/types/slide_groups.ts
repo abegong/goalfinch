@@ -7,7 +7,7 @@
  * 3. SlideGroupConfigType - A type utility for type-safe discrimination of slide group types
  */
 
-import { SlideType, BulletSlideConfig, ChartSlideConfig } from './slides';
+import { SlideType, BulletSlideConfig, ChartSlideConfig, PictureSlideConfig } from './slides';
 import { ReactNode } from 'react';
 
 
@@ -51,15 +51,17 @@ export interface ChartSlideGroupConfig extends BaseSlideGroupConfig {
 export interface PictureSlideGroupConfig extends BaseSlideGroupConfig {
   type: SlideType.PICTURE;
   slide_count: number;
+  slides: PictureSlideConfig[];
 }
 
 /**
  * Union type of all possible slide configurations.
  */
 export type SlideGroupConfig = 
+  | PictureSlideGroupConfig
   | BulletSlideGroupConfig 
   | ChartSlideGroupConfig 
-  | PictureSlideGroupConfig;
+;
 
 /**
  * Gets a display name for a slide group based on its type and captions.

@@ -7,6 +7,7 @@ interface BulletListSlideProps extends Omit<React.ComponentProps<typeof Slide>, 
 }
 
 const BulletSlide: React.FC<BulletListSlideProps> = ({ slideGroup, ...slideProps }) => {
+  // console.log(slideGroup);
   return (
     <Slide
       {...slideProps}
