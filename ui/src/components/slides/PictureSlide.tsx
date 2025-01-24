@@ -2,12 +2,12 @@ import React from 'react';
 import Slide from './Slide';
 import { PictureSlideGroupConfig } from '../../types/slide_groups';
 
-interface GallerySlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
+interface PictureSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slideGroup: PictureSlideGroupConfig;
   backgroundImage?: string;
 }
 
-const PictureSlideGroup: React.FC<GallerySlideProps> = ({ slideGroup, backgroundImage, ...slideProps }) => {
+const PictureSlideGroup: React.FC<PictureSlideProps> = ({ slideGroup, backgroundImage, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}

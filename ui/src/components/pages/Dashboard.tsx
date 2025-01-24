@@ -7,8 +7,8 @@ import { SlideType } from '../../types/slides';
 import DashboardControlBar from '../DashboardControlBar';
 import { SlideGroupConfig } from '../../types/slide_groups';
 import ChartSlideGroup from '../slides/ChartSlide';
-import PictureSlideGroup from '../slides/GallerySlide';
-import BulletListSlideGroup from '../slides/BulletListSlide';
+import PictureSlideGroup from '../slides/PictureSlide';
+import BulletSlideGroup from '../slides/BulletSlide';
 
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
@@ -113,7 +113,7 @@ const Dashboard: React.FC = () => {
           {...props}
         />;
       case SlideType.BULLETS:
-        return <BulletListSlideGroup slide={config} {...props} />;
+        return <BulletSlideGroup slide={config} {...props} />;
     }
   };
 

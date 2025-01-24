@@ -3,9 +3,9 @@ import { Card, IconButton, Box } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { SlideGroupConfig, BaseSlideGroupConfig } from '../../types/slide_groups';
 import { SlideType, SlideConfig } from '../../types/slides';
-import BulletListSlide from './BulletListSlide';
+import BulletSlide from './BulletSlide';
 import ChartSlide from './ChartSlide';
-import PictureSlide from './GallerySlide';
+import PictureSlide from './PictureSlide';
 
 interface SlideGroupProps {
   config: SlideGroupConfig;
@@ -82,11 +82,11 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
     //       {...props}
     //     />;
     //   case SlideType.BULLETS:
-    //     return <BulletListSlideGroup slide={config} {...props} />;
+    //     return <BulletSlideGroup slide={config} {...props} />;
     // }
     switch (config.type) {
       case SlideType.BULLETS:
-        return <BulletListSlide {...commonProps} slideGroup={config} />;
+        return <BulletSlide {...commonProps} slideGroup={config} />;
 
       case SlideType.CHART:
         return <ChartSlide {...commonProps} slideGroup={config} />;
