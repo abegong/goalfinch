@@ -6,6 +6,7 @@ import { SlideType, SlideConfig } from '../../types/slides';
 import BulletSlide from './BulletSlide';
 import ChartSlide from './ChartSlide';
 import PictureSlide from './PictureSlide';
+import SlideGroupCaptions from './SlideGroupCaptions';
 import { Typography } from '@mui/material';
 
 interface SlideGroupProps {
@@ -68,6 +69,8 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
 
     const currentSlide = config.slides[currentSlideIndex];
     const commonProps = {
+      index: currentSlide,
+      captions: config.captions,
       isTransitioning,
       animationDuration,
       direction,
@@ -89,53 +92,6 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
     }
   };
 
-  const renderCaptions = (captions: Captions) => {
-    console.log(captions);
-    return <Box sx={{ position: 'absolute' as const }}>
-      {captions.top_center && (
-        <Typography sx={{ 
-          // ...captionStyles, 
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center'
-        }}>
-          {captions.top_center}
-        </Typography>
-      )}
-      {captions.bottom_center && (
-        <Typography sx={{ 
-          // ...captionStyles, 
-          bottom: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center'
-        }}>
-          {captions.bottom_center}
-        </Typography>
-      )}
-      {captions.bottom_left && (
-        <Typography sx={{ 
-          // ...captionStyles, 
-          bottom: 0,
-          left: 0
-        }}>
-          {captions.bottom_left}
-        </Typography>
-      )}
-      {captions.bottom_right && (
-        <Typography sx={{ 
-          // ...captionStyles, 
-          bottom: 0,
-          right: 0,
-          textAlign: 'right'
-        }}>
-          {captions.bottom_right}
-        </Typography>
-      )}
-    </Box>          
-  }
-
   console.log(config);
   return (
     <Card
@@ -148,44 +104,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
       }}
     >
       {renderSlide()}
-      {renderCaptions(config.captions)}
-
-      {/* {totalSlides > 1 && (
-        <>
-          <IconButton
-            onClick={goToPrevSlide}
-            disabled={isTransitioning}
-            sx={{
-              position: 'absolute',
-              left: 16,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              backgroundColor: 'rgba(255, 255, 255, 0.3)',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
-              },
-            }}
-          >
-            <ChevronLeft />
-          </IconButton>
-          <IconButton
-            onClick={goToNextSlide}
-            disabled={isTransitioning}
-            sx={{
-              position: 'absolute',
-              right: 16,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              backgroundColor: 'rgba(255, 255, 255, 0.3)',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
-              },
-            }}
-          >
-            <ChevronRight />
-          </IconButton>
-        </>
-      )} */}
+      <SlideGroupCaptions captions={config.captions} />
     </Card>
   );
 };
