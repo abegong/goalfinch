@@ -5,12 +5,12 @@ import { SlideType } from '../../types/slides';
 import { SlideGroupConfig } from '../../types/slide_groups';
 
 describe('DashboardControlBar', () => {
-  const mockSlideGroups: SlideGroupConfig[] = [{
-    type: SlideType.BULLETS,
-    // Missing captions field to recreate the error
-  } as SlideGroupConfig];
-
   test('handles slide groups with undefined captions', () => {
+    const mockSlideGroups: SlideGroupConfig[] = [{
+      type: SlideType.BULLETS,
+      // Missing captions field to recreate the error
+    } as SlideGroupConfig];
+
     render(
       <DashboardControlBar
         visible={true}
@@ -23,5 +23,29 @@ describe('DashboardControlBar', () => {
 
     // The component should render without throwing an error
     expect(screen.getByLabelText('Dashboard Control Bar')).toBeInTheDocument();
+    // Should show the slide type when no captions are available
+    expect(screen.getByText('bullets')).toBeInTheDocument();
+  });
+
+  test('uses available caption from any position', () => {
+    const mockSlideGroups: SlideGroupConfig[] = [{
+      type: SlideType.BULLETS,
+      captions: {
+        bottom_right: 'Bottom Right Caption',
+      }
+    } as SlideGroupConfig];
+
+    render(
+      <DashboardControlBar
+        visible={true}
+        onClose={() => {}}
+        slideGroups={mockSlideGroups}
+        visibleColorIndex={0}
+        onSlideClick={() => {}}
+      />
+    );
+
+    // Should use the bottom_right caption since it's the only one available
+    expect(screen.getByText('Bottom Right Caption')).toBeInTheDocument();
   });
 });

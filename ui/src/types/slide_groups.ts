@@ -62,9 +62,19 @@ export type SlideGroupConfig =
   | PictureSlideGroupConfig;
 
 /**
- * Gets a display name for a slide group based on its type and captions
+ * Gets a display name for a slide group based on its type and captions.
+ * Returns the first available caption from any position, or falls back to the slide type.
  */
 export function getSlideGroupName(config: BaseSlideGroupConfig): string {
-  // Safely access captions.top_center with fallback to slide type
-  return config.captions?.top_center || config.type;
+  if (config.captions) {
+    // Check each caption position and return the first non-empty one
+    const validCaption = config.captions.top_center || 
+                        config.captions.bottom_center || 
+                        config.captions.bottom_right || 
+                        config.captions.bottom_left;
+    if (validCaption) {
+      return validCaption;
+    }
+  }
+  return config.type;
 }
