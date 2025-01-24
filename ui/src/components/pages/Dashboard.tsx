@@ -27,7 +27,8 @@ const ANIMATION_DURATION = 500; // 500ms for the animation
 const TOTAL_INTERVAL = 2000; // 2000ms (2s) total time between starts of animations
 
 const Dashboard: React.FC = () => {
-  const { slideGroups } = useConfig();
+  const { dashboard } = useConfig();
+  const slideGroups = dashboard.slideGroups;
   const [slideGroupIndex, setSlideGroupIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);

@@ -60,7 +60,9 @@ const mockSlideGroups = [
 // Mock the useConfig hook
 jest.mock('../../../context/ConfigContext', () => ({
   useConfig: () => ({
-    slideGroups: mockSlideGroups,
+    dashboard: {
+      slideGroups: mockSlideGroups,
+    },
   }),
 }));
 
@@ -85,7 +87,9 @@ describe('Dashboard', () => {
   it('renders with empty slide groups', () => {
     // Override the mock to return empty slide groups
     jest.spyOn(require('../../../context/ConfigContext'), 'useConfig').mockReturnValue({
-      slideGroups: [],
+      dashboard: {
+        slideGroups: [],
+      },
     });
 
     render(

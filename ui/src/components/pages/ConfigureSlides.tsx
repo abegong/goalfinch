@@ -9,31 +9,26 @@ import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
 import { PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
 
 const ConfigureSlides: React.FC = () => {
-  const { slideGroups, setSlideGroups } = useConfig();
+  const { dashboard, setDashboard } = useConfig();
   const [expandedItems, setExpandedItems] = useState<boolean[]>([]);
 
   const handleSlideGroupChange = (index: number, newConfig: Partial<SlideGroupConfig>) => {
-    const newSlideGroups = [...slideGroups];
+    const newSlideGroups = [...dashboard.slideGroups];
     const currentSlideGroup = newSlideGroups[index];
-    // Preserve the getName method from the current slide
-    // newSlideGroups[index] = { 
-    //   ...currentSlideGroup, 
-    //   ...newConfig,
-    //   getName: currentSlideGroup.getName.bind(currentSlideGroup)
-    // };
-    setSlideGroups(newSlideGroups);
+    newSlideGroups[index] = { ...currentSlideGroup, ...newConfig } as SlideGroupConfig;
+    setDashboard({ ...dashboard, slideGroups: newSlideGroups });
   };
 
   const handleSlideGroupOrderChange = useCallback((newSlideGroupConfigs: SlideGroupConfig[]) => {
-    setSlideGroups(newSlideGroupConfigs);
-  }, [setSlideGroups]);
+    setDashboard({ ...dashboard, slideGroups: newSlideGroupConfigs });
+  }, [setDashboard, dashboard]);
 
   const handleAddSlide = () => {
     const newSlideGroupConfig = {
       type : SlideType.PICTURE,
       slide_count: 3,
     } as PictureSlideGroupConfig;
-    const newSlideGroups = [...slideGroups, newSlideGroupConfig];
+    const newSlideGroups = [...dashboard.slideGroups, newSlideGroupConfig];
     handleSlideGroupOrderChange(newSlideGroups);
     
     // Update expanded and animating states
@@ -64,7 +59,7 @@ const ConfigureSlides: React.FC = () => {
     const sourceIndex = parseInt(e.dataTransfer.getData('text/plain'));
     if (sourceIndex === targetIndex) return;
 
-    const newSlideGroups = [...slideGroups];
+    const newSlideGroups = [...dashboard.slideGroups];
     const [removed] = newSlideGroups.splice(sourceIndex, 1);
     newSlideGroups.splice(targetIndex, 0, removed);
     handleSlideGroupOrderChange(newSlideGroups);
@@ -77,7 +72,7 @@ const ConfigureSlides: React.FC = () => {
   };
 
   const handleSlideGroupDelete = (index: number) => {
-    const newSlideGroups = [...slideGroups];
+    const newSlideGroups = [...dashboard.slideGroups];
     newSlideGroups.splice(index, 1);
     handleSlideGroupOrderChange(newSlideGroups);
     
@@ -125,12 +120,12 @@ const ConfigureSlides: React.FC = () => {
         },
       }}
     >
-      {slideGroups.map((slideGroup, index) => (
+      {dashboard.slideGroups.map((slideGroup, index) => (
         <SlideGroupTimelineItem
           key={index}
           slideGroup={slideGroup}
           index={index}
-          slideGroups={slideGroups}
+          slideGroups={dashboard.slideGroups}
           expandedItems={expandedItems}
           onToggleExpanded={toggleExpanded}
           onDragStart={handleDragStart}
