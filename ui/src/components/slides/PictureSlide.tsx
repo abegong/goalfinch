@@ -7,7 +7,7 @@ interface PictureSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'te
   backgroundImage?: string;
 }
 
-const PictureSlideGroup: React.FC<PictureSlideProps> = ({ slideGroup, backgroundImage, ...slideProps }) => {
+const PictureSlide: React.FC<PictureSlideProps> = ({ slideGroup, backgroundImage, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
@@ -52,4 +52,4 @@ const PictureSlideGroup: React.FC<PictureSlideProps> = ({ slideGroup, background
   );
 };
 
-export default PictureSlideGroup;
+export default PictureSlide;

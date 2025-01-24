@@ -6,7 +6,7 @@ interface ChartSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text
   slideGroup: ChartSlideGroupConfig;
 }
 
-const ChartSlideGroup: React.FC<ChartSlideProps> = ({ slideGroup, ...slideProps }) => {
+const ChartSlide: React.FC<ChartSlideProps> = ({ slideGroup, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
@@ -22,4 +22,4 @@ const ChartSlideGroup: React.FC<ChartSlideProps> = ({ slideGroup, ...slideProps 
   );
 };
 
-export default ChartSlideGroup;
+export default ChartSlide;
