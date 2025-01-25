@@ -7,6 +7,8 @@ import { ConnectionsConfig } from './connections';
 
 export interface DashboardConfig {
   slideGroups: SlideGroupConfig[];
+  /** Index of the currently active slide within the current slide group */
+  activeSlideIndex: number;
 }
 
 export interface AppConfig {

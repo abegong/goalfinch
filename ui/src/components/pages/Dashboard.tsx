@@ -28,7 +28,7 @@ const ANIMATION_DURATION = 500; // 500ms for the animation
 const TOTAL_INTERVAL = 2000; // 2000ms (2s) total time between starts of animations
 
 const Dashboard: React.FC = () => {
-  const { dashboard } = useConfig();
+  const { dashboard, setDashboard } = useConfig();
   const slideGroups = dashboard.slideGroups;
   const [slideGroupIndex, setSlideGroupIndex] = useState(0);
   const [nextColorIndex, setNextColorIndex] = useState(1);
@@ -72,24 +72,32 @@ const Dashboard: React.FC = () => {
       } else if (event.key === ' ') {
         event.preventDefault(); // Prevent page scroll
         setIsPaused(prev => !prev);
-      } else if (event.key === 'ArrowLeft') {
+      } else if (event.key === 'ArrowLeft' && !event.shiftKey) {
         const prevIndex = (slideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
         setSlideGroupIndex(prevIndex);
         setNextColorIndex(prevIndex);
         setSlideDirection('right');
         setIsTransitioning(true);
-      } else if (event.key === 'ArrowRight') {
+      } else if (event.key === 'ArrowRight' && !event.shiftKey) {
         const nextIndex = (slideGroupIndex + 1) % slideGroups.length;
         setSlideGroupIndex(nextIndex);
         setNextColorIndex(nextIndex);
         setSlideDirection('left');
         setIsTransitioning(true);
+      } else if (event.key === 'ArrowLeft' && event.shiftKey) {
+        const currentGroup = slideGroups[slideGroupIndex];
+        const prevSlide = (dashboard.activeSlideIndex - 1 + currentGroup.slides.length) % currentGroup.slides.length;
+        setDashboard({...dashboard, activeSlideIndex: prevSlide});
+      } else if (event.key === 'ArrowRight' && event.shiftKey) {
+        const currentGroup = slideGroups[slideGroupIndex];
+        const nextSlide = (dashboard.activeSlideIndex + 1) % currentGroup.slides.length;
+        setDashboard({...dashboard, activeSlideIndex: nextSlide});
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [dashboardControlBarVisible, setAppControlBarVisible, slideGroupIndex, slideGroups.length]);
+  }, [dashboardControlBarVisible, setAppControlBarVisible, slideGroupIndex, slideGroups, dashboard, setDashboard]);
 
   const handleColorClick = (index: number) => {
     setSlideGroupIndex(index);
@@ -140,7 +148,10 @@ const Dashboard: React.FC = () => {
         <Menu />
       </IconButton>
 
-      <SlideGroup config={slideGroups[slideGroupIndex]}/>
+      <SlideGroup 
+        config={slideGroups[slideGroupIndex]} 
+        initialSlideIndex={dashboard.activeSlideIndex}
+      />
 
       <DashboardControlBar 
         visible={dashboardControlBarVisible}

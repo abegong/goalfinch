@@ -13,14 +13,16 @@ interface SlideGroupProps {
   config: SlideGroupConfig;
   autoAdvance?: boolean;
   autoAdvanceInterval?: number;
+  initialSlideIndex?: number;
 }
 
 const SlideGroup: React.FC<SlideGroupProps> = ({
   config,
   autoAdvance = false,
   autoAdvanceInterval = 5000,
+  initialSlideIndex = 0,
 }) => {
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(initialSlideIndex);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [direction, setDirection] = useState<'left' | 'right'>('right');
 
@@ -57,6 +59,17 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
     };
   }, [autoAdvance, autoAdvanceInterval, goToNextSlide, totalSlides]);
 
+  useEffect(() => {
+    if (currentSlideIndex !== initialSlideIndex) {
+      setDirection(initialSlideIndex > currentSlideIndex ? 'right' : 'left');
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentSlideIndex(initialSlideIndex);
+        setIsTransitioning(false);
+      }, animationDuration);
+    }
+  }, [initialSlideIndex, currentSlideIndex, animationDuration]);
+
   const renderSlide = (slideConfig: SlideConfig, index: number) => {
     // if (!('slides' in config)) {
     //   return <PictureSlide
@@ -71,6 +84,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
     const commonProps = {
       index: currentSlide,
       captions: config.captions,
+      text: index.toString(),
       isTransitioning,
       animationDuration,
       direction,

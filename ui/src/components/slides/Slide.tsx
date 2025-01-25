@@ -82,7 +82,7 @@ const Slide: React.FC<SlideProps> = ({
         textAlign: 'center',
         width: '100%',
         height: '100%',
-        backgroundColor,
+        backgroundColor: "blue",
         backgroundImage: backgroundImage ? `url("${backgroundImage}")` : 'none',
         animation: getAnimation(),
         '@keyframes slideOutLeft': {

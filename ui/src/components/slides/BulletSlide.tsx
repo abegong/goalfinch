@@ -7,7 +7,7 @@ interface BulletSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'tex
   slideConfig: BulletSlideConfig;
 }
 
-const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, ...slideProps }) => {
+const BulletSlide: React.FC<any> = ({ slideConfig, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
@@ -33,6 +33,8 @@ const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, ...slideProps })
           flexDirection: 'column',
           gap: '16px'
         }}>
+          {slideProps.text}
+          {/* {JSON.stringify(slideProps)} */}
           {/* {slideGroup.slides[0].content?.map((item: string, index: number) => (
             <li 
               key={index}

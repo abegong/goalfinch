@@ -8,7 +8,7 @@ interface PictureSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'te
   backgroundImage?: string;
 }
 
-const PictureSlide: React.FC<PictureSlideProps> = ({ slideConfig, backgroundImage, ...slideProps }) => {
+const PictureSlide: React.FC<any> = ({ slideConfig, backgroundImage, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
@@ -26,6 +26,7 @@ const PictureSlide: React.FC<PictureSlideProps> = ({ slideConfig, backgroundImag
         height: '100%',
         boxSizing: 'border-box'
       }}>
+        {slideProps.text}
         {/* {slideGroup.slides[0].content?.map((imageUrl: string, index: number) => (
           <div 
             key={index}

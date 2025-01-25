@@ -7,15 +7,12 @@ interface ChartSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text
   slideConfig: ChartSlideConfig;
 }
 
-const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) => {
+const ChartSlide: React.FC<any> = ({ slideConfig, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
-      text=""
-      // text={`${slideGroup.slides[0].content.goal}${slideGroup.slides[0].content.units}`}
-      // captions={slideGroup.captions}
+      text={slideProps.text}
     >
-      {/* TODO: Add chart visualization component here */}
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
         {/* Chart content will go here */}
       </div>

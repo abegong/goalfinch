@@ -16,7 +16,8 @@ const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [dashboard, setDashboard] = useState<DashboardConfig>({
-    slideGroups: demoData
+    slideGroups: demoData,
+    activeSlideIndex: 0
   });
 
   const [connections, setConnections] = useState<ConnectionsConfig>({
