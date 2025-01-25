@@ -1,12 +1,13 @@
 import React from 'react';
 import Slide from './Slide';
 import { ChartSlideGroupConfig } from '../../types/slide_groups';
+import { ChartSlideConfig } from '../../types/slides';
 
 interface ChartSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
-  slideGroup: ChartSlideGroupConfig;
+  slideConfig: ChartSlideConfig;
 }
 
-const ChartSlide: React.FC<ChartSlideProps> = ({ slideGroup, ...slideProps }) => {
+const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}

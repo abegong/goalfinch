@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Card, IconButton, Box } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { SlideGroupConfig, BaseSlideGroupConfig, Captions } from '../../types/slide_groups';
-import { SlideType, SlideConfig } from '../../types/slides';
+import { SlideType, SlideConfig, BulletSlideConfig, ChartSlideConfig, PictureSlideConfig } from '../../types/slides';
 import BulletSlide from './BulletSlide';
 import ChartSlide from './ChartSlide';
 import PictureSlide from './PictureSlide';
@@ -57,15 +57,15 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
     };
   }, [autoAdvance, autoAdvanceInterval, goToNextSlide, totalSlides]);
 
-  const renderSlide = () => {
-    if (!('slides' in config)) {
-      return <PictureSlide
-        isTransitioning={isTransitioning}
-        animationDuration={animationDuration}
-        direction={direction}
-        slideGroup={config}
-      />;
-    }
+  const renderSlide = (slideConfig: SlideConfig, index: number) => {
+    // if (!('slides' in config)) {
+    //   return <PictureSlide
+    //     isTransitioning={isTransitioning}
+    //     animationDuration={animationDuration}
+    //     direction={direction}
+    //     slideGroup={config}
+    //   />;
+    // }
 
     const currentSlide = config.slides[currentSlideIndex];
     const commonProps = {
@@ -78,21 +78,20 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
 
     switch (config.type) {
       case SlideType.BULLETS:
-        return <BulletSlide {...commonProps} slideGroup={config} />;
+        return <BulletSlide {...commonProps} slideConfig={slideConfig as BulletSlideConfig} />;
 
       case SlideType.CHART:
-        return <ChartSlide {...commonProps} slideGroup={config} />;
+        return <ChartSlide {...commonProps} slideConfig={slideConfig as ChartSlideConfig} />;
 
       case SlideType.PICTURE:
         return <PictureSlide
-          slideGroup={config}
+          slideConfig={slideConfig as PictureSlideConfig}
           backgroundImage={"http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png"}
           {...commonProps}
         />;  
     }
   };
 
-  console.log(config);
   return (
     <Card
       sx={{
@@ -103,7 +102,10 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
         backgroundColor: 'background.paper',
       }}
     >
-      {renderSlide()}
+      {/* Iterate over slides */}
+      {config.slides.map((slide, index) => (
+        renderSlide(slide, index)
+      ))}
       <SlideGroupCaptions captions={config.captions} />
     </Card>
   );

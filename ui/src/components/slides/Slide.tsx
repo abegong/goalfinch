@@ -79,6 +79,9 @@ const Slide: React.FC<SlideProps> = ({
     <Box
       sx={{
         ...colorBlockStyles,
+        textAlign: 'center',
+        width: '100%',
+        height: '100%',
         backgroundColor,
         backgroundImage: backgroundImage ? `url("${backgroundImage}")` : 'none',
         animation: getAnimation(),
@@ -148,11 +151,9 @@ const Slide: React.FC<SlideProps> = ({
         },
       }}
     >
-      {text && (
-        <Typography variant="h1" sx={{ color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-          {text}
-        </Typography>
-      )}
+      <Typography variant="h1" sx={{ color: 'red', marginLeft: '50%' }}>
+        {text}
+      </Typography>
       {children}
     </Box>
   );

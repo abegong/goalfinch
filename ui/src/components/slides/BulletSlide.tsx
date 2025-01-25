@@ -1,12 +1,13 @@
 import React from 'react';
 import Slide from './Slide';
 import { BulletSlideGroupConfig } from '../../types/slide_groups';
+import { BulletSlideConfig } from '../../types/slides';
 
 interface BulletSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
-  slideGroup: BulletSlideGroupConfig;
+  slideConfig: BulletSlideConfig;
 }
 
-const BulletSlide: React.FC<BulletSlideProps> = ({ slideGroup, ...slideProps }) => {
+const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
