@@ -3,12 +3,7 @@ import { Box, IconButton } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 import { LayoutContext } from '../Layout';
 import { useConfig } from '../../context/ConfigContext';
-import { SlideType } from '../../types/slides';
 import DashboardControlBar from '../DashboardControlBar';
-import { SlideGroupConfig } from '../../types/slide_groups';
-import ChartSlideGroup from '../slides/ChartSlide';
-import PictureSlideGroup from '../slides/PictureSlide';
-import BulletSlideGroup from '../slides/BulletSlide';
 import SlideGroup from '../slides/SlideGroup';
 
 /**
@@ -136,12 +131,13 @@ const Dashboard: React.FC = () => {
   ]);
 
   /**
-   * Handles direct navigation to a specific slide group by index.
-   * @param index - The index of the target slide group
+   * Handles direct navigation to a specific slide within a slide group.
+   * @param groupIndex - The index of the target slide group
+   * @param slideIndex - The index of the target slide within the group
    */
-  const handleSlideClick = (index: number) => {
-    setActiveSlideGroupIndex(index);
-    setActiveSlideIndex(0);
+  const handleControlBarSlideClick = (groupIndex: number, slideIndex: number) => {
+    setActiveSlideGroupIndex(groupIndex);
+    setActiveSlideIndex(slideIndex);
     setSlideDirection('left');
     setIsTransitioning(true);
   };
@@ -206,7 +202,7 @@ const Dashboard: React.FC = () => {
         slideGroups={slideGroups}
         visibleColorIndex={activeSlideGroupIndex % colors.length}
         activeSlideIndex={activeSlideIndex}
-        onSlideClick={handleSlideClick}
+        onSlideClick={handleControlBarSlideClick}
         isPaused={isPaused}
         onPauseChange={setIsPaused}
       />

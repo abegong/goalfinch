@@ -11,7 +11,7 @@ interface DashboardControlBarProps {
   slideGroups: Array<SlideGroupConfig>;
   visibleColorIndex: number;
   activeSlideIndex: number;
-  onSlideClick: (index: number) => void;
+  onSlideClick: (groupIndex: number, slideIndex: number) => void;
   isPaused?: boolean;
   onPauseChange: (paused: boolean) => void;
 }
@@ -51,7 +51,7 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
           <React.Fragment key={groupIndex}>
             {/* Slide Group Header */}
             <ListItem
-              onClick={() => onSlideClick(groupIndex)}
+              onClick={() => onSlideClick(groupIndex, 0)}
               sx={{
                 cursor: 'pointer',
                 m: 0,
@@ -68,7 +68,7 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
             {slideGroup.slides.map((_, slideIndex) => (
               <ListItem
                 key={`${groupIndex}-${slideIndex}`}
-                onClick={() => onSlideClick(groupIndex)}
+                onClick={() => onSlideClick(groupIndex, slideIndex)}
                 sx={{
                   cursor: 'pointer',
                   m: 0,
