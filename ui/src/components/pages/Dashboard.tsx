@@ -199,11 +199,16 @@ const Dashboard: React.FC = () => {
 
       <DashboardControlBar 
         visible={dashboardControlBarVisible}
-        onClose={() => setDashboardControlBarVisible(false)}
+        onClose={() => {
+          setAppControlBarVisible(false);
+          setDashboardControlBarVisible(false);
+        }}
         slideGroups={slideGroups}
-        visibleColorIndex={activeSlideGroupIndex}
+        visibleColorIndex={activeSlideGroupIndex % colors.length}
         activeSlideIndex={activeSlideIndex}
         onSlideClick={handleSlideClick}
+        isPaused={isPaused}
+        onPauseChange={setIsPaused}
       />
     </Box>
   );

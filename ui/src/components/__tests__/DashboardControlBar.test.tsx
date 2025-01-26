@@ -20,6 +20,8 @@ describe('DashboardControlBar', () => {
         visibleColorIndex={0}
         activeSlideIndex={0}
         onSlideClick={() => {}}
+        isPaused={false}
+        onPauseChange={() => {}}
       />
     );
 
@@ -46,6 +48,8 @@ describe('DashboardControlBar', () => {
         visibleColorIndex={0}
         activeSlideIndex={0}
         onSlideClick={() => {}}
+        isPaused={false}
+        onPauseChange={() => {}}
       />
     );
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { Landscape, ShowChart, SsidChart, FormatListBulleted, Segment } from '@mui/icons-material';
 import { SlideType } from '../types/slides';
 import { SlideGroupConfig, getSlideGroupName } from '../types/slide_groups';
@@ -12,6 +12,8 @@ interface DashboardControlBarProps {
   visibleColorIndex: number;
   activeSlideIndex: number;
   onSlideClick: (index: number) => void;
+  isPaused?: boolean;
+  onPauseChange: (paused: boolean) => void;
 }
 
 const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
@@ -21,6 +23,8 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
   visibleColorIndex,
   activeSlideIndex,
   onSlideClick,
+  isPaused = false,
+  onPauseChange,
 }) => {
   return (
     <Drawer
@@ -93,6 +97,16 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
           </React.Fragment>
         ))}
       </List>
+      <FormControlLabel
+        control={
+          <Checkbox 
+            checked={isPaused} 
+            onChange={(e) => onPauseChange(e.target.checked)}
+          />
+        }
+        label="Paused"
+        sx={{ ml: '10px', mt: '10px' }}
+      />
     </Drawer>
   );
 };
