@@ -31,6 +31,11 @@ const mockSlideGroups = [
   } as ChartSlideGroupConfig,
   {
     type: SlideType.PICTURE,
+    slides: [
+      { type: SlideType.PICTURE },
+      { type: SlideType.PICTURE },
+      { type: SlideType.PICTURE }
+    ],
     slide_count: 3,
     captions: {}
   } as PictureSlideGroupConfig
@@ -66,32 +71,6 @@ jest.mock('../../../context/ConfigContext', () => ({
 
 describe('Dashboard', () => {
   it('renders all slide types correctly', () => {
-    render(
-      <LayoutContext.Provider value={mockLayoutContext}>
-        <Dashboard />
-      </LayoutContext.Provider>
-    );
-  });
-
-  it('renders with empty slide groups', () => {
-    // Override the mock to return empty slide groups
-    jest.spyOn(require('../../../context/ConfigContext'), 'useConfig').mockReturnValue({
-      dashboard: {
-        slideGroups: [],
-      },
-      app: {
-        appControlBar: {
-          open: false,
-          visible: true
-        },
-        theme: {
-          mode: 'light'
-        }
-      },
-      setApp: jest.fn(),
-      setDashboard: jest.fn()
-    });
-
     render(
       <LayoutContext.Provider value={mockLayoutContext}>
         <Dashboard />

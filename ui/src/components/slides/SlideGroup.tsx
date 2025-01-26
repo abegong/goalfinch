@@ -117,8 +117,10 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
       }}
     >
       {/* Iterate over slides */}
-      {config.slides.map((slide, index) => (
-        renderSlide(slide, index)
+      {config.slides?.map((slide, index) => (
+        <React.Fragment key={index}>
+          {renderSlide(slide, index)}
+        </React.Fragment>
       ))}
       <SlideGroupCaptions captions={config.captions} />
     </Card>

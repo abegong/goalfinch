@@ -69,4 +69,4 @@ export interface PictureSlideConfig extends BaseSlideConfig {
 export type SlideConfig = 
   | BulletSlideConfig 
   | ChartSlideConfig
-  | PictureSlideConfig
+  | PictureSlideConfig;

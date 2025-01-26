@@ -8,6 +8,7 @@ describe('DashboardControlBar', () => {
   test('handles slide groups with undefined captions', () => {
     const mockSlideGroups: SlideGroupConfig[] = [{
       type: SlideType.BULLETS,
+      slides: [{ type: SlideType.BULLETS, content: ['Test bullet'] }],
       // Missing captions field to recreate the error
     } as SlideGroupConfig];
 
@@ -30,6 +31,7 @@ describe('DashboardControlBar', () => {
   test('uses available caption from any position', () => {
     const mockSlideGroups: SlideGroupConfig[] = [{
       type: SlideType.BULLETS,
+      slides: [{ type: SlideType.BULLETS, content: ['Test bullet'] }],
       captions: {
         bottom_right: 'Bottom Right Caption',
       }
