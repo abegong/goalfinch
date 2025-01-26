@@ -11,6 +11,10 @@ import PictureSlideGroup from '../slides/PictureSlide';
 import BulletSlideGroup from '../slides/BulletSlide';
 import SlideGroup from '../slides/SlideGroup';
 
+/**
+ * Color palette used for slide transitions and visual styling.
+ * Each color has a hex value and a descriptive name.
+ */
 const colors = [
   { hex: '#FF6B6B', name: 'Coral Red' },
   { hex: '#4ECDC4', name: 'Turquoise' },
@@ -24,9 +28,19 @@ const colors = [
   { hex: '#FEE440', name: 'Yellow' },
 ];
 
-const ANIMATION_DURATION = 500; // 500ms for the animation
-const TOTAL_INTERVAL = 2000; // 2000ms (2s) total time between starts of animations
+/** Duration of slide transition animation in milliseconds */
+const ANIMATION_DURATION = 500;
+/** Total interval between slide transitions in milliseconds */
+const TOTAL_INTERVAL = 2000;
 
+/**
+ * Dashboard component that manages and displays slide groups with automatic transitions.
+ * Features include:
+ * - Automatic slide group rotation with configurable intervals
+ * - Manual navigation with arrow keys and control bar
+ * - Pause/resume functionality
+ * - Responsive layout with fullscreen display
+ */
 const Dashboard: React.FC = () => {
   const { dashboard, setDashboard } = useConfig();
   const slideGroups = dashboard.slideGroups;
@@ -40,6 +54,10 @@ const Dashboard: React.FC = () => {
     setAppControlBarVisible,
   } = useContext(LayoutContext);
 
+  /**
+   * Transitions to the next slide group with a left sliding animation.
+   * Updates slide group index and triggers transition animation.
+   */
   const goToNextSlide = useCallback(() => {
     const nextIndex = (slideGroupIndex + 1) % slideGroups.length;
     setSlideGroupIndex(nextIndex);
@@ -48,6 +66,10 @@ const Dashboard: React.FC = () => {
     setIsTransitioning(true);
   }, [slideGroupIndex, slideGroups.length]);
 
+  /**
+   * Transitions to the previous slide group with a right sliding animation.
+   * Updates slide group index and triggers transition animation.
+   */
   const goToPrevSlide = useCallback(() => {
     const prevIndex = (slideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
     setSlideGroupIndex(prevIndex);
@@ -56,12 +78,20 @@ const Dashboard: React.FC = () => {
     setIsTransitioning(true);
   }, [slideGroupIndex, slideGroups.length]);
 
+  /**
+   * Advances to the next slide within the current slide group.
+   * Cycles back to the first slide if at the end of the group.
+   */
   const goToNextSlideInGroup = useCallback(() => {
     const currentGroup = slideGroups[slideGroupIndex];
     const nextSlide = (dashboard.activeSlideIndex + 1) % currentGroup.slides.length;
     setDashboard({...dashboard, activeSlideIndex: nextSlide});
   }, [slideGroupIndex, slideGroups, dashboard, setDashboard]);
 
+  /**
+   * Returns to the previous slide within the current slide group.
+   * Cycles to the last slide if at the beginning of the group.
+   */
   const goToPrevSlideInGroup = useCallback(() => {
     const currentGroup = slideGroups[slideGroupIndex];
     const prevSlide = (dashboard.activeSlideIndex - 1 + currentGroup.slides.length) % currentGroup.slides.length;
@@ -98,14 +128,10 @@ const Dashboard: React.FC = () => {
       } else if (event.key === ' ') {
         event.preventDefault(); // Prevent page scroll
         setIsPaused(prev => !prev);
-      } else if (event.key === 'ArrowLeft' && !event.shiftKey) {
+      } else if (event.key === 'ArrowLeft') {
         goToPrevSlide();
-      } else if (event.key === 'ArrowRight' && !event.shiftKey) {
+      } else if (event.key === 'ArrowRight') {
         goToNextSlide();
-      } else if (event.key === 'ArrowLeft' && event.shiftKey) {
-        goToPrevSlideInGroup();
-      } else if (event.key === 'ArrowRight' && event.shiftKey) {
-        goToNextSlideInGroup();
       }
     };
 
@@ -120,12 +146,19 @@ const Dashboard: React.FC = () => {
     goToPrevSlideInGroup
   ]);
 
+  /**
+   * Handles direct navigation to a specific slide group by index.
+   * @param index - The index of the target slide group
+   */
   const handleColorClick = (index: number) => {
     setSlideGroupIndex(index);
     setSlideDirection('left');
     setIsTransitioning(true);
   };
 
+  /**
+   * Toggles the visibility of the dashboard control bar and app control bar.
+   */
   const handleMenuClick = () => {
     const newState = !dashboardControlBarVisible;
     setAppControlBarVisible(newState);
