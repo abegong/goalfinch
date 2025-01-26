@@ -7,56 +7,37 @@ interface BulletSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'tex
   slideConfig: BulletSlideConfig;
 }
 
-const BulletSlide: React.FC<any> = ({ slideConfig, ...slideProps }) => {
+const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
       text=""
-      // captions={slideGroup.captions}
     >
       <div style={{ 
-        padding: '48px',
-        width: '100%',
-        height: '100%',
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center'
+        position: 'absolute',
+        left: '25%',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        width: '75%'
       }}>
         <ul style={{
-          position: 'relative',
-          left: '25%',
-          listStyle: 'none',
           padding: 0,
           margin: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
+          listStyleType: 'square',
         }}>
-          {slideProps.text}
-          {/* {JSON.stringify(slideProps)} */}
-          {/* {slideGroup.slides[0].content?.map((item: string, index: number) => (
+          {slideConfig.content.map((item: string, index: number) => (
             <li 
               key={index}
               style={{
-                fontSize: '2.0rem',
-                color: 'rgb(255, 255, 255, 0.9)',
-                fontWeight: 'bold',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px'
+                fontSize: '3rem',
+                color: 'rgba(235, 235, 235, 0.85)',
+                marginBottom: '1rem',
+                textAlign: 'left'
               }}
             >
-              <span style={{
-                width: '8px',
-                height: '8px',
-                backgroundColor: 'white',
-                borderRadius: '50%',
-                display: 'inline-block'
-              }}/>
               {item}
             </li>
-          ))} */}
+          ))}
         </ul>
       </div>
     </Slide>

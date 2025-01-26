@@ -26,7 +26,7 @@ const colors = [
 /** Duration of slide transition animation in milliseconds */
 const ANIMATION_DURATION = 200;
 /** Total interval between slide transitions in milliseconds */
-const TOTAL_INTERVAL = 1000;
+const TOTAL_INTERVAL = 2000;
 
 /**
  * Dashboard component that manages and displays slide groups with automatic transitions.
