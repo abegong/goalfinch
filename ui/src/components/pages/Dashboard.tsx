@@ -60,94 +60,23 @@ const Dashboard: React.FC = () => {
    * Otherwise, go to the next slide in the current group.
    */
   const goToNextSlide = useCallback(() => {
-    console.log('goToNextSlide');
-    let nextSlideIndex = activeSlideIndex + 1;
-    let nextSlideGroupIndex = activeSlideGroupIndex;
-
     const currentGroup = slideGroups[activeSlideGroupIndex];
-    if( nextSlideIndex >= currentGroup.slides.length ) {
-      console.log("here")
-      nextSlideIndex = 0;
-      nextSlideGroupIndex += 1;
-      if( nextSlideGroupIndex >= slideGroups.length ) {
-        nextSlideGroupIndex = 0;
-      }
-      setActiveSlideGroupIndex(nextSlideGroupIndex);
+    const nextSlideIndex = activeSlideIndex + 1;
+
+    if (nextSlideIndex >= currentGroup.slides.length) {
+      // Move to next group
+      const nextGroupIndex = (activeSlideGroupIndex + 1) % slideGroups.length;
+      setActiveSlideGroupIndex(nextGroupIndex);
+      setActiveSlideIndex(0);
+    } else {
+      // Stay in current group, move to next slide
+      setActiveSlideIndex(nextSlideIndex);
     }
-    console.log(activeSlideGroupIndex, activeSlideIndex, nextSlideIndex, nextSlideGroupIndex, currentGroup.slides.length);
-
-    setActiveSlideIndex(nextSlideIndex);
-    // setSlideDirection('left');
-    // setIsTransitioning(true);
-
-    // const isLastSlide = activeSlideGroupIndex === slideGroups[activeSlideGroupIndex].slides.length - 1;
-    // if (isLastSlide) {
-    //   goToNextSlideGroup();
-    // } else {
-    //   goToNextSlideInGroup();
-    // }
-  }, [activeSlideGroupIndex, slideGroups.length]);
-
-  /**
-   * Transitions to the previous slide.
-   * If this is the first slide in a slide group, go to the last slide in the previous group.
-   * Otherwise, go to the previous slide in the current group.
-   */
-  // const goToPrevSlide = useCallback(() => {
-  //   const isFirstSlide = activeSlideGroupIndex === 0;
-  //   if (isFirstSlide) {
-  //     goToPrevSlideGroup();
-  //   } else {
-  //     goToPrevSlideInGroup();
-  //   }
-  // }, [activeSlideGroupIndex, slideGroups.length]);
-
-  // /**
-  //  * Transitions to the next slide group with a left sliding animation.
-  //  * Updates slide group index and triggers transition animation.
-  //  */
-  // const goToNextSlideGroup = useCallback(() => {
-  //   console.log('goToNextSlideGroup');
-  //   const nextIndex = (activeSlideGroupIndex + 1) % slideGroups.length;
-  //   setActiveSlideGroupIndex(nextIndex);
-  //   setSlideDirection('left');
-  //   setIsTransitioning(true);
-  // }, [activeSlideGroupIndex, slideGroups.length]);
-
-  // /**
-  //  * Transitions to the previous slide group with a right sliding animation.
-  //  * Updates slide group index and triggers transition animation.
-  //  */
-  // const goToPrevSlideGroup = useCallback(() => {
-  //   const prevIndex = (activeSlideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
-  //   setActiveSlideGroupIndex(prevIndex);
-  //   setSlideDirection('right');
-  //   setIsTransitioning(true);
-  // }, [activeSlideGroupIndex, slideGroups.length]);
-
-  // /**
-  //  * Advances to the next slide within the current slide group.
-  //  * Cycles back to the first slide if at the end of the group.
-  //  */
-  // const goToNextSlideInGroup = useCallback(() => {
-  //   console.log('goToNextSlideInGroup');
-  //   const currentGroup = slideGroups[activeSlideGroupIndex];
-  //   let nextSlide = activeSlideIndex + 1;
-  //   if( nextSlide >= currentGroup.slides.length ) {
-  //     nextSlide = 0;
-  //   }
-  //   setActiveSlideIndex(nextSlide);
-  // }, [activeSlideGroupIndex, slideGroups, dashboard, setDashboard]);
-
-  // /**
-  //  * Returns to the previous slide within the current slide group.
-  //  * Cycles to the last slide if at the beginning of the group.
-  //  */
-  // const goToPrevSlideInGroup = useCallback(() => {
-  //   const currentGroup = slideGroups[activeSlideGroupIndex];
-  //   const prevSlide = (activeSlideIndex - 1 + currentGroup.slides.length) % currentGroup.slides.length;
-  //   setActiveSlideIndex(prevSlide);
-  // }, [activeSlideGroupIndex, slideGroups, activeSlideIndex]);
+    
+    setSlideDirection('left');
+    setIsTransitioning(true);
+    console.log(activeSlideGroupIndex, activeSlideIndex);
+  }, [activeSlideGroupIndex, activeSlideIndex, slideGroups]);
 
   useEffect(() => {
     if (isPaused) return;
@@ -158,16 +87,6 @@ const Dashboard: React.FC = () => {
 
     return () => clearInterval(interval);
   }, [isPaused, goToNextSlide]);
-
-  // useEffect(() => {
-  //   if (isTransitioning) {
-  //     const timer = setTimeout(() => {
-  //       goToNextSlide();
-  //     }, ANIMATION_DURATION);
-
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [isTransitioning]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -192,8 +111,6 @@ const Dashboard: React.FC = () => {
     setAppControlBarVisible, 
     goToNextSlide, 
     // goToPrevSlide, 
-    // goToNextSlideInGroup, 
-    // goToPrevSlideInGroup
   ]);
 
   /**
