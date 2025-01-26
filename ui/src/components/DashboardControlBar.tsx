@@ -57,19 +57,6 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
                 }
               }}
             >
-              <ListItemIcon
-                sx={{
-                  minWidth: 48,
-                  color: 'black',
-                  borderRadius: '16px',
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                  mr: '6px',
-                }}
-              >
-                {slideGroup.type === SlideType.BULLETS && <FormatListBulleted />}
-                {slideGroup.type === SlideType.PICTURE && <Landscape />}
-                {slideGroup.type === SlideType.CHART && <ShowChart />}
-              </ListItemIcon>
               <ListItemText primary={getSlideGroupName(slideGroup)} />
             </ListItem>
             
