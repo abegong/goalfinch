@@ -1,18 +1,24 @@
 import React from 'react';
 import Slide from './Slide';
-import { BulletSlideGroupConfig } from '../../types/slide_groups';
+import { BulletSlideGroupConfig, Captions } from '../../types/slide_groups';
 import { BulletSlideConfig } from '../../types/slides';
 import { Box } from '@mui/material';
 
-interface BulletSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
+interface BulletSlideProps {
   slideConfig: BulletSlideConfig;
+  index: number;
+  captions?: Captions;
+  text: string;
+  isTransitioning: boolean;
+  animationDuration: number;
+  direction: 'left' | 'right';
 }
 
-const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, ...slideProps }) => {
+const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, text, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
-      text=""
+      text={text}
     >
       <Box sx={{ 
         position: 'absolute',

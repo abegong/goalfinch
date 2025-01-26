@@ -1,20 +1,25 @@
 import React from 'react';
 import Slide from './Slide';
-import { PictureSlideGroupConfig } from '../../types/slide_groups';
+import { Captions, PictureSlideGroupConfig } from '../../types/slide_groups';
 import { PictureSlideConfig } from '../../types/slides';
 import { Box } from '@mui/material';
 
-interface PictureSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
+interface PictureSlideProps {
   slideConfig: PictureSlideConfig;
+  index: number;
+  captions?: Captions;
+  text: string;
+  isTransitioning: boolean;
+  animationDuration: number;
+  direction: 'left' | 'right';
   backgroundImage?: string;
 }
 
-const PictureSlide: React.FC<any> = ({ slideConfig, backgroundImage, ...slideProps }) => {
+const PictureSlide: React.FC<PictureSlideProps> = ({ slideConfig, text, backgroundImage, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}
-      text=""
-      // captions={slideGroup.captions}
+      text={text}
       backgroundColor="#000000"
       backgroundImage={backgroundImage}
     >
@@ -22,7 +27,6 @@ const PictureSlide: React.FC<any> = ({ slideConfig, backgroundImage, ...slidePro
         width: '100%',
         height: '100%',
       }}>
-        {slideProps.text}
         {/* {slideGroup.slides[0].content?.map((imageUrl: string, index: number) => (
           <div 
             key={index}

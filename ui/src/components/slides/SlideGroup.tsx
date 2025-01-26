@@ -82,9 +82,9 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
 
     const currentSlide = config.slides[currentSlideIndex];
     const commonProps = {
-      index: currentSlide,
+      index: currentSlideIndex,
       captions: config.captions,
-      text: index.toString(),
+      text: `${currentSlideIndex + 1}/${totalSlides}`,
       isTransitioning,
       animationDuration,
       direction,
