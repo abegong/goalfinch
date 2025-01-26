@@ -2,6 +2,7 @@ import React from 'react';
 import Slide from './Slide';
 import { BulletSlideGroupConfig } from '../../types/slide_groups';
 import { BulletSlideConfig } from '../../types/slides';
+import { Box } from '@mui/material';
 
 interface BulletSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slideConfig: BulletSlideConfig;
@@ -13,7 +14,7 @@ const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, ...slideProps })
       {...slideProps}
       text=""
     >
-      <div style={{ 
+      <Box sx={{ 
         position: 'absolute',
         left: '25%',
         top: '50%',
@@ -30,7 +31,7 @@ const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, ...slideProps })
               key={index}
               style={{
                 fontSize: '3rem',
-                color: 'rgba(235, 235, 235, 0.85)',
+                color: 'rgba(235, 235, 235, 0.90)',
                 marginBottom: '1rem',
                 textAlign: 'left'
               }}
@@ -39,7 +40,7 @@ const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, ...slideProps })
             </li>
           ))}
         </ul>
-      </div>
+      </Box>
     </Slide>
   );
 };

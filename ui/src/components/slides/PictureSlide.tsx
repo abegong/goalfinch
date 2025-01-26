@@ -2,6 +2,7 @@ import React from 'react';
 import Slide from './Slide';
 import { PictureSlideGroupConfig } from '../../types/slide_groups';
 import { PictureSlideConfig } from '../../types/slides';
+import { Box } from '@mui/material';
 
 interface PictureSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slideConfig: PictureSlideConfig;
@@ -17,14 +18,9 @@ const PictureSlide: React.FC<any> = ({ slideConfig, backgroundImage, ...slidePro
       backgroundColor="#000000"
       backgroundImage={backgroundImage}
     >
-      <div style={{ 
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '16px',
-        padding: '24px',
+      <Box sx={{ 
         width: '100%',
         height: '100%',
-        boxSizing: 'border-box'
       }}>
         {slideProps.text}
         {/* {slideGroup.slides[0].content?.map((imageUrl: string, index: number) => (
@@ -49,7 +45,7 @@ const PictureSlide: React.FC<any> = ({ slideConfig, backgroundImage, ...slidePro
             />
           </div>
         ))} */}
-      </div>
+      </Box>
     </Slide>
   );
 };

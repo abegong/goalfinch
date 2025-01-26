@@ -107,7 +107,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
   };
 
   return (
-    <Card
+    <Box
       sx={{
         position: 'relative',
         width: '100%',
@@ -123,7 +123,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
         </React.Fragment>
       ))}
       <SlideGroupCaptions captions={config.captions} />
-    </Card>
+    </Box>
   );
 };
 
