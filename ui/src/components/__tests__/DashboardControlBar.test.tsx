@@ -18,6 +18,7 @@ describe('DashboardControlBar', () => {
         onClose={() => {}}
         slideGroups={mockSlideGroups}
         visibleColorIndex={0}
+        activeSlideIndex={0}
         onSlideClick={() => {}}
       />
     );
@@ -43,6 +44,7 @@ describe('DashboardControlBar', () => {
         onClose={() => {}}
         slideGroups={mockSlideGroups}
         visibleColorIndex={0}
+        activeSlideIndex={0}
         onSlideClick={() => {}}
       />
     );

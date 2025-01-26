@@ -10,6 +10,7 @@ interface DashboardControlBarProps {
   onClose: () => void;
   slideGroups: Array<SlideGroupConfig>;
   visibleColorIndex: number;
+  activeSlideIndex: number;
   onSlideClick: (index: number) => void;
 }
 
@@ -18,6 +19,7 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
   onClose,
   slideGroups,
   visibleColorIndex,
+  activeSlideIndex,
   onSlideClick,
 }) => {
   return (
@@ -58,9 +60,9 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
               <ListItemIcon
                 sx={{
                   minWidth: 48,
-                  color: groupIndex === visibleColorIndex ? 'white' : 'black',
+                  color: 'black',
                   borderRadius: '16px',
-                  backgroundColor: groupIndex === visibleColorIndex ? 'rgba(255,255,255,0.5)' : 'rgba(0, 0, 0, 0.1)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
                   mr: '6px',
                 }}
               >
@@ -89,9 +91,9 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
                 <ListItemIcon
                   sx={{
                     minWidth: 48,
-                    color: groupIndex === visibleColorIndex ? 'white' : 'black',
+                    color: groupIndex === visibleColorIndex && slideIndex === activeSlideIndex ? 'white' : 'black',
                     borderRadius: '16px',
-                    backgroundColor: groupIndex === visibleColorIndex ? 'rgba(255,255,255,0.5)' : 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: groupIndex === visibleColorIndex && slideIndex === activeSlideIndex ? 'rgba(255,255,255,0.5)' : 'rgba(0, 0, 0, 0.1)',
                     mr: '6px',
                   }}
                 >
