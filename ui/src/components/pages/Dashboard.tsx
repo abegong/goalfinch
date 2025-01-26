@@ -29,9 +29,9 @@ const colors = [
 ];
 
 /** Duration of slide transition animation in milliseconds */
-const ANIMATION_DURATION = 500;
+const ANIMATION_DURATION = 200;
 /** Total interval between slide transitions in milliseconds */
-const TOTAL_INTERVAL = 2000;
+const TOTAL_INTERVAL = 1000;
 
 /**
  * Dashboard component that manages and displays slide groups with automatic transitions.
@@ -44,8 +44,8 @@ const TOTAL_INTERVAL = 2000;
 const Dashboard: React.FC = () => {
   const { dashboard, setDashboard } = useConfig();
   const slideGroups = dashboard.slideGroups;
-  const [slideGroupIndex, setSlideGroupIndex] = useState(0);
-  const [nextColorIndex, setNextColorIndex] = useState(1);
+  const [activeSlideGroupIndex, setActiveSlideGroupIndex] = useState(0);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
   const [dashboardControlBarVisible, setDashboardControlBarVisible] = useState(false);
@@ -61,74 +61,93 @@ const Dashboard: React.FC = () => {
    */
   const goToNextSlide = useCallback(() => {
     console.log('goToNextSlide');
-    const isLastSlide = slideGroupIndex === slideGroups[slideGroupIndex].slides.length - 1;
-    if (isLastSlide) {
-      goToNextSlideGroup();
-    } else {
-      goToNextSlideInGroup();
+    let nextSlideIndex = activeSlideIndex + 1;
+    let nextSlideGroupIndex = activeSlideGroupIndex;
+
+    const currentGroup = slideGroups[activeSlideGroupIndex];
+    if( nextSlideIndex >= currentGroup.slides.length ) {
+      console.log("here")
+      nextSlideIndex = 0;
+      nextSlideGroupIndex += 1;
+      if( nextSlideGroupIndex >= slideGroups.length ) {
+        nextSlideGroupIndex = 0;
+      }
+      setActiveSlideGroupIndex(nextSlideGroupIndex);
     }
-    console.log(slideGroupIndex, dashboard.activeSlideIndex, isLastSlide);
-  }, [slideGroupIndex, slideGroups.length]);
+    console.log(activeSlideGroupIndex, activeSlideIndex, nextSlideIndex, nextSlideGroupIndex, currentGroup.slides.length);
+
+    setActiveSlideIndex(nextSlideIndex);
+    // setSlideDirection('left');
+    // setIsTransitioning(true);
+
+    // const isLastSlide = activeSlideGroupIndex === slideGroups[activeSlideGroupIndex].slides.length - 1;
+    // if (isLastSlide) {
+    //   goToNextSlideGroup();
+    // } else {
+    //   goToNextSlideInGroup();
+    // }
+  }, [activeSlideGroupIndex, slideGroups.length]);
 
   /**
    * Transitions to the previous slide.
    * If this is the first slide in a slide group, go to the last slide in the previous group.
    * Otherwise, go to the previous slide in the current group.
    */
-  const goToPrevSlide = useCallback(() => {
-    const isFirstSlide = slideGroupIndex === 0;
-    if (isFirstSlide) {
-      goToPrevSlideGroup();
-    } else {
-      goToPrevSlideInGroup();
-    }
-  }, [slideGroupIndex, slideGroups.length]);
+  // const goToPrevSlide = useCallback(() => {
+  //   const isFirstSlide = activeSlideGroupIndex === 0;
+  //   if (isFirstSlide) {
+  //     goToPrevSlideGroup();
+  //   } else {
+  //     goToPrevSlideInGroup();
+  //   }
+  // }, [activeSlideGroupIndex, slideGroups.length]);
 
-  /**
-   * Transitions to the next slide group with a left sliding animation.
-   * Updates slide group index and triggers transition animation.
-   */
-  const goToNextSlideGroup = useCallback(() => {
-    console.log('goToNextSlideGroup');
-    const nextIndex = (slideGroupIndex + 1) % slideGroups.length;
-    setSlideGroupIndex(nextIndex);
-    setNextColorIndex(nextIndex);
-    setSlideDirection('left');
-    setIsTransitioning(true);
-  }, [slideGroupIndex, slideGroups.length]);
+  // /**
+  //  * Transitions to the next slide group with a left sliding animation.
+  //  * Updates slide group index and triggers transition animation.
+  //  */
+  // const goToNextSlideGroup = useCallback(() => {
+  //   console.log('goToNextSlideGroup');
+  //   const nextIndex = (activeSlideGroupIndex + 1) % slideGroups.length;
+  //   setActiveSlideGroupIndex(nextIndex);
+  //   setSlideDirection('left');
+  //   setIsTransitioning(true);
+  // }, [activeSlideGroupIndex, slideGroups.length]);
 
-  /**
-   * Transitions to the previous slide group with a right sliding animation.
-   * Updates slide group index and triggers transition animation.
-   */
-  const goToPrevSlideGroup = useCallback(() => {
-    const prevIndex = (slideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
-    setSlideGroupIndex(prevIndex);
-    setNextColorIndex(prevIndex);
-    setSlideDirection('right');
-    setIsTransitioning(true);
-  }, [slideGroupIndex, slideGroups.length]);
+  // /**
+  //  * Transitions to the previous slide group with a right sliding animation.
+  //  * Updates slide group index and triggers transition animation.
+  //  */
+  // const goToPrevSlideGroup = useCallback(() => {
+  //   const prevIndex = (activeSlideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
+  //   setActiveSlideGroupIndex(prevIndex);
+  //   setSlideDirection('right');
+  //   setIsTransitioning(true);
+  // }, [activeSlideGroupIndex, slideGroups.length]);
 
-  /**
-   * Advances to the next slide within the current slide group.
-   * Cycles back to the first slide if at the end of the group.
-   */
-  const goToNextSlideInGroup = useCallback(() => {
-    console.log('goToNextSlideInGroup');
-    const currentGroup = slideGroups[slideGroupIndex];
-    const nextSlide = (dashboard.activeSlideIndex + 1) % currentGroup.slides.length;
-    setDashboard({...dashboard, activeSlideIndex: nextSlide});
-  }, [slideGroupIndex, slideGroups, dashboard, setDashboard]);
+  // /**
+  //  * Advances to the next slide within the current slide group.
+  //  * Cycles back to the first slide if at the end of the group.
+  //  */
+  // const goToNextSlideInGroup = useCallback(() => {
+  //   console.log('goToNextSlideInGroup');
+  //   const currentGroup = slideGroups[activeSlideGroupIndex];
+  //   let nextSlide = activeSlideIndex + 1;
+  //   if( nextSlide >= currentGroup.slides.length ) {
+  //     nextSlide = 0;
+  //   }
+  //   setActiveSlideIndex(nextSlide);
+  // }, [activeSlideGroupIndex, slideGroups, dashboard, setDashboard]);
 
-  /**
-   * Returns to the previous slide within the current slide group.
-   * Cycles to the last slide if at the beginning of the group.
-   */
-  const goToPrevSlideInGroup = useCallback(() => {
-    const currentGroup = slideGroups[slideGroupIndex];
-    const prevSlide = (dashboard.activeSlideIndex - 1 + currentGroup.slides.length) % currentGroup.slides.length;
-    setDashboard({...dashboard, activeSlideIndex: prevSlide});
-  }, [slideGroupIndex, slideGroups, dashboard, setDashboard]);
+  // /**
+  //  * Returns to the previous slide within the current slide group.
+  //  * Cycles to the last slide if at the beginning of the group.
+  //  */
+  // const goToPrevSlideInGroup = useCallback(() => {
+  //   const currentGroup = slideGroups[activeSlideGroupIndex];
+  //   const prevSlide = (activeSlideIndex - 1 + currentGroup.slides.length) % currentGroup.slides.length;
+  //   setActiveSlideIndex(prevSlide);
+  // }, [activeSlideGroupIndex, slideGroups, activeSlideIndex]);
 
   useEffect(() => {
     if (isPaused) return;
@@ -140,17 +159,15 @@ const Dashboard: React.FC = () => {
     return () => clearInterval(interval);
   }, [isPaused, goToNextSlide]);
 
-  useEffect(() => {
-    if (isTransitioning) {
-      const timer = setTimeout(() => {
-        goToNextSlide();
-        // setSlideGroupIndex(nextColorIndex);
-        // setIsTransitioning(false);
-      }, ANIMATION_DURATION);
+  // useEffect(() => {
+  //   if (isTransitioning) {
+  //     const timer = setTimeout(() => {
+  //       goToNextSlide();
+  //     }, ANIMATION_DURATION);
 
-      return () => clearTimeout(timer);
-    }
-  }, [isTransitioning]);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [isTransitioning]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -161,8 +178,8 @@ const Dashboard: React.FC = () => {
       } else if (event.key === ' ') {
         event.preventDefault(); // Prevent page scroll
         setIsPaused(prev => !prev);
-      } else if (event.key === 'ArrowLeft') {
-        goToPrevSlide();
+      // } else if (event.key === 'ArrowLeft') {
+      //   goToPrevSlide();
       } else if (event.key === 'ArrowRight') {
         goToNextSlide();
       }
@@ -174,17 +191,18 @@ const Dashboard: React.FC = () => {
     dashboardControlBarVisible, 
     setAppControlBarVisible, 
     goToNextSlide, 
-    goToPrevSlide, 
-    goToNextSlideInGroup, 
-    goToPrevSlideInGroup
+    // goToPrevSlide, 
+    // goToNextSlideInGroup, 
+    // goToPrevSlideInGroup
   ]);
 
   /**
    * Handles direct navigation to a specific slide group by index.
    * @param index - The index of the target slide group
    */
-  const handleColorClick = (index: number) => {
-    setSlideGroupIndex(index);
+  const handleSlideClick = (index: number) => {
+    setActiveSlideGroupIndex(index);
+    setActiveSlideIndex(0);
     setSlideDirection('left');
     setIsTransitioning(true);
   };
@@ -192,7 +210,7 @@ const Dashboard: React.FC = () => {
   /**
    * Toggles the visibility of the dashboard control bar and app control bar.
    */
-  const handleMenuClick = () => {
+  const handleMenuToggleClick = () => {
     const newState = !dashboardControlBarVisible;
     setAppControlBarVisible(newState);
     setDashboardControlBarVisible(newState);
@@ -218,7 +236,7 @@ const Dashboard: React.FC = () => {
       }}
     >
       <IconButton
-        onClick={handleMenuClick}
+        onClick={handleMenuToggleClick}
         sx={{ 
           position: 'fixed',
           top: 24,
@@ -236,17 +254,17 @@ const Dashboard: React.FC = () => {
       </IconButton>
 
       <SlideGroup 
-        config={slideGroups[slideGroupIndex]} 
-        initialSlideIndex={dashboard.activeSlideIndex}
+        config={slideGroups[activeSlideGroupIndex]} 
+        initialSlideIndex={activeSlideIndex}
       />
 
       <DashboardControlBar 
         visible={dashboardControlBarVisible}
         onClose={() => setDashboardControlBarVisible(false)}
         slideGroups={slideGroups}
-        visibleColorIndex={slideGroupIndex}
-        activeSlideIndex={dashboard.activeSlideIndex}
-        onSlideClick={handleColorClick}
+        visibleColorIndex={activeSlideGroupIndex}
+        activeSlideIndex={activeSlideIndex}
+        onSlideClick={handleSlideClick}
       />
     </Box>
   );

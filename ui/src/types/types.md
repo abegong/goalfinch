@@ -4,7 +4,7 @@ This document describes the main groups of types in Goal Finch and how they shou
 
 ## Core Configuration Types
 
-The application's state is managed through three main configuration objects, all accessible via the `ConfigContext`:
+The application's persisted state is managed through three main configuration objects, all accessible via the `ConfigContext`:
 
 1. **DashboardConfig**
    - Contains all SlideGroup configurations
@@ -21,7 +21,7 @@ The application's state is managed through three main configuration objects, all
 
 ## Slide Type Hierarchy
 
-Slides follow a clear inheritance pattern:
+Slides follow this inheritance pattern:
 
 ```typescript
 BaseSlideConfig
@@ -52,6 +52,7 @@ Each SlideGroup contains:
 
 ### Page Components
 - Receive configuration through `ConfigContext`
+- Maintain their own local state
 - May receive URL parameters through React Router
 - Pass relevant subsets of configuration to child components
 
