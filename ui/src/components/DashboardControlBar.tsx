@@ -38,15 +38,15 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
       sx={{
         '& .MuiDrawer-paper': {
           bgcolor: 'rgb(255, 193, 5)',
-          width: 240,
-          padding: '10px',
+          width: "240px",
+          padding: "10px",
         }
       }}
     >
-      <Typography variant="h4" sx={{ ml: '20px', mt: '20px', mb: '20px' }}>
-        Slides
+      <Typography variant="h4" sx={{ ml: '0px', height: '94px' }}>
+        {/* Slides */}
       </Typography>
-      <List sx={{ width: 220, borderTop: '1px solid rgba(0, 0, 0, 0.1)', borderBottom: '1px solid rgba(0, 0, 0, 0.1)', margin: '10px' }}>
+      <List sx={{ width: 218, borderTop: '1px solid rgba(0, 0, 0, 0.1)', borderBottom: '1px solid rgba(0, 0, 0, 0.1)', margin: 0 }}>
         {slideGroups.map((slideGroup, groupIndex) => (
           <React.Fragment key={groupIndex}>
             {/* Slide Group Header */}
@@ -72,20 +72,20 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
                 sx={{
                   cursor: 'pointer',
                   m: 0,
-                  p: '6px',
-                  pl: '32px', // Indent the individual slides
+                  p: '2px',
                   '&:hover': {
                     backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                  }
+                  },
+                  borderRadius: '16px'
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    minWidth: 48,
+                    minWidth: 24,
                     color: groupIndex === visibleColorIndex && slideIndex === activeSlideIndex ? 'white' : 'black',
                     borderRadius: '16px',
                     backgroundColor: groupIndex === visibleColorIndex && slideIndex === activeSlideIndex ? 'rgba(255,255,255,0.5)' : 'rgba(0, 0, 0, 0.1)',
-                    mr: '6px',
+                    mr: '2px',
                   }}
                 >
                   {slideGroup.type === SlideType.BULLETS && <FormatListBulleted />}
@@ -102,10 +102,11 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
           <Checkbox 
             checked={isPaused} 
             onChange={(e) => onPauseChange(e.target.checked)}
+            sx={{ color: 'black', '&.Mui-checked': { color: 'black' } }}
           />
         }
         label="Paused"
-        sx={{ ml: '10px', mt: '10px' }}
+        sx={{ ml: '0px', mt: '10px' }}
       />
     </Drawer>
   );
