@@ -78,6 +78,28 @@ const Dashboard: React.FC = () => {
     console.log(activeSlideGroupIndex, activeSlideIndex);
   }, [activeSlideGroupIndex, activeSlideIndex, slideGroups]);
 
+  /**
+   * Transitions to the previous slide.
+   * If this is the first slide in a slide group, go to the last slide in the previous group.
+   * Otherwise, go to the previous slide in the current group.
+   */
+  const goToPrevSlide = useCallback(() => {
+    if (activeSlideIndex > 0) {
+      // Stay in current group, move to previous slide
+      setActiveSlideIndex(activeSlideIndex - 1);
+    } else {
+      // Move to previous group
+      const prevGroupIndex = (activeSlideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
+      const prevGroup = slideGroups[prevGroupIndex];
+      setActiveSlideGroupIndex(prevGroupIndex);
+      setActiveSlideIndex(prevGroup.slides.length - 1);
+    }
+    
+    setSlideDirection('right');
+    setIsTransitioning(true);
+    console.log(activeSlideGroupIndex, activeSlideIndex);
+  }, [activeSlideGroupIndex, activeSlideIndex, slideGroups]);
+
   useEffect(() => {
     if (isPaused) return;
 
@@ -97,8 +119,8 @@ const Dashboard: React.FC = () => {
       } else if (event.key === ' ') {
         event.preventDefault(); // Prevent page scroll
         setIsPaused(prev => !prev);
-      // } else if (event.key === 'ArrowLeft') {
-      //   goToPrevSlide();
+      } else if (event.key === 'ArrowLeft') {
+        goToPrevSlide();
       } else if (event.key === 'ArrowRight') {
         goToNextSlide();
       }
@@ -109,8 +131,8 @@ const Dashboard: React.FC = () => {
   }, [
     dashboardControlBarVisible, 
     setAppControlBarVisible, 
-    goToNextSlide, 
-    // goToPrevSlide, 
+    goToNextSlide,
+    goToPrevSlide
   ]);
 
   /**
