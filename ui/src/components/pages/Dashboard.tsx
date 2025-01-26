@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
   const [activeSlideGroupIndex, setActiveSlideGroupIndex] = useState(0);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | 'up' | 'down'>('left');
   const [dashboardControlBarVisible, setDashboardControlBarVisible] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const { 
@@ -63,12 +63,13 @@ const Dashboard: React.FC = () => {
       const nextGroupIndex = (activeSlideGroupIndex + 1) % slideGroups.length;
       setActiveSlideGroupIndex(nextGroupIndex);
       setActiveSlideIndex(0);
+      setSlideDirection('down');
     } else {
       // Stay in current group, move to next slide
       setActiveSlideIndex(nextSlideIndex);
+      setSlideDirection('left');
     }
     
-    setSlideDirection('left');
     setIsTransitioning(true);
     console.log(activeSlideGroupIndex, activeSlideIndex);
   }, [activeSlideGroupIndex, activeSlideIndex, slideGroups]);

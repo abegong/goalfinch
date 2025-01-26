@@ -4,7 +4,7 @@
 
 # Testing
 
-* After any change to code, run `yarn tsc` to make sure the code compiles.
+* After any change to code, run `yarn tsc` to make sure the code compiles. Just run `yarn tsc`. You do not need to run `cd ui && yarn tsc`.
 * After any change to code that successfully compiles, Run `yarn test --watchAll=false` to run the test suite to verify that nothing has broken.
 * Also, think through whether tests need to be added or changed. Be conservative: we don't need exhaustive testing for this application.
 * Check with me before you add any tests. Propose the gist of the test(s) you want to add, and get confirmation from me before you start to implement the test(s).

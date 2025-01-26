@@ -11,7 +11,7 @@ interface PictureSlideProps {
   text: string;
   isTransitioning: boolean;
   animationDuration: number;
-  direction: 'left' | 'right';
+  direction: 'left' | 'right' | 'up' | 'down';
   backgroundImage?: string;
 }
 

@@ -88,33 +88,41 @@ const Slide: React.FC<SlideProps> = ({
         '@keyframes slideOutLeft': {
           '0%': {
             transform: 'translateX(0)',
+            zIndex: 1
           },
           '100%': {
             transform: 'translateX(-100%)',
+            zIndex: 1
           },
         },
         '@keyframes slideInRight': {
           '0%': {
             transform: 'translateX(100%)',
+            zIndex: 2
           },
           '100%': {
             transform: 'translateX(0)',
+            zIndex: 2
           },
         },
         '@keyframes slideOutRight': {
           '0%': {
             transform: 'translateX(0)',
+            zIndex: 1
           },
           '100%': {
             transform: 'translateX(100%)',
+            zIndex: 1
           },
         },
         '@keyframes slideInLeft': {
           '0%': {
             transform: 'translateX(-100%)',
+            zIndex: 2
           },
           '100%': {
             transform: 'translateX(0)',
+            zIndex: 2
           },
         },
         '@keyframes slideOutUp': {

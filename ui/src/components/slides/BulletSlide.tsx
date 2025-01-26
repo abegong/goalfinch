@@ -11,7 +11,7 @@ interface BulletSlideProps {
   text: string;
   isTransitioning: boolean;
   animationDuration: number;
-  direction: 'left' | 'right';
+  direction: 'left' | 'right' | 'up' | 'down';
 }
 
 const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, text, ...slideProps }) => {

@@ -24,7 +24,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
 }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(initialSlideIndex);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [direction, setDirection] = useState<'left' | 'right'>('right');
+  const [direction, setDirection] = useState<'left' | 'right' | 'up' | 'down'>('right');
 
   const totalSlides = config.slides.length;
   const animationDuration = 500; // ms
@@ -37,7 +37,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
       setCurrentSlideIndex((prev) => (prev + 1) % totalSlides);
       setIsTransitioning(false);
     }, animationDuration);
-  }, [isTransitioning, totalSlides]);
+  }, [isTransitioning, totalSlides, currentSlideIndex, animationDuration]);
 
   const goToPrevSlide = useCallback(() => {
     if (isTransitioning) return;
@@ -47,7 +47,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
       setCurrentSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
       setIsTransitioning(false);
     }, animationDuration);
-  }, [isTransitioning, totalSlides]);
+  }, [isTransitioning, totalSlides, currentSlideIndex, animationDuration]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -70,22 +70,13 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
     }
   }, [initialSlideIndex, currentSlideIndex, animationDuration]);
 
-  const renderSlide = (slideConfig: SlideConfig, index: number) => {
-    // if (!('slides' in config)) {
-    //   return <PictureSlide
-    //     isTransitioning={isTransitioning}
-    //     animationDuration={animationDuration}
-    //     direction={direction}
-    //     slideGroup={config}
-    //   />;
-    // }
-
-    const currentSlide = config.slides[currentSlideIndex];
+  const renderSlide = (slideConfig: SlideConfig, index: number, isOutgoing = false) => {
     const commonProps = {
       index: currentSlideIndex,
       captions: config.captions,
       text: `${currentSlideIndex + 1}/${totalSlides}`,
       isTransitioning,
+      isOutgoing,
       animationDuration,
       direction,
     };
