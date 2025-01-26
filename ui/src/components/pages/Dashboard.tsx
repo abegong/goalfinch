@@ -55,10 +55,41 @@ const Dashboard: React.FC = () => {
   } = useContext(LayoutContext);
 
   /**
+   * Transitions to the next slide.
+   * If this is the last slide in a slide group, go to the first slide in the next group.
+   * Otherwise, go to the next slide in the current group.
+   */
+  const goToNextSlide = useCallback(() => {
+    console.log('goToNextSlide');
+    const isLastSlide = slideGroupIndex === slideGroups[slideGroupIndex].slides.length - 1;
+    if (isLastSlide) {
+      goToNextSlideGroup();
+    } else {
+      goToNextSlideInGroup();
+    }
+    console.log(slideGroupIndex, dashboard.activeSlideIndex, isLastSlide);
+  }, [slideGroupIndex, slideGroups.length]);
+
+  /**
+   * Transitions to the previous slide.
+   * If this is the first slide in a slide group, go to the last slide in the previous group.
+   * Otherwise, go to the previous slide in the current group.
+   */
+  const goToPrevSlide = useCallback(() => {
+    const isFirstSlide = slideGroupIndex === 0;
+    if (isFirstSlide) {
+      goToPrevSlideGroup();
+    } else {
+      goToPrevSlideInGroup();
+    }
+  }, [slideGroupIndex, slideGroups.length]);
+
+  /**
    * Transitions to the next slide group with a left sliding animation.
    * Updates slide group index and triggers transition animation.
    */
-  const goToNextSlide = useCallback(() => {
+  const goToNextSlideGroup = useCallback(() => {
+    console.log('goToNextSlideGroup');
     const nextIndex = (slideGroupIndex + 1) % slideGroups.length;
     setSlideGroupIndex(nextIndex);
     setNextColorIndex(nextIndex);
@@ -70,7 +101,7 @@ const Dashboard: React.FC = () => {
    * Transitions to the previous slide group with a right sliding animation.
    * Updates slide group index and triggers transition animation.
    */
-  const goToPrevSlide = useCallback(() => {
+  const goToPrevSlideGroup = useCallback(() => {
     const prevIndex = (slideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
     setSlideGroupIndex(prevIndex);
     setNextColorIndex(prevIndex);
@@ -83,6 +114,7 @@ const Dashboard: React.FC = () => {
    * Cycles back to the first slide if at the end of the group.
    */
   const goToNextSlideInGroup = useCallback(() => {
+    console.log('goToNextSlideInGroup');
     const currentGroup = slideGroups[slideGroupIndex];
     const nextSlide = (dashboard.activeSlideIndex + 1) % currentGroup.slides.length;
     setDashboard({...dashboard, activeSlideIndex: nextSlide});
@@ -111,13 +143,14 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if (isTransitioning) {
       const timer = setTimeout(() => {
-        setSlideGroupIndex(nextColorIndex);
-        setIsTransitioning(false);
+        goToNextSlide();
+        // setSlideGroupIndex(nextColorIndex);
+        // setIsTransitioning(false);
       }, ANIMATION_DURATION);
 
       return () => clearTimeout(timer);
     }
-  }, [isTransitioning, nextColorIndex]);
+  }, [isTransitioning]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
