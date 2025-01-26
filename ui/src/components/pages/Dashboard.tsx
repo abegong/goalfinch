@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Box, IconButton } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 import { LayoutContext } from '../Layout';
@@ -40,17 +40,43 @@ const Dashboard: React.FC = () => {
     setAppControlBarVisible,
   } = useContext(LayoutContext);
 
+  const goToNextSlide = useCallback(() => {
+    const nextIndex = (slideGroupIndex + 1) % slideGroups.length;
+    setSlideGroupIndex(nextIndex);
+    setNextColorIndex(nextIndex);
+    setSlideDirection('left');
+    setIsTransitioning(true);
+  }, [slideGroupIndex, slideGroups.length]);
+
+  const goToPrevSlide = useCallback(() => {
+    const prevIndex = (slideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
+    setSlideGroupIndex(prevIndex);
+    setNextColorIndex(prevIndex);
+    setSlideDirection('right');
+    setIsTransitioning(true);
+  }, [slideGroupIndex, slideGroups.length]);
+
+  const goToNextSlideInGroup = useCallback(() => {
+    const currentGroup = slideGroups[slideGroupIndex];
+    const nextSlide = (dashboard.activeSlideIndex + 1) % currentGroup.slides.length;
+    setDashboard({...dashboard, activeSlideIndex: nextSlide});
+  }, [slideGroupIndex, slideGroups, dashboard, setDashboard]);
+
+  const goToPrevSlideInGroup = useCallback(() => {
+    const currentGroup = slideGroups[slideGroupIndex];
+    const prevSlide = (dashboard.activeSlideIndex - 1 + currentGroup.slides.length) % currentGroup.slides.length;
+    setDashboard({...dashboard, activeSlideIndex: prevSlide});
+  }, [slideGroupIndex, slideGroups, dashboard, setDashboard]);
+
   useEffect(() => {
     if (isPaused) return;
 
     const interval = setInterval(() => {
-      setNextColorIndex((slideGroupIndex + 1) % slideGroups.length);
-      setSlideDirection('left');
-      setIsTransitioning(true);
+      goToNextSlide();
     }, TOTAL_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [slideGroupIndex, slideGroups.length, isPaused]);
+  }, [isPaused, goToNextSlide]);
 
   useEffect(() => {
     if (isTransitioning) {
@@ -73,31 +99,26 @@ const Dashboard: React.FC = () => {
         event.preventDefault(); // Prevent page scroll
         setIsPaused(prev => !prev);
       } else if (event.key === 'ArrowLeft' && !event.shiftKey) {
-        const prevIndex = (slideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
-        setSlideGroupIndex(prevIndex);
-        setNextColorIndex(prevIndex);
-        setSlideDirection('right');
-        setIsTransitioning(true);
+        goToPrevSlide();
       } else if (event.key === 'ArrowRight' && !event.shiftKey) {
-        const nextIndex = (slideGroupIndex + 1) % slideGroups.length;
-        setSlideGroupIndex(nextIndex);
-        setNextColorIndex(nextIndex);
-        setSlideDirection('left');
-        setIsTransitioning(true);
+        goToNextSlide();
       } else if (event.key === 'ArrowLeft' && event.shiftKey) {
-        const currentGroup = slideGroups[slideGroupIndex];
-        const prevSlide = (dashboard.activeSlideIndex - 1 + currentGroup.slides.length) % currentGroup.slides.length;
-        setDashboard({...dashboard, activeSlideIndex: prevSlide});
+        goToPrevSlideInGroup();
       } else if (event.key === 'ArrowRight' && event.shiftKey) {
-        const currentGroup = slideGroups[slideGroupIndex];
-        const nextSlide = (dashboard.activeSlideIndex + 1) % currentGroup.slides.length;
-        setDashboard({...dashboard, activeSlideIndex: nextSlide});
+        goToNextSlideInGroup();
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [dashboardControlBarVisible, setAppControlBarVisible, slideGroupIndex, slideGroups, dashboard, setDashboard]);
+  }, [
+    dashboardControlBarVisible, 
+    setAppControlBarVisible, 
+    goToNextSlide, 
+    goToPrevSlide, 
+    goToNextSlideInGroup, 
+    goToPrevSlideInGroup
+  ]);
 
   const handleColorClick = (index: number) => {
     setSlideGroupIndex(index);
