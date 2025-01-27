@@ -16,6 +16,32 @@ interface SlideGroupProps {
   isOutgoing?: boolean;
 }
 
+/**
+ * SlideGroup is responsible for rendering a single slide and managing its transition state.
+ * 
+ * Transition Behavior:
+ * 1. Rendering:
+ *    - Renders a single slide based on the currentSlideIndex
+ *    - The slide is wrapped in a Card component that provides the base styling
+ * 
+ * 2. Transition State:
+ *    - Receives isTransitioning and isOutgoing props from SlideTransition
+ *    - These props are passed down to the individual Slide component
+ *    - isOutgoing determines if this SlideGroup contains the slide that's leaving
+ * 
+ * 3. Animation Coordination:
+ *    - Does not handle animations directly
+ *    - Passes animation-related props to the Slide component:
+ *      - direction: The direction of the transition
+ *      - animationDuration: How long the transition should take
+ *      - isTransitioning: Whether a transition is in progress
+ *      - isOutgoing: Whether this slide is the one leaving
+ * 
+ * 4. Slide Content:
+ *    - Maintains the slide content during the entire transition
+ *    - Content should not change until the transition is complete
+ *    - This ensures smooth transitions without content flashing
+ */
 const SlideGroup: React.FC<SlideGroupProps> = ({
   config,
   currentSlideIndex,

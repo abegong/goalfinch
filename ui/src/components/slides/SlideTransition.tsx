@@ -1,140 +1,87 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import { SlideGroupConfig } from '../../types/slide_groups';
 import SlideGroup from './SlideGroup';
 
 interface SlideTransitionProps {
   config: SlideGroupConfig;
-  autoAdvance?: boolean;
-  autoAdvanceInterval?: number;
-  initialSlideIndex?: number;
+  currentSlideIndex: number;
+  currentSlideGroupIndex: number;
+  nextSlideIndex: number;
+  nextSlideGroupIndex: number;
+  direction: 'left' | 'right' | 'up' | 'down';
   onTransitionStart?: () => void;
   onTransitionEnd?: () => void;
 }
 
+/**
+ * Handles the animation of transitioning between slides.
+ * Supports both intra-group and inter-group transitions:
+ * 
+ * Within same group (currentSlideGroupIndex === nextSlideGroupIndex):
+ * - direction='left': Current slide moves left, next slide enters from right
+ * - direction='right': Current slide moves right, previous slide enters from left
+ * 
+ * Between groups:
+ * - direction='up': Current slide moves up, next slide enters from bottom
+ * - direction='down': Current slide moves down, next slide enters from top
+ */
 const SlideTransition: React.FC<SlideTransitionProps> = ({
   config,
-  autoAdvance = false,
-  autoAdvanceInterval = 5000,
-  initialSlideIndex = 0,
+  currentSlideIndex,
+  currentSlideGroupIndex,
+  nextSlideIndex,
+  nextSlideGroupIndex,
+  direction,
   onTransitionStart,
   onTransitionEnd,
 }) => {
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(initialSlideIndex);
+  const animationDuration = 200;
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [direction, setDirection] = useState<'left' | 'right' | 'up' | 'down'>('right');
+  const prevSlideIndex = useRef(currentSlideIndex);
+  const prevGroupIndex = useRef(currentSlideGroupIndex);
 
-  const totalSlides = config.slides.length;
-  const animationDuration = 500; // ms
-
-  const goToNextSlide = useCallback(() => {
-    if (isTransitioning || totalSlides <= 1) return;
-    
-    const nextIndex = (currentSlideIndex + 1) % totalSlides;
-    if (nextIndex === currentSlideIndex) return;  // Don't transition if we're staying on the same slide
-    
-    setDirection('right');
-    setIsTransitioning(true);
-    onTransitionStart?.();
-    
-    setTimeout(() => {
-      setCurrentSlideIndex(nextIndex);
-      setIsTransitioning(false);
-      onTransitionEnd?.();
-    }, animationDuration);
-  }, [isTransitioning, totalSlides, currentSlideIndex, animationDuration, onTransitionStart, onTransitionEnd]);
-
-  const goToPrevSlide = useCallback(() => {
-    if (isTransitioning || totalSlides <= 1) return;
-    
-    const prevIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
-    if (prevIndex === currentSlideIndex) return;  // Don't transition if we're staying on the same slide
-    
-    setDirection('left');
-    setIsTransitioning(true);
-    onTransitionStart?.();
-    
-    setTimeout(() => {
-      setCurrentSlideIndex(prevIndex);
-      setIsTransitioning(false);
-      onTransitionEnd?.();
-    }, animationDuration);
-  }, [isTransitioning, totalSlides, currentSlideIndex, animationDuration, onTransitionStart, onTransitionEnd]);
-
+  // Start transition when either slide index or group changes
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    if (autoAdvance && totalSlides > 1) {
-      intervalId = setInterval(goToNextSlide, autoAdvanceInterval);
-    }
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [autoAdvance, autoAdvanceInterval, goToNextSlide, totalSlides]);
-
-  useEffect(() => {
-    if (currentSlideIndex !== initialSlideIndex) {
-      const newDirection = initialSlideIndex > currentSlideIndex ? 'right' : 'left';
-      setDirection(newDirection);
+    const isNewSlide = currentSlideIndex !== prevSlideIndex.current;
+    const isNewGroup = currentSlideGroupIndex !== prevGroupIndex.current;
+    
+    if (isNewSlide || isNewGroup) {
       setIsTransitioning(true);
       onTransitionStart?.();
       
       setTimeout(() => {
-        setCurrentSlideIndex(initialSlideIndex);
         setIsTransitioning(false);
         onTransitionEnd?.();
       }, animationDuration);
-    }
-  }, [initialSlideIndex, currentSlideIndex, animationDuration, onTransitionStart, onTransitionEnd]);
 
-  const nextSlideIndex = direction === 'left' ? 
-    (currentSlideIndex - 1 + totalSlides) % totalSlides : 
-    (currentSlideIndex + 1) % totalSlides;
+      prevSlideIndex.current = currentSlideIndex;
+      prevGroupIndex.current = currentSlideGroupIndex;
+    }
+  }, [currentSlideIndex, currentSlideGroupIndex, animationDuration, onTransitionStart, onTransitionEnd]);
 
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
-        backgroundColor: 'blue',
-      }}
-    >
+    <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
+      <SlideGroup
+        key={`current-${currentSlideGroupIndex}-${currentSlideIndex}`}
+        config={config}
+        currentSlideIndex={currentSlideIndex}
+        isTransitioning={isTransitioning}
+        direction={direction}
+        isOutgoing={true}
+        animationDuration={animationDuration}
+      />
       {isTransitioning && (
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            zIndex: 1,
-          }}
-        >
-          <SlideGroup
-            config={config}
-            currentSlideIndex={currentSlideIndex}
-            isTransitioning={isTransitioning}
-            direction={direction}
-            animationDuration={animationDuration}
-            isOutgoing={true}
-          />
-        </Box>
-      )}
-      <Box
-        sx={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          zIndex: isTransitioning ? 2 : 1,
-        }}
-      >
         <SlideGroup
+          key={`next-${nextSlideGroupIndex}-${nextSlideIndex}`}
           config={config}
-          currentSlideIndex={isTransitioning ? nextSlideIndex : currentSlideIndex}
+          currentSlideIndex={nextSlideIndex}
           isTransitioning={isTransitioning}
           direction={direction}
+          isOutgoing={false}
           animationDuration={animationDuration}
         />
-      </Box>
+      )}
     </Box>
   );
 };
