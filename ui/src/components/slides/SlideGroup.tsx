@@ -15,6 +15,7 @@ interface SlideGroupProps {
   direction?: 'left' | 'right' | 'up' | 'down';
   animationDuration?: number;
   isOutgoing?: boolean;
+  sx?: any;
 }
 
 /**
@@ -50,6 +51,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
   direction = 'right',
   animationDuration = 500,
   isOutgoing = false,
+  sx,
 }) => {
   const totalSlides = config.slides.length;
   const currentSlide = config.slides[currentSlideIndex];
@@ -88,7 +90,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
   };
 
   return (
-    <Card sx={{ width: '100%', height: '100%', position: 'relative' }}>
+    <Card sx={{ width: '100%', height: '100%', position: 'relative', ...sx }}>
       {renderSlide(currentSlide)}
       <SlideGroupCaptions captions={config.captions} />
     </Card>

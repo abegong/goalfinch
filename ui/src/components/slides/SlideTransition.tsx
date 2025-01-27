@@ -60,18 +60,60 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
     }
   }, [currentSlideIndex, currentSlideGroupIndex, animationDuration, onTransitionStart, onTransitionEnd]);
 
+  const getTransforms = () => {
+    const offScreenStart = direction === 'left' ? 100 : -100;
+    const offScreenEnd = direction === 'left' ? -100 : 100;
+
+    return {
+      current: {
+        initial: 'translateX(0%)',
+        final: `translateX(${offScreenEnd}%)`
+      },
+      next: {
+        initial: `translateX(${offScreenStart}%)`,
+        final: 'translateX(0%)'
+      }
+    };
+  };
+
+  const transforms = getTransforms();
+
   return (
-    <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-      <SlideGroup
-        key={`current-${currentSlideGroupIndex}-${currentSlideIndex}`}
-        config={config}
-        currentSlideIndex={currentSlideIndex}
-        isTransitioning={isTransitioning}
-        direction={direction}
-        isOutgoing={true}
-        animationDuration={animationDuration}
-      />
-      {isTransitioning && (
+    <Box sx={{ 
+      position: 'relative', 
+      width: '100%', 
+      height: '100%', 
+      overflow: 'hidden'
+    }}>
+      {/* Current Slide */}
+      <Box sx={{ 
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        transform: isTransitioning ? transforms.current.final : transforms.current.initial,
+        transition: `transform ${animationDuration}ms ease-in-out`,
+        zIndex: 1
+      }}>
+        <SlideGroup
+          key={`current-${currentSlideGroupIndex}-${currentSlideIndex}`}
+          config={config}
+          currentSlideIndex={currentSlideIndex}
+          isTransitioning={isTransitioning}
+          direction={direction}
+          isOutgoing={true}
+          animationDuration={animationDuration}
+        />
+      </Box>
+
+      {/* Next Slide */}
+      <Box sx={{ 
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        transform: isTransitioning ? transforms.next.final : transforms.next.initial,
+        transition: `transform ${animationDuration}ms ease-in-out`,
+        zIndex: 2
+      }}>
         <SlideGroup
           key={`next-${nextSlideGroupIndex}-${nextSlideIndex}`}
           config={config}
@@ -81,7 +123,7 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
           isOutgoing={false}
           animationDuration={animationDuration}
         />
-      )}
+      </Box>
     </Box>
   );
 };
