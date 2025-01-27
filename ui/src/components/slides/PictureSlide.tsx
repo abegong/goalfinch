@@ -9,9 +9,6 @@ interface PictureSlideProps {
   index: number;
   captions?: Captions;
   text: string;
-  isTransitioning: boolean;
-  animationDuration: number;
-  direction: 'left' | 'right' | 'up' | 'down';
   backgroundImage?: string;
 }
 

@@ -98,10 +98,6 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
           key={`current-${currentSlideGroupIndex}-${currentSlideIndex}`}
           config={config}
           currentSlideIndex={currentSlideIndex}
-          isTransitioning={isTransitioning}
-          direction={direction}
-          isOutgoing={true}
-          animationDuration={animationDuration}
         />
       </Box>
 
@@ -118,10 +114,6 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
           key={`next-${nextSlideGroupIndex}-${nextSlideIndex}`}
           config={config}
           currentSlideIndex={nextSlideIndex}
-          isTransitioning={isTransitioning}
-          direction={direction}
-          isOutgoing={false}
-          animationDuration={animationDuration}
         />
       </Box>
     </Box>

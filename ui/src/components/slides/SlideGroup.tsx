@@ -11,46 +11,29 @@ import { colors } from '../../theme/colors';
 interface SlideGroupProps {
   config: SlideGroupConfig;
   currentSlideIndex: number;
-  isTransitioning?: boolean;
-  direction?: 'left' | 'right' | 'up' | 'down';
-  animationDuration?: number;
-  isOutgoing?: boolean;
   sx?: any;
 }
 
 /**
- * SlideGroup is responsible for rendering a single slide and managing its transition state.
+ * SlideGroup renders a single slide with its captions based on the configuration.
  * 
- * Transition Behavior:
- * 1. Rendering:
- *    - Renders a single slide based on the currentSlideIndex
- *    - The slide is wrapped in a Card component that provides the base styling
+ * Responsibilities:
+ * 1. Slide Content:
+ *    - Renders the appropriate slide type (Bullet, Chart, Picture)
+ *    - Passes configuration to the specific slide component
+ *    - Provides slide index information
  * 
- * 2. Transition State:
- *    - Receives isTransitioning and isOutgoing props from SlideTransition
- *    - These props are passed down to the individual Slide component
- *    - isOutgoing determines if this SlideGroup contains the slide that's leaving
+ * 2. Visual Styling:
+ *    - Applies a random background color from the theme
+ *    - Maintains consistent card-based layout
+ *    - Supports custom styling via sx prop
  * 
- * 3. Animation Coordination:
- *    - Does not handle animations directly
- *    - Passes animation-related props to the Slide component:
- *      - direction: The direction of the transition
- *      - animationDuration: How long the transition should take
- *      - isTransitioning: Whether a transition is in progress
- *      - isOutgoing: Whether this slide is the one leaving
- * 
- * 4. Slide Content:
- *    - Maintains the slide content during the entire transition
- *    - Content should not change until the transition is complete
- *    - This ensures smooth transitions without content flashing
+ * 3. Captions:
+ *    - Renders group-level captions using SlideGroupCaptions
  */
 const SlideGroup: React.FC<SlideGroupProps> = ({
   config,
   currentSlideIndex,
-  isTransitioning = false,
-  direction = 'right',
-  animationDuration = 500,
-  isOutgoing = false,
   sx,
 }) => {
   const totalSlides = config.slides.length;
@@ -66,10 +49,6 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
       index: currentSlideIndex,
       captions: config.captions,
       text: `${currentSlideIndex + 1}/${totalSlides}`,
-      isTransitioning,
-      isOutgoing,
-      animationDuration,
-      direction,
       backgroundColor: randomColor.hex,
     };
 
