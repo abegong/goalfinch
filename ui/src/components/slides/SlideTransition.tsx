@@ -7,8 +7,8 @@ interface SlideTransitionProps {
   config: SlideGroupConfig;
   currentSlideIndex: number;
   currentSlideGroupIndex: number;
-  nextSlideIndex: number;
-  nextSlideGroupIndex: number;
+  incomingSlideIndex: number;
+  incomingSlideGroupIndex: number;
   direction: 'left' | 'right' | 'up' | 'down';
   onTransitionStart?: () => void;
   onTransitionEnd?: () => void;
@@ -30,8 +30,8 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
   config,
   currentSlideIndex,
   currentSlideGroupIndex,
-  nextSlideIndex,
-  nextSlideGroupIndex,
+  incomingSlideIndex,
+  incomingSlideGroupIndex,
   direction,
   onTransitionStart,
   onTransitionEnd,
@@ -61,17 +61,18 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
   }, [currentSlideIndex, currentSlideGroupIndex, animationDuration, onTransitionStart, onTransitionEnd]);
 
   const getTransforms = () => {
-    const offScreenStart = direction === 'left' ? 100 : -100;
-    const offScreenEnd = direction === 'left' ? -100 : 100;
+    const offScreenStart = direction === 'left' ? 100 : direction === 'right' ? -100 : direction === 'up' ? 100 : -100;
+    const offScreenEnd = direction === 'left' ? -100 : direction === 'right' ? 100 : direction === 'up' ? -100 : 100;
+    const translateProp = direction === 'left' || direction === 'right' ? 'X' : 'Y';
 
     return {
-      current: {
-        initial: 'translateX(0%)',
-        final: `translateX(${offScreenEnd}%)`
+      outgoing: {
+        initial: `translate${translateProp}(0%)`,
+        final: `translate${translateProp}(${offScreenEnd}%)`
       },
-      next: {
-        initial: `translateX(${offScreenStart}%)`,
-        final: 'translateX(0%)'
+      incoming: {
+        initial: `translate${translateProp}(${offScreenStart}%)`,
+        final: `translate${translateProp}(0%)`
       }
     };
   };
@@ -85,37 +86,57 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
       height: '100%', 
       overflow: 'hidden'
     }}>
-      {/* Current Slide */}
-      <Box sx={{ 
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        transform: isTransitioning ? transforms.current.final : transforms.current.initial,
-        transition: `transform ${animationDuration}ms ease-in-out`,
-        zIndex: 1
-      }}>
-        <SlideGroup
-          key={`current-${currentSlideGroupIndex}-${currentSlideIndex}`}
-          config={config}
-          currentSlideIndex={currentSlideIndex}
-        />
-      </Box>
+      {isTransitioning ? (
+        <>
+          {/* Outgoing Slide */}
+          <Box sx={{ 
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            transform: transforms.outgoing.final,
+            transition: `transform ${animationDuration}ms ease-in-out`,
+            zIndex: 1
+          }}>
+            <SlideGroup
+              key={`${currentSlideGroupIndex}-${currentSlideIndex}`}
+              config={config}
+              currentSlideIndex={currentSlideIndex}
+            />
+          </Box>
 
-      {/* Next Slide */}
-      <Box sx={{ 
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        transform: isTransitioning ? transforms.next.final : transforms.next.initial,
-        transition: `transform ${animationDuration}ms ease-in-out`,
-        zIndex: 2
-      }}>
-        <SlideGroup
-          key={`next-${nextSlideGroupIndex}-${nextSlideIndex}`}
-          config={config}
-          currentSlideIndex={nextSlideIndex}
-        />
-      </Box>
+          {/* Incoming Slide */}
+          <Box sx={{ 
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            transform: transforms.incoming.final,
+            transition: `transform ${animationDuration}ms ease-in-out`,
+            zIndex: 1
+          }}>
+            <SlideGroup
+              key={`${incomingSlideGroupIndex}-${incomingSlideIndex}`}
+              config={config}
+              currentSlideIndex={incomingSlideIndex}
+            />
+          </Box>
+        </>
+      ) : (
+        /* Single slide when not transitioning */
+        <Box sx={{ 
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          transform: transforms.outgoing.initial,
+          transition: `transform ${animationDuration}ms ease-in-out`,
+          zIndex: 1
+        }}>
+          <SlideGroup
+            key={`${currentSlideGroupIndex}-${currentSlideIndex}`}
+            config={config}
+            currentSlideIndex={currentSlideIndex}
+          />
+        </Box>
+      )}
     </Box>
   );
 };
