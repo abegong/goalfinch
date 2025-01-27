@@ -31,6 +31,7 @@ export const demoData: SlideGroupConfig[] = [
   {
     type: SlideType.BULLETS,
     slides: [{
+      type: SlideType.BULLETS,
       content: [
         "Become a wizard-level swordsman",
         "Find the six-fingered man",
@@ -44,9 +45,15 @@ export const demoData: SlideGroupConfig[] = [
   {
     type: SlideType.PICTURE,
     slides: [
-      {} as PictureSlideConfig,
-      {} as PictureSlideConfig,
-      {} as PictureSlideConfig
+      {
+        type: SlideType.PICTURE,
+      } as PictureSlideConfig,
+      {
+        type: SlideType.PICTURE,
+      } as PictureSlideConfig,
+      {
+        type: SlideType.PICTURE,
+      } as PictureSlideConfig
     ],
     captions: {}
   } as PictureSlideGroupConfig,

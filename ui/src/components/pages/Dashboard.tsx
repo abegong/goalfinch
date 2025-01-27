@@ -4,7 +4,7 @@ import { Menu } from '@mui/icons-material';
 import { LayoutContext } from '../Layout';
 import { useConfig } from '../../context/ConfigContext';
 import DashboardControlBar from '../DashboardControlBar';
-import SlideGroup from '../slides/SlideGroup';
+import SlideTransition from '../slides/SlideTransition';
 
 /**
  * Color palette used for slide transitions and visual styling.
@@ -189,9 +189,11 @@ const Dashboard: React.FC = () => {
         <Menu />
       </IconButton>
 
-      <SlideGroup 
+      <SlideTransition
         config={slideGroups[activeSlideGroupIndex]} 
         initialSlideIndex={activeSlideIndex}
+        autoAdvance={!isPaused}
+        autoAdvanceInterval={5000}
       />
 
       <DashboardControlBar 
