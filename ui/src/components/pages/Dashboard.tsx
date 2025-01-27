@@ -69,15 +69,16 @@ const Dashboard: React.FC = () => {
     if (activeSlideIndex > 0) {
       // Stay in current group, move to previous slide
       setActiveSlideIndex(activeSlideIndex - 1);
+      setSlideDirection('right');
     } else {
       // Move to previous group
       const prevGroupIndex = (activeSlideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
       const prevGroup = slideGroups[prevGroupIndex];
       setActiveSlideGroupIndex(prevGroupIndex);
       setActiveSlideIndex(prevGroup.slides.length - 1);
+      setSlideDirection('up');
     }
     
-    setSlideDirection('right');
     setIsTransitioning(true);
     console.log(activeSlideGroupIndex, activeSlideIndex);
   }, [activeSlideGroupIndex, activeSlideIndex, slideGroups]);
@@ -138,34 +139,6 @@ const Dashboard: React.FC = () => {
     setDashboardControlBarVisible(newState);
   };
 
-  // Calculate next indices based on transition direction
-  const getNextIndices = useCallback(() => {
-    const currentGroup = slideGroups[activeSlideGroupIndex];
-    
-    if (slideDirection === 'left') {
-      return {
-        nextGroupIndex: activeSlideGroupIndex,
-        nextSlideIndex: (activeSlideIndex + 1) % currentGroup.slides.length
-      };
-    } else if (slideDirection === 'right') {
-      return {
-        nextGroupIndex: activeSlideGroupIndex,
-        nextSlideIndex: (activeSlideIndex - 1 + currentGroup.slides.length) % currentGroup.slides.length
-      };
-    } else if (slideDirection === 'down') {
-      const nextGroupIndex = (activeSlideGroupIndex + 1) % slideGroups.length;
-      return { nextGroupIndex, nextSlideIndex: 0 };
-    } else { // up
-      const nextGroupIndex = (activeSlideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
-      return {
-        nextGroupIndex,
-        nextSlideIndex: slideGroups[nextGroupIndex].slides.length - 1
-      };
-    }
-  }, [activeSlideGroupIndex, activeSlideIndex, slideDirection, slideGroups]);
-
-  const { nextGroupIndex, nextSlideIndex } = getNextIndices();
-
   return (
     <Box 
       component="div"
@@ -207,8 +180,8 @@ const Dashboard: React.FC = () => {
         config={slideGroups[activeSlideGroupIndex]}
         currentSlideIndex={activeSlideIndex}
         currentSlideGroupIndex={activeSlideGroupIndex}
-        nextSlideIndex={nextSlideIndex}
-        nextSlideGroupIndex={nextGroupIndex}
+        nextSlideIndex={activeSlideIndex}
+        nextSlideGroupIndex={activeSlideGroupIndex}
         direction={slideDirection}
         onTransitionStart={() => setIsTransitioning(true)}
         onTransitionEnd={() => setIsTransitioning(false)}
