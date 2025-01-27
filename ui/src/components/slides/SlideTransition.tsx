@@ -36,7 +36,7 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
   onTransitionStart,
   onTransitionEnd,
 }) => {
-  const animationDuration = 200;
+  const animationDuration = 500;
   const [isTransitioning, setIsTransitioning] = useState(false);
   const prevSlideIndex = useRef(currentSlideIndex);
   const prevGroupIndex = useRef(currentSlideGroupIndex);
