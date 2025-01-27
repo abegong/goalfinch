@@ -6,6 +6,7 @@ import BulletSlide from './BulletSlide';
 import ChartSlide from './ChartSlide';
 import PictureSlide from './PictureSlide';
 import SlideGroupCaptions from './SlideGroupCaptions';
+import { colors } from '../../theme/colors';
 
 interface SlideGroupProps {
   config: SlideGroupConfig;
@@ -56,6 +57,9 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
   const renderSlide = (slideConfig: SlideConfig | undefined) => {
     if (!slideConfig) return null;
 
+    // Get a random color from the colors array
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
     const commonProps = {
       index: currentSlideIndex,
       captions: config.captions,
@@ -64,6 +68,7 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
       isOutgoing,
       animationDuration,
       direction,
+      backgroundColor: randomColor.hex,
     };
 
     switch (slideConfig.type) {
