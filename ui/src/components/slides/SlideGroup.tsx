@@ -8,9 +8,36 @@ import PictureSlide from './PictureSlide';
 import SlideGroupCaptions from './SlideGroupCaptions';
 import { colors } from '../../theme/colors';
 
+/**
+ * Creates a deterministic hash from the slide index, group index and current date.
+ * This ensures the same slide gets the same color on a given day, but colors change daily.
+ */
+const getHashedColor = (slideIndex: number, groupIndex: number) => {
+  // Get today's date in YYYY-MM-DD format to use as a seed
+  const today = new Date().toISOString().split('T')[0];
+  
+  // Create a string to hash
+  const str = `${today}-${groupIndex}-${slideIndex}`;
+  
+  // Simple hash function
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  
+  // Use absolute value of hash to get a positive number
+  const positiveHash = Math.abs(hash);
+  
+  // Use the hash to select a color
+  return colors[positiveHash % colors.length];
+};
+
 interface SlideGroupProps {
   config: SlideGroupConfig;
   currentSlideIndex: number;
+  currentSlideGroupIndex: number;
   sx?: any;
 }
 
@@ -24,7 +51,7 @@ interface SlideGroupProps {
  *    - Provides slide index information
  * 
  * 2. Visual Styling:
- *    - Applies a random background color from the theme
+ *    - Applies a deterministic background color based on indices
  *    - Maintains consistent card-based layout
  *    - Supports custom styling via sx prop
  * 
@@ -34,6 +61,7 @@ interface SlideGroupProps {
 const SlideGroup: React.FC<SlideGroupProps> = ({
   config,
   currentSlideIndex,
+  currentSlideGroupIndex,
   sx,
 }) => {
   const totalSlides = config.slides.length;
@@ -42,14 +70,14 @@ const SlideGroup: React.FC<SlideGroupProps> = ({
   const renderSlide = (slideConfig: SlideConfig | undefined) => {
     if (!slideConfig) return null;
 
-    // Get a random color from the colors array
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    // Get a deterministic color based on indices
+    const slideColor = getHashedColor(currentSlideIndex, currentSlideGroupIndex);
 
     const commonProps = {
       index: currentSlideIndex,
       captions: config.captions,
       text: `${currentSlideIndex + 1}/${totalSlides}`,
-      backgroundColor: randomColor.hex,
+      backgroundColor: slideColor.hex,
     };
 
     switch (slideConfig.type) {

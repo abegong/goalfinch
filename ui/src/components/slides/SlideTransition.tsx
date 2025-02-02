@@ -101,6 +101,8 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
               key={`${currentSlideGroupIndex}-${currentSlideIndex}`}
               config={config}
               currentSlideIndex={currentSlideIndex}
+              currentSlideGroupIndex={currentSlideGroupIndex}
+              sx={{ height: '100%' }}
             />
           </Box>
 
@@ -117,6 +119,8 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
               key={`${incomingSlideGroupIndex}-${incomingSlideIndex}`}
               config={config}
               currentSlideIndex={incomingSlideIndex}
+              currentSlideGroupIndex={incomingSlideGroupIndex}
+              sx={{ height: '100%' }}
             />
           </Box>
         </>
@@ -134,6 +138,8 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
             key={`${currentSlideGroupIndex}-${currentSlideIndex}`}
             config={config}
             currentSlideIndex={currentSlideIndex}
+            currentSlideGroupIndex={currentSlideGroupIndex}
+            sx={{ height: '100%' }}
           />
         </Box>
       )}
