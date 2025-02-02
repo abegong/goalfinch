@@ -12,7 +12,7 @@ import { colors } from '../../theme/colors';
  */
 const ANIMATION_DURATION = 200;
 /** Total interval between slide transitions in milliseconds */
-const TOTAL_INTERVAL = 2000;
+const TOTAL_INTERVAL = 1000;
 
 /**
  * Dashboard component that manages and displays slide groups with automatic transitions.
@@ -27,8 +27,8 @@ const Dashboard: React.FC = () => {
   const slideGroups = dashboard.slideGroups;
   
   // Track which slide is currently visible and which one is coming in
-  const [outgoingSlideGroupIndex, setOutgoingSlideGroupIndex] = useState(0);
-  const [outgoingSlideIndex, setOutgoingSlideIndex] = useState(0);
+  const [currentSlideGroupIndex, setCurrentSlideGroupIndex] = useState(0);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [incomingSlideGroupIndex, setIncomingSlideGroupIndex] = useState(0);
   const [incomingSlideIndex, setIncomingSlideIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | 'up' | 'down'>('left');
@@ -44,30 +44,32 @@ const Dashboard: React.FC = () => {
    * Otherwise, go to the next slide in the current group.
    */
   const goToNextSlide = useCallback(() => {
-    const currentGroup = slideGroups[outgoingSlideGroupIndex];
-    const nextSlideIndex = outgoingSlideIndex + 1;
+    const currentGroup = slideGroups[currentSlideGroupIndex];
+    const nextSlideIndex = currentSlideIndex + 1;
 
+    // If this is the last slide in the group...
     if (nextSlideIndex >= currentGroup.slides.length) {
-      // Move to next group
-      const nextGroupIndex = (outgoingSlideGroupIndex + 1) % slideGroups.length;
+      // ...move to next group.
+      const nextGroupIndex = (currentSlideGroupIndex + 1) % slideGroups.length;
       setIncomingSlideGroupIndex(nextGroupIndex);
       setIncomingSlideIndex(0);
       setSlideDirection('down');
+
     } else {
-      // Stay in current group, move to next slide
-      setIncomingSlideGroupIndex(outgoingSlideGroupIndex);
+      // Otherwise, stay in current group, move to next slide
+      setIncomingSlideGroupIndex(currentSlideGroupIndex);
       setIncomingSlideIndex(nextSlideIndex);
       setSlideDirection('left');
     }
     
-    // After animation completes, the incoming slide becomes the outgoing slide
+    // After animation completes, the current slide becomes the incoming slide
     setTimeout(() => {
-      setOutgoingSlideGroupIndex(incomingSlideGroupIndex);
-      setOutgoingSlideIndex(incomingSlideIndex);
+      setCurrentSlideGroupIndex(incomingSlideGroupIndex);
+      setCurrentSlideIndex(incomingSlideIndex);
     }, ANIMATION_DURATION);
     
-    console.log(outgoingSlideGroupIndex, outgoingSlideIndex);
-  }, [outgoingSlideGroupIndex, outgoingSlideIndex, incomingSlideGroupIndex, incomingSlideIndex, slideGroups]);
+    console.log(currentSlideGroupIndex, currentSlideIndex);
+  }, [currentSlideGroupIndex, currentSlideIndex, incomingSlideGroupIndex, incomingSlideIndex, slideGroups]);
 
   /**
    * Transitions to the previous slide.
@@ -75,32 +77,32 @@ const Dashboard: React.FC = () => {
    * Otherwise, go to the previous slide in the current group.
    */
   const goToPrevSlide = useCallback(() => {
-    if (outgoingSlideIndex > 0) {
+    if (currentSlideIndex > 0) {
       // Stay in current group, move to previous slide
-      setIncomingSlideGroupIndex(outgoingSlideGroupIndex);
-      setIncomingSlideIndex(outgoingSlideIndex - 1);
+      setIncomingSlideGroupIndex(currentSlideGroupIndex);
+      setIncomingSlideIndex(currentSlideIndex - 1);
       setSlideDirection('right');
     } else {
       // Move to previous group
-      const prevGroupIndex = (outgoingSlideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
+      const prevGroupIndex = (currentSlideGroupIndex - 1 + slideGroups.length) % slideGroups.length;
       const prevGroup = slideGroups[prevGroupIndex];
       setIncomingSlideGroupIndex(prevGroupIndex);
       setIncomingSlideIndex(prevGroup.slides.length - 1);
       setSlideDirection('up');
     }
     
-    // After animation completes, the incoming slide becomes the outgoing slide
+    // After animation completes, the current slide becomes the incoming slide
     setTimeout(() => {
-      setOutgoingSlideGroupIndex(incomingSlideGroupIndex);
-      setOutgoingSlideIndex(incomingSlideIndex);
+      setCurrentSlideGroupIndex(incomingSlideGroupIndex);
+      setCurrentSlideIndex(incomingSlideIndex);
     }, ANIMATION_DURATION);
     
-    console.log(outgoingSlideGroupIndex, outgoingSlideIndex);
-  }, [outgoingSlideGroupIndex, outgoingSlideIndex, incomingSlideGroupIndex, incomingSlideIndex, slideGroups]);
+  }, [currentSlideGroupIndex, currentSlideIndex, incomingSlideGroupIndex, incomingSlideIndex, slideGroups]);
 
   useEffect(() => {
     if (isPaused) return;
 
+    console.log(new Date());
     const interval = setInterval(() => {
       goToNextSlide();
     }, TOTAL_INTERVAL);
@@ -143,10 +145,10 @@ const Dashboard: React.FC = () => {
     setIncomingSlideIndex(slideIndex);
     setSlideDirection('left');
     
-    // After animation completes, the incoming slide becomes the outgoing slide
+    // After animation completes, the incoming slide becomes the current slide
     setTimeout(() => {
-      setOutgoingSlideGroupIndex(groupIndex);
-      setOutgoingSlideIndex(slideIndex);
+      setCurrentSlideGroupIndex(groupIndex);
+      setCurrentSlideIndex(slideIndex);
     }, ANIMATION_DURATION);
   };
 
@@ -197,9 +199,9 @@ const Dashboard: React.FC = () => {
       </IconButton>
 
       <SlideTransition
-        config={slideGroups[outgoingSlideGroupIndex]}
-        currentSlideIndex={outgoingSlideIndex}
-        currentSlideGroupIndex={outgoingSlideGroupIndex}
+        config={slideGroups[currentSlideGroupIndex]}
+        currentSlideIndex={currentSlideIndex}
+        currentSlideGroupIndex={currentSlideGroupIndex}
         incomingSlideIndex={incomingSlideIndex}
         incomingSlideGroupIndex={incomingSlideGroupIndex}
         direction={slideDirection}
@@ -212,8 +214,8 @@ const Dashboard: React.FC = () => {
           setDashboardControlBarVisible(false);
         }}
         slideGroups={slideGroups}
-        visibleColorIndex={outgoingSlideGroupIndex % colors.length}
-        activeSlideIndex={outgoingSlideIndex}
+        visibleColorIndex={currentSlideGroupIndex % colors.length}
+        activeSlideIndex={currentSlideIndex}
         onSlideClick={handleControlBarSlideClick}
         isPaused={isPaused}
         onPauseChange={setIsPaused}
