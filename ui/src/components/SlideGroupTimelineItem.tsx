@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineDot, TimelineContent, TimelineOppositeContent } from '@mui/lab';
 import { Typography, Box } from '@mui/material';
 import { SlideConfig, SlideType } from '../types/slides';
@@ -16,6 +16,7 @@ interface SlideGroupTimelineItemProps {
   onDrop: (e: React.DragEvent, index: number) => void;
   onSlideGroupChange: (index: number, newConfig: Partial<SlideGroupConfig>) => void;
   onDelete: (index: number) => void;
+  className?: string;
 }
 
 const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
@@ -29,12 +30,39 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   onDrop,
   onSlideGroupChange,
   onDelete,
+  className,
 }) => {
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    const handleDragEnd = () => setIsDragging(false);
+    document.addEventListener('dragend', handleDragEnd);
+    return () => document.removeEventListener('dragend', handleDragEnd);
+  }, []);
+
+  const handleDragStart = (e: React.DragEvent) => {
+    setIsDragging(true);
+    onDragStart(e, index);
+  };
 
   return (
     <TimelineItem 
       key={index}
-      sx={{ cursor: 'default' }}
+      draggable
+      onDragStart={handleDragStart}
+      onDragOver={onDragOver}
+      onDrop={(e) => {
+        onDrop(e, index);
+        setIsDragging(false);
+      }}
+      className={[className, isDragging ? 'dragging' : ''].filter(Boolean).join(' ')}
+      data-dragging={isDragging}
+      data-testid="timeline-item"
+      sx={{ 
+        cursor: isDragging ? 'grabbing' : 'grab',
+        opacity: isDragging ? 0.5 : 1,
+        transition: 'opacity 0.2s'
+      }}
     >
       <TimelineOppositeContent
         onClick={() => onToggleExpanded(index)}

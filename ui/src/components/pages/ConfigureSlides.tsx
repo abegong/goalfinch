@@ -6,11 +6,12 @@ import { useConfig } from '../../context/ConfigContext';
 import { SlideConfig, SlideType } from '../../types/slides';
 // import { BaseSlide, Slide } from '../slides/Slide';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
-import { PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
+import { PictureSlideGroupConfig, SlideGroupConfig, getSlideGroupName } from '../../types/slide_groups';
 
 const ConfigureSlides: React.FC = () => {
   const { dashboard, setDashboard } = useConfig();
   const [expandedItems, setExpandedItems] = useState<boolean[]>([]);
+  const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
 
   const handleSlideGroupChange = (index: number, newConfig: Partial<SlideGroupConfig>) => {
     const newSlideGroups = [...dashboard.slideGroups];
@@ -44,7 +45,26 @@ const ConfigureSlides: React.FC = () => {
   }, []);
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
+    const dragPreview = document.createElement('div');
+    dragPreview.className = 'drag-preview';
+    dragPreview.textContent = getSlideGroupName(dashboard.slideGroups[index]);
+    dragPreview.style.cssText = `
+      position: fixed;
+      top: -1000px;
+      padding: 8px 16px;
+      background: rgba(25, 118, 210, 0.9);
+      color: white;
+      border-radius: 4px;
+      font-family: system-ui;
+      pointer-events: none;
+      z-index: 1000;
+    `;
+    document.body.appendChild(dragPreview);
+    e.dataTransfer.setDragImage(dragPreview, 0, 0);
+    setTimeout(() => document.body.removeChild(dragPreview), 0);
+    
     e.dataTransfer.setData('text/plain', index.toString());
+    setDraggingIndex(index);
     e.stopPropagation();
   };
 
@@ -69,6 +89,7 @@ const ConfigureSlides: React.FC = () => {
     const [removedExpanded] = newExpandedItems.splice(sourceIndex, 1);
     newExpandedItems.splice(targetIndex, 0, removedExpanded);
     setExpandedItems(newExpandedItems);
+    setDraggingIndex(null);
   };
 
   const handleSlideGroupDelete = (index: number) => {
@@ -97,6 +118,18 @@ const ConfigureSlides: React.FC = () => {
         },
         [`& .MuiTimelineItem-root`]: {
           minHeight: '80px',
+          '&[draggable="true"]': {
+            cursor: 'grab',
+            '&:active': {
+              cursor: 'grabbing'
+            }
+          },
+          '&.dragging': {
+            opacity: 0.5,
+            '& .timeline-text': {
+              backgroundColor: 'primary.main'
+            }
+          },
           '&:hover': {
             '& .timeline-text:not(:empty)': {
               backgroundColor: 'primary.light',
@@ -133,6 +166,7 @@ const ConfigureSlides: React.FC = () => {
           onDrop={handleDrop}
           onSlideGroupChange={handleSlideGroupChange}
           onDelete={handleSlideGroupDelete}
+          className={draggingIndex === index ? 'dragging' : ''}
         />
       ))}
       <TimelineItem>
