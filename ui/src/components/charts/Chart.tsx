@@ -212,7 +212,7 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) 
           height: '100%',
           minHeight: '600px'
         }}>
-          <VegaLite spec={spec} data={{ values: safeData }} />
+          <VegaLite spec={spec} data={{ values: safeData }} actions={false} />
         </div>
         <div style={{ 
           width: '100%',
