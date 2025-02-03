@@ -20,7 +20,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
     const fetchData = async () => {
       try {
         setLoading(true);
-        const chartData = await loadChartData(slideConfig.content.url);
+        const chartData = await loadChartData(slideConfig.content.url, slideConfig.content.asOfDate);
         setData(chartData);
         setError(null);
       } catch (err) {
@@ -31,7 +31,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
     };
 
     fetchData();
-  }, [slideConfig.content.url]);
+  }, [slideConfig.content.url, slideConfig.content.asOfDate]);
 
   return (
     <Slide
@@ -59,6 +59,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
             goal={slideConfig.content.goal}
             rounding={slideConfig.content.rounding}
             units={slideConfig.content.units}
+            asOfDate={slideConfig.content.asOfDate}
           />
         )}
       </Box>

@@ -2,21 +2,24 @@ import React from 'react';
 import { VegaLite } from 'react-vega';
 import { TopLevelSpec } from 'vega-lite';
 import * as d3 from 'd3';
+import { Typography } from '@mui/material';
+import { roundToDigits } from '../../utils/chart';
 
 interface ChartProps {
-  data: any[];  // CSV data after loading
+  data: Array<{date: string; value: number}>;
   goal: number;
   rounding: number;
   units: string;
+  asOfDate?: string;
 }
 
-const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
+const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) => {
   // Generate goal line data
   const firstDate = data[0]?.date;
-  const lastDate = data[data.length - 1]?.date;
+  const lastDateInMonth = data[data.length - 1]?.date;
   const goalLineData = [
     { date: firstDate, value: 0 },
-    { date: lastDate, value: goal }
+    { date: lastDateInMonth, value: goal }
   ];
 
   // Find the last date with data
@@ -28,7 +31,7 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
     // Calculate target value for the last data point
     const startDate = new Date(firstDate);
     const lastDataDate = new Date(lastDataPoint.date);
-    const endDate = new Date(lastDate);
+    const endDate = new Date(lastDateInMonth);
     const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     const daysSoFar = Math.ceil((lastDataDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     const targetForLastDay = (daysSoFar / totalDays) * goal;
@@ -98,9 +101,9 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
           data: { values: targetLine },
           mark: {
             type: "line",
-            strokeDash: [4, 4],
-            color: "#666",
-            strokeWidth: 2
+            strokeDash: [6, 4],
+            color: "#999",
+            strokeWidth: 3
           },
           encoding: {
             x: {
@@ -186,14 +189,49 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
       }
     });
 
+    // Calculate how far ahead/behind
+    const diff = lastDataPoint.value - targetForLastDay;
+    const roundedDiff = Math.abs(roundToDigits(diff, rounding));
+    let assessmentText = '';
+    
+    if (Math.abs(diff) < 0.0001) {  // Account for floating point
+      assessmentText = "Right on track! 🎯";
+    } else if (diff > 0) {
+      assessmentText = `Ahead by ${roundedDiff} ${units} 🚀`;
+    } else {
+      assessmentText = `Behind by ${roundedDiff} ${units} ⏰`;
+    }
+
     return (
       <div style={{ 
         width: '100%', 
-        height: '100%',
-        minWidth: '1000px',
-        minHeight: '600px'
+        minWidth: '1000px'
       }}>
-        <VegaLite spec={spec} data={{ values: safeData }} />
+        <div style={{ 
+          width: '100%', 
+          height: '100%',
+          minHeight: '600px'
+        }}>
+          <VegaLite spec={spec} data={{ values: safeData }} />
+        </div>
+        <div style={{ 
+          width: '100%',
+          display: 'flex', 
+          justifyContent: 'center'
+        }}>
+          <Typography 
+            variant="h4" 
+            align="center" 
+            sx={{ 
+              mt: 3,
+              mb: 2,
+              color: 'white',
+              fontWeight: 500
+            }}
+          >
+            {assessmentText}
+          </Typography>
+        </div>
       </div>
     );
   } else {
