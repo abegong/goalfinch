@@ -11,6 +11,14 @@ interface ChartProps {
 }
 
 const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
+  // Generate goal line data
+  const firstDate = data[0]?.date;
+  const lastDate = data[data.length - 1]?.date;
+  const goalLineData = [
+    { date: firstDate, value: 0 },
+    { date: lastDate, value: goal }
+  ];
+
   const spec: TopLevelSpec = {
     width: 1000,
     height: 600,
@@ -21,6 +29,37 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
     data: { name: "values" },
     layer: [
       {
+        data: { values: goalLineData },
+        mark: {
+          type: "line",
+          strokeDash: [6, 4],
+          color: "#999",
+          strokeWidth: 1
+        },
+        encoding: {
+          x: {
+            field: "date",
+            type: "temporal",
+            axis: { 
+              title: null,
+              tickCount: 4,
+              grid: true,
+              gridDash: [2, 2]
+            }
+          },
+          y: {
+            field: "value",
+            type: "quantitative",
+            axis: { 
+              title: units,
+              grid: true,
+              gridDash: [2, 2]
+            }
+          }
+        }
+      },
+      {
+        data: { name: "values" },
         mark: {
           type: "line",
           point: true
@@ -31,7 +70,7 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
             type: "temporal",
             axis: { 
               title: null,
-              tickCount: 4,  // Reduce number of ticks
+              tickCount: 4,
               grid: true,
               gridDash: [2, 2]
             }
@@ -55,12 +94,12 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
 
   return (
     <div style={{ 
-      // width: '100%', 
-      // height: '100%',
+      width: '100%', 
+      height: '100%',
       minWidth: '1000px',
       minHeight: '600px'
     }}>
-      <VegaLite spec={spec} data={{ values: safeData }}/>
+      <VegaLite spec={spec} data={{ values: safeData }} />
     </div>
   );
 };

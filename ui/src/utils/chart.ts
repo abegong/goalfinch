@@ -30,7 +30,7 @@ export async function loadChartData(url: string) {
                 .filter(() => Math.random() < 0.7)  // Randomly keep only 40% of days
                 .map(d => ({
                     date: d.date,
-                    value: Math.floor(Math.random() * 3) // Random value between 0 and 2 hours per day
+                    value: Math.floor(Math.random() * 4) // Random value between 0 and 2 hours per day
                 }));
             return preprocessChartData(demoData);
         }
