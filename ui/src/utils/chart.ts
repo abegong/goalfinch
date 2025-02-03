@@ -25,10 +25,13 @@ export async function loadChartData(url: string) {
         // If this is a demo URL, generate random data
         if (url.startsWith('SPREADSHEET_URL')) {
             const dates = getDatesInCurrentMonth();
-            const demoData = dates.map(d => ({
-                date: d.date,
-                value: Math.floor(Math.random() * 3) // Random value between 0 and 2 hours per day
-            }));
+            const demoData = dates
+                .filter(d => parseInt(d.date.split('/')[1]) <= 20)  // Only keep first 20 days
+                .filter(() => Math.random() < 0.7)  // Randomly keep only 40% of days
+                .map(d => ({
+                    date: d.date,
+                    value: Math.floor(Math.random() * 3) // Random value between 0 and 2 hours per day
+                }));
             return preprocessChartData(demoData);
         }
 
