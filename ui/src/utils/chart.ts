@@ -44,15 +44,19 @@ function preprocessChartData(data: any[]) {
     // Get all dates in the current month
     const allDates = getDatesInCurrentMonth();
     
+    let cumulativeValue = 0;
     // Process the data exactly as in niblings.js
     const processedData = allDates.map(dateObj => {
         const matchingEntries = data.filter(d => d.date === dateObj.date);
-        const value = matchingEntries.length > 0 
+        const dayValue = matchingEntries.length > 0 
             ? matchingEntries.reduce((sum, entry) => sum + (parseFloat(entry.value) || 0), 0)
             : 0;
+        
+        cumulativeValue += dayValue;
+        
         return {
             date: dateObj.date,
-            value: value
+            value: cumulativeValue
         };
     });
 
