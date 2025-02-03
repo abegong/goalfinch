@@ -5,6 +5,7 @@ import Chart from '../charts/Chart';
 import LoadingIndicator from '../charts/LoadingIndicator';
 import ErrorDisplay from '../charts/ErrorDisplay';
 import { loadChartData } from '../../utils/chart';
+import { Box } from '@mui/material';
 
 interface ChartSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slideConfig: ChartSlideConfig;
@@ -37,15 +38,17 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
       {...slideProps}
       text=""  // Empty string since we're not using text in chart slides
     >
-      <div style={{ 
-        position: 'relative', 
-        width: '100%', 
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '2rem'
-      }}>
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mt: '10%'  // Add margin to move it down
+        }}
+      >
         {loading ? (
           <LoadingIndicator />
         ) : error ? (
@@ -58,7 +61,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
             units={slideConfig.content.units}
           />
         )}
-      </div>
+      </Box>
     </Slide>
   );
 };

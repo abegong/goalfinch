@@ -56,12 +56,12 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
 
   return (
     <div style={{ 
-      width: '100%', 
-      height: '100%',
+      // width: '100%', 
+      // height: '100%',
       minWidth: '1000px',
       minHeight: '600px'
     }}>
-      <VegaLite spec={spec} data={{ values: safeData }} />
+      <VegaLite spec={spec} data={{ values: safeData }}/>
     </div>
   );
 };
