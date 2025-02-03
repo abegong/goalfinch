@@ -1,7 +1,6 @@
 import React from 'react';
 import { VegaLite } from 'react-vega';
 import { TopLevelSpec } from 'vega-lite';
-import * as d3 from 'd3';
 import { Typography } from '@mui/material';
 import { roundToDigits } from '../../utils/chart';
 

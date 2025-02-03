@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import Papa from 'papaparse';
 
 export function getDatesInMonth(asOfDate?: string) {
     const referenceDate = asOfDate ? new Date(asOfDate) : new Date();
@@ -43,7 +44,9 @@ export async function loadChartData(url: string, asOfDate?: string) {
         }
 
         // Otherwise load from actual URL
-        const data = await d3.csv(url);
+        const response = await fetch(url);
+        const csvText = await response.text();
+        const { data } = Papa.parse(csvText, { header: true });
         return preprocessChartData(data, asOfDate);
     } catch (error) {
         throw new Error(`Failed to load chart data: ${error}`);
