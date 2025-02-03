@@ -8,7 +8,7 @@ import SlideTransition from '../slides/SlideTransition';
 import { colors } from '../../theme/colors';
 
 /** Total interval between slide transitions in milliseconds */
-const TOTAL_INTERVAL = 1000;
+const TOTAL_INTERVAL = 2500;
 
 /**
  * Dashboard component that manages and displays slide groups with automatic transitions.
