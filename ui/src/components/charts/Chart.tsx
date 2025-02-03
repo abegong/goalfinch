@@ -19,35 +19,33 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
       contains: "padding"
     },
     data: { name: "values" },
-    mark: {
-      type: "line",
-      point: true
-    },
-    encoding: {
-      x: {
-        field: "date",
-        type: "temporal",
-        axis: { title: null }
-      },
-      y: {
-        field: "value",
-        type: "quantitative",
-        axis: { title: units }
-      }
-    },
     layer: [
       {
-        mark: "line",
+        mark: {
+          type: "line",
+          point: true
+        },
         encoding: {
-          y: { field: "value" }
+          x: {
+            field: "date",
+            type: "temporal",
+            axis: { title: null }
+          },
+          y: {
+            field: "value",
+            type: "quantitative",
+            axis: { title: units }
+          }
         }
       },
       {
-        mark: "rule",
+        mark: {
+          type: "rule",
+          strokeDash: [8, 4],
+          color: "red"
+        },
         encoding: {
-          y: { datum: goal },
-          color: { value: "red" },
-          strokeDash: { value: [8, 4] }
+          y: { datum: goal }
         }
       }
     ]
