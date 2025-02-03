@@ -30,6 +30,8 @@ export interface ChartSlideContent {
   goal: number;
   rounding: number;
   units: string;
+  asOfDate?: string;
+  caption?: string;
 }
 
 /**

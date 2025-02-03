@@ -69,11 +69,9 @@ export const demoData: SlideGroupConfig[] = [
           url: "SPREADSHEET_URL_1",
           goal: 40,
           rounding: 0,
-          units: "hours"
+          units: "hours",
+          caption: "Bonetti"
         },
-        captions: {
-          top_center: "Bonetti",
-        }
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
@@ -82,10 +80,8 @@ export const demoData: SlideGroupConfig[] = [
           goal: 40,
           rounding: 0,
           units: "hours",
+          caption: "Thibault"
         },
-        captions: {
-          top_center: "Thibault",
-        }
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
@@ -93,11 +89,9 @@ export const demoData: SlideGroupConfig[] = [
           url: "SPREADSHEET_URL_3",
           goal: 40,
           rounding: 0,
-          units: "hours"
+          units: "hours",
+          caption: "McBone"
         },
-        captions: {
-          top_center: "McBone",
-        }
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
@@ -105,11 +99,9 @@ export const demoData: SlideGroupConfig[] = [
           url: "SPREADSHEET_URL_3",
           goal: 40,
           rounding: 0,
-          units: "hours"
+          units: "hours",
+          caption: "Agrippa"
         },
-        captions: {
-          top_center: "Agrippa",
-        }
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
@@ -117,11 +109,9 @@ export const demoData: SlideGroupConfig[] = [
           url: "SPREADSHEET_URL_3",
           goal: 40,
           rounding: 0,
-          units: "hours"
+          units: "hours",
+          caption: "Capo Ferro"
         },
-        captions: {
-          top_center: "Capo Ferro",
-        }
       } as ChartSlideConfig,
     ]
   } as ChartSlideGroupConfig,
