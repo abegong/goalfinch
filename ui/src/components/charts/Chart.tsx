@@ -19,6 +19,19 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
     { date: lastDate, value: goal }
   ];
 
+  // Calculate weekly target values
+  const startDate = new Date(firstDate);
+  const endDate = new Date(lastDate);
+  const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  const weeklyTargets = [];
+  
+  for (let i = 0; i <= totalDays; i += 7) {
+    const targetDate = new Date(startDate);
+    targetDate.setDate(startDate.getDate() + i);
+    const targetValue = (i / totalDays) * goal;
+    weeklyTargets.push(targetValue);
+  }
+
   const spec: TopLevelSpec = {
     width: 1000,
     height: 600,
@@ -53,7 +66,8 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
             axis: { 
               title: units,
               grid: true,
-              gridDash: [2, 2]
+              gridDash: [2, 2],
+              values: weeklyTargets
             }
           }
         }
@@ -81,7 +95,8 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
             axis: { 
               title: units,
               grid: true,
-              gridDash: [2, 2]
+              gridDash: [2, 2],
+              values: weeklyTargets
             }
           }
         }
