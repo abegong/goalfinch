@@ -56,9 +56,6 @@ const Slide: React.FC<SlideProps> = ({
         left: 0,
       }}
     >
-      <Typography variant="h1" sx={{ color: 'red', marginLeft: '50%' }}>
-        {text}
-      </Typography>
       {children}
     </Box>
   );
