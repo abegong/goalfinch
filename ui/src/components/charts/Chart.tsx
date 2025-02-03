@@ -76,7 +76,6 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
         data: { name: "values" },
         mark: {
           type: "line",
-          point: true
         },
         encoding: {
           x: {
@@ -100,12 +99,47 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
             }
           }
         }
+      },
+      {
+        data: { name: "values" },
+        mark: {
+          type: "point",
+          filled: true
+        },
+        transform: [
+          {
+            filter: "datum.showPoint"
+          }
+        ],
+        encoding: {
+          x: {
+            field: "date",
+            type: "temporal"
+          },
+          y: {
+            field: "value",
+            type: "quantitative"
+          }
+        }
       }
     ]
   };
 
   // Use JSON parse/stringify for deep cloning
-  const safeData = JSON.parse(JSON.stringify(data));
+  const safeData = JSON.parse(JSON.stringify(data)) as Array<{
+    date: string;
+    value: number;
+    showPoint?: boolean;
+  }>;
+
+  // Add showPoint property to data
+  safeData.forEach((d, i: number) => {
+    if (i === 0 || d.value !== safeData[i - 1].value) {
+      d.showPoint = true;
+    } else {
+      d.showPoint = false;
+    }
+  });
 
   return (
     <div style={{ 
