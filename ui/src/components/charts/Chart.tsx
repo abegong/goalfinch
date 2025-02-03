@@ -37,16 +37,6 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
             axis: { title: units }
           }
         }
-      },
-      {
-        mark: {
-          type: "rule",
-          strokeDash: [8, 4],
-          color: "red"
-        },
-        encoding: {
-          y: { datum: goal }
-        }
       }
     ]
   };
