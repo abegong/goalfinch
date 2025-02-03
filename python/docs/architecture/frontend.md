@@ -30,8 +30,8 @@ Here's the list of Pages:
 
 * `Home`: A simple landing page with setup instructions and links to documentation.
 * `Dashboard`: The main app dashboard
-* `Slides`: Configuration page for SlideGroups and Slides
-* `Connections`: Configuration page for Connections
+* `ConfigureSlides`: Configuration page for SlideGroups and Slides
+* `ConfigureConnections`: Configuration page for external service connections and API settings
 
 Source code for Page components is in the `src/components/pages` directory.
 

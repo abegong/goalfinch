@@ -1,7 +1,6 @@
 import React from 'react';
 import { VegaLite } from 'react-vega';
 import { TopLevelSpec } from 'vega-lite';
-import * as d3 from 'd3';
 import { Typography } from '@mui/material';
 import { roundToDigits } from '../../utils/chart';
 
@@ -212,7 +211,7 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) 
           height: '100%',
           minHeight: '600px'
         }}>
-          <VegaLite spec={spec} data={{ values: safeData }} />
+          <VegaLite spec={spec} data={{ values: safeData }} actions={false} />
         </div>
         <div style={{ 
           width: '100%',

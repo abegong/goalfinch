@@ -1,6 +1,6 @@
 # Goal Finch Type System
 
-This document describes the main groups of types in Goal Finch and how they should be used throughout the application.
+This document describes the type system implementation in Goal Finch and how these types are used throughout the application.
 
 ## Core Configuration Types
 
@@ -19,29 +19,15 @@ The application's persisted state is managed through three main configuration ob
    - Contains UI preferences and application settings
    - Affects global application behavior
 
-## Slide Type Hierarchy
+## Slide Types
 
-Slides follow this inheritance pattern:
+Slides use TypeScript interfaces and a discriminated union pattern with SlideType as the discriminator.
 
-```typescript
-BaseSlideConfig
-├── BulletSlideConfig
-├── ChartSlideConfig
-└── PictureSlideConfig
-```
+The `SlideType` enum defines three supported types: BULLETS, PICTURE, and CHART.
 
-Each slide type implements the `BaseSlideConfig` interface while adding its own specific content type.
+## SlideGroup Types
 
-## SlideGroup Type Hierarchy
-
-SlideGroups follow a similar pattern:
-
-```typescript
-BaseSlideGroupConfig
-├── BulletSlideGroupConfig
-├── ChartSlideGroupConfig
-└── PictureSlideGroupConfig
-```
+SlideGroups follow a similar interface extension pattern.
 
 Each SlideGroup contains:
 - A `type` field matching the corresponding `SlideType`
@@ -81,9 +67,19 @@ Each SlideGroup contains:
 
 ## Type File Organization
 
-- `slides.ts`: Slide-related types and interfaces
-- `slide_groups.ts`: SlideGroup configurations
-- `connections.ts`: Connection and API configuration types
+The type system is organized into four main files:
+
+- `slides.ts`: Slide interfaces and the SlideType enum
+- `slide_groups.ts`: SlideGroup interfaces and caption types
+- `connections.ts`: Connection configuration interfaces
 - `config.ts`: Core configuration types
 
 This organization aligns with the frontend architecture document by maintaining clear separation of concerns and supporting the component hierarchy described there.
+
+## Type Safety Best Practices
+
+1. Use TypeScript's strict mode
+2. Leverage discriminated unions for type-safe handling of different slide types
+3. Use interface extension to enforce type consistency
+4. Avoid `any` - use `unknown` for runtime data that needs validation
+5. Keep prop interfaces close to their components unless shared

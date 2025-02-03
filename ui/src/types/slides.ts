@@ -31,6 +31,7 @@ export interface ChartSlideContent {
   rounding: number;
   units: string;
   asOfDate?: string;
+  caption?: string;
 }
 
 /**

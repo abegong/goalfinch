@@ -5,7 +5,7 @@ import Chart from '../charts/Chart';
 import LoadingIndicator from '../charts/LoadingIndicator';
 import ErrorDisplay from '../charts/ErrorDisplay';
 import { loadChartData } from '../../utils/chart';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 interface ChartSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text'> {
   slideConfig: ChartSlideConfig;
@@ -33,6 +33,8 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
     fetchData();
   }, [slideConfig.content.url, slideConfig.content.asOfDate]);
 
+  console.log(slideConfig);
+
   return (
     <Slide
       {...slideProps}
@@ -44,24 +46,38 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
           width: '100%',
           height: '100%',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          mt: '10%'  // Add margin to move it down
+          mt: '10%'  // Add margin to move everything down
         }}
       >
+        {slideConfig.content.caption && (
+          <Typography 
+            variant="h4" 
+            align="center"
+            sx={{ 
+              mb: 3,
+              color: 'white',
+              fontWeight: 500
+            }}
+          >
+            {slideConfig.content.caption}
+          </Typography>
+        )}
         {loading ? (
           <LoadingIndicator />
         ) : error ? (
           <ErrorDisplay message={error} />
-        ) : (
+        ) : data ? (
           <Chart 
-            data={data}
+            data={data} 
             goal={slideConfig.content.goal}
             rounding={slideConfig.content.rounding}
             units={slideConfig.content.units}
             asOfDate={slideConfig.content.asOfDate}
           />
-        )}
+        ) : null}
       </Box>
     </Slide>
   );
