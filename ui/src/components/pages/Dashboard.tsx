@@ -68,7 +68,6 @@ const Dashboard: React.FC = () => {
       setCurrentSlideIndex(incomingSlideIndex);
     }, ANIMATION_DURATION);
     
-    console.log(currentSlideGroupIndex, currentSlideIndex);
   }, [currentSlideGroupIndex, currentSlideIndex, incomingSlideGroupIndex, incomingSlideIndex, slideGroups]);
 
   /**
@@ -102,7 +101,6 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if (isPaused) return;
 
-    console.log(new Date());
     const interval = setInterval(() => {
       goToNextSlide();
     }, TOTAL_INTERVAL);
