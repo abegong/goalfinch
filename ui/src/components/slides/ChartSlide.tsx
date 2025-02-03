@@ -40,10 +40,11 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
       <div style={{ 
         position: 'relative', 
         width: '100%', 
-        height: '100%',
+        height: '100vh',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: '2rem'
       }}>
         {loading ? (
           <LoadingIndicator />

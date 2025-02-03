@@ -12,8 +12,8 @@ interface ChartProps {
 
 const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
   const spec: TopLevelSpec = {
-    // width: "container",
-    // height: "container",
+    width: 1000,
+    height: 600,
     autosize: {
       type: "fit",
       contains: "padding"
@@ -57,7 +57,12 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
   const safeData = JSON.parse(JSON.stringify(data));
 
   return (
-    <div style={{ width: '600px', height: '400px' }}>
+    <div style={{ 
+      width: '100%', 
+      height: '100%',
+      minWidth: '1000px',
+      minHeight: '600px'
+    }}>
       <VegaLite spec={spec} data={{ values: safeData }} />
     </div>
   );
