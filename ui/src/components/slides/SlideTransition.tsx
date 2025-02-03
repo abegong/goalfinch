@@ -6,13 +6,9 @@ import SlideGroup from './SlideGroup';
 
 interface SlideTransitionProps {
   config: SlideGroupConfig;
-  currentSlideIndex: number;
-  currentSlideGroupIndex: number;
-  incomingSlideIndex: number;
-  incomingSlideGroupIndex: number;
+  slideIndex: number;
+  slideGroupIndex: number;
   direction: 'left' | 'right' | 'up' | 'down';
-  onTransitionStart?: () => void;
-  onTransitionEnd?: () => void;
 }
 
 /**
@@ -27,16 +23,11 @@ interface SlideTransitionProps {
  */
 const SlideTransition: React.FC<SlideTransitionProps> = ({
   config,
-  currentSlideIndex,
-  currentSlideGroupIndex,
+  slideIndex,
+  slideGroupIndex,
   direction,
-  onTransitionStart,
-  onTransitionEnd,
 }) => {
   const getVariants = () => {
-    const offset = 100;
-    
-    // For each direction, define enter/exit positions
     const variants = {
       left: {
         enter: { x: '100%', y: 0 },
@@ -66,15 +57,13 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
   const transition = {
     duration: 0.5,
     ease: [0.4, 0.0, 0.2, 1],
-    onStart: onTransitionStart,
-    onComplete: onTransitionEnd,
   };
 
   return (
     <Box sx={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
       <AnimatePresence initial={false} mode="sync">
         <motion.div
-          key={`${currentSlideGroupIndex}-${currentSlideIndex}`}
+          key={`${slideGroupIndex}-${slideIndex}`}
           initial="enter"
           animate="center"
           exit="exit"
@@ -88,8 +77,8 @@ const SlideTransition: React.FC<SlideTransitionProps> = ({
         >
           <SlideGroup
             config={config}
-            currentSlideIndex={currentSlideIndex}
-            currentSlideGroupIndex={currentSlideGroupIndex}
+            slideIndex={slideIndex}
+            slideGroupIndex={slideGroupIndex}
             sx={{ height: '100%' }}
           />
         </motion.div>

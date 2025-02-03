@@ -36,8 +36,8 @@ const getHashedColor = (slideIndex: number, groupIndex: number) => {
 
 interface SlideGroupProps {
   config: SlideGroupConfig;
-  currentSlideIndex: number;
-  currentSlideGroupIndex: number;
+  slideIndex: number;
+  slideGroupIndex: number;
   sx?: any;
 }
 
@@ -60,23 +60,23 @@ interface SlideGroupProps {
  */
 const SlideGroup: React.FC<SlideGroupProps> = ({
   config,
-  currentSlideIndex,
-  currentSlideGroupIndex,
+  slideIndex,
+  slideGroupIndex,
   sx,
 }) => {
   const totalSlides = config.slides.length;
-  const currentSlide = config.slides[currentSlideIndex];
+  const currentSlide = config.slides[slideIndex];
 
   const renderSlide = (slideConfig: SlideConfig | undefined) => {
     if (!slideConfig) return null;
 
     // Get a deterministic color based on indices
-    const slideColor = getHashedColor(currentSlideIndex, currentSlideGroupIndex);
+    const slideColor = getHashedColor(slideIndex, slideGroupIndex);
 
     const commonProps = {
-      index: currentSlideIndex,
+      index: slideIndex,
       captions: config.captions,
-      text: `${currentSlideIndex + 1}/${totalSlides}`,
+      text: `${slideIndex + 1}/${totalSlides}`,
       backgroundColor: slideColor.hex,
     };
 
