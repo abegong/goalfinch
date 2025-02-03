@@ -29,12 +29,21 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units }) => {
           x: {
             field: "date",
             type: "temporal",
-            axis: { title: null }
+            axis: { 
+              title: null,
+              tickCount: 4,  // Reduce number of ticks
+              grid: true,
+              gridDash: [2, 2]
+            }
           },
           y: {
             field: "value",
             type: "quantitative",
-            axis: { title: units }
+            axis: { 
+              title: units,
+              grid: true,
+              gridDash: [2, 2]
+            }
           }
         }
       }
