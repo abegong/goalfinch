@@ -25,6 +25,29 @@ interface DeleteDialogState {
   index: number;
 }
 
+const defaultConfig = {
+  connections: {
+    backend: {
+      serverUrl: '',
+      serverPassword: '',
+    },
+    pictureSources: [],
+    goalSources: []
+  },
+  dashboard: {
+    slideGroups: []
+  },
+  app: {
+    appControlBar: {
+      open: false,
+      visible: true
+    },
+    theme: {
+      mode: 'light' as const
+    }
+  }
+};
+
 const ConfigureConnections: React.FC = () => {
   const { connections, setConnections, dashboard, app, setDashboard, setApp } = useConfig();
   const [deleteDialog, setDeleteDialog] = useState<DeleteDialogState>({
@@ -34,6 +57,7 @@ const ConfigureConnections: React.FC = () => {
   });
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [resetModalOpen, setResetModalOpen] = useState(false);
 
   const handleBackendChange = (field: keyof BackendConfig) => 
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +180,13 @@ const ConfigureConnections: React.FC = () => {
     }
   }, [setConnections, setDashboard, setApp]);
 
+  const handleReset = () => {
+    setConnections(defaultConfig.connections);
+    setDashboard(defaultConfig.dashboard);
+    setApp(defaultConfig.app);
+    setResetModalOpen(false);
+  };
+
   const SourceList = ({ type, title }: { type: 'pictureSources' | 'goalSources', title: string }) => (
     <Stack spacing={2}>
       <Typography variant="h6">{title}</Typography>
@@ -277,9 +308,37 @@ const ConfigureConnections: React.FC = () => {
             <Button variant="contained" onClick={() => setImportModalOpen(true)}>
               Import Configuration
             </Button>
+            <Button 
+              variant="contained" 
+              color="error" 
+              onClick={() => setResetModalOpen(true)}
+            >
+              Reset Configuration
+            </Button>
           </Stack>
         </CardContent>
       </Card>
+
+      <Dialog
+        open={resetModalOpen}
+        onClose={() => setResetModalOpen(false)}
+      >
+        <DialogTitle>Reset Configuration</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to reset all configuration to default values? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setResetModalOpen(false)}>Cancel</Button>
+          <Button
+            onClick={handleReset}
+            color="error"
+          >
+            Reset
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog
         open={importModalOpen}
