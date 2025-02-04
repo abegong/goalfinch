@@ -97,11 +97,19 @@ const ConfigureConnections: React.FC = () => {
   };
 
   const handleEditSource = (type: 'pictureSources' | 'goalSources', index: number) => {
+    // If this is a new source (index equals length), generate a default name
+    const isNewSource = index === connections[type].length;
+    const defaultName = isNewSource 
+      ? `${type === 'pictureSources' ? 'pictures' : 'data'}-${connections[type].length + 1}`
+      : connections[type][index].name;
+
     setEditDialog({
       open: true,
       type,
       index,
-      source: { ...connections[type][index] },
+      source: isNewSource 
+        ? { name: defaultName, url: '' }
+        : { ...connections[type][index] },
       errors: { name: '', url: '' }
     });
   };
