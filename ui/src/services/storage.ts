@@ -38,23 +38,46 @@ export interface StorageService {
   clear(): void;
 }
 
+// Version format for stored data
+interface VersionedData<T> {
+  version: number;
+  data: T;
+}
+
 export class LocalStorageService implements StorageService {
+  private readonly CURRENT_VERSION = 1;
+
   constructor(private readonly notify?: { 
     showError: (message: string) => void;
     showWarning: (message: string) => void;
   }) {}
 
   private createError(type: 'save' | 'load' | 'clear', originalError: unknown, key?: string): StorageError {
-    const error = new Error(
-      type === 'save' ? `Failed to save data${key ? ` for key ${key}` : ''}`
-      : type === 'load' ? `Failed to load data${key ? ` for key ${key}` : ''}`
-      : 'Failed to clear storage'
-    ) as StorageError;
+    let message = '';
     
+    if (originalError instanceof Error) {
+      message = originalError.message;
+    } else {
+      message = type === 'save' ? `Failed to save data${key ? ` for key ${key}` : ''}`
+        : type === 'load' ? `Failed to load data${key ? ` for key ${key}` : ''}`
+        : 'Failed to clear storage';
+    }
+    
+    const error = new Error(message) as StorageError;
     error.type = type;
     error.key = key;
     error.originalError = originalError;
     return error;
+  }
+
+  private migrateData<T>(versionedData: VersionedData<T>): T {
+    // Add migrations as needed when data format changes
+    switch (versionedData.version) {
+      case 1:
+        return versionedData.data;
+      default:
+        throw new Error(`Unknown data version: ${versionedData.version}`);
+    }
   }
 
   save<T>(key: string, data: T): void {
@@ -64,8 +87,14 @@ export class LocalStorageService implements StorageService {
         throw new Error('localStorage is not available');
       }
 
+      // Wrap data with version
+      const versionedData: VersionedData<T> = {
+        version: this.CURRENT_VERSION,
+        data
+      };
+
       // Check remaining storage space (rough estimate)
-      const serialized = JSON.stringify(data);
+      const serialized = JSON.stringify(versionedData);
       const spaceNeeded = (key.length + serialized.length) * 2; // Unicode characters
       if (spaceNeeded > 5242880) { // 5MB limit
         throw new Error('Data exceeds storage limit');
@@ -83,9 +112,9 @@ export class LocalStorageService implements StorageService {
           if (error.message.includes('storage limit')) {
             this.notify.showError('Unable to save changes: storage is full. Try clearing some data.');
           } else if (error.message.includes('not available')) {
-            this.notify.showError('Unable to save changes: storage is not available in private browsing mode.');
+            this.notify.showWarning('Unable to save changes: storage is not available in private browsing mode.');
           } else {
-            this.notify.showError('Unable to save changes. Your data may be lost if you close the app.');
+            this.notify.showError('Failed to save changes. Please try again.');
           }
         }
       }
@@ -104,7 +133,16 @@ export class LocalStorageService implements StorageService {
       if (!serialized) {
         return null;
       }
-      return JSON.parse(serialized) as T;
+
+      const parsed = JSON.parse(serialized);
+      
+      // Handle both versioned and unversioned data for backward compatibility
+      if (parsed && typeof parsed === 'object' && 'version' in parsed && 'data' in parsed) {
+        return this.migrateData(parsed as VersionedData<T>);
+      }
+      
+      // If data is not versioned, treat it as version 1
+      return parsed as T;
     } catch (error) {
       console.error(`Failed to load data for key ${key}:`, error);
       
@@ -114,6 +152,8 @@ export class LocalStorageService implements StorageService {
         if (error instanceof Error) {
           if (error.message.includes('not available')) {
             this.notify.showWarning('Unable to load saved data: storage is not available in private browsing mode.');
+          } else if (error.message.includes('Unknown data version')) {
+            this.notify.showWarning('Unable to load saved data: incompatible data version.');
           } else {
             this.notify.showWarning('Unable to load saved data. Using default settings.');
           }

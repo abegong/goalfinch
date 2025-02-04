@@ -26,10 +26,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { SourceConfig, BackendConfig, ConnectionsConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
+import { LocalStorageService } from '../../services/storage';
 
 interface DeleteDialogState {
   open: boolean;
-  type: 'pictureSources' | 'goalSources' | null;
+  type: 'pictureSources' | 'goalSources';
   index: number;
 }
 
@@ -67,11 +68,14 @@ const defaultConfig = {
   }
 };
 
+// Current version of the configuration format
+const CURRENT_VERSION = 1;
+
 const ConfigureConnections: React.FC = () => {
   const { connections, setConnections, dashboard, app, setDashboard, setApp } = useConfig();
   const [deleteDialog, setDeleteDialog] = useState<DeleteDialogState>({
     open: false,
-    type: null,
+    type: 'pictureSources',
     index: -1,
   });
   const [editDialog, setEditDialog] = useState<EditDialogState>({
@@ -255,18 +259,21 @@ const ConfigureConnections: React.FC = () => {
         [deleteDialog.type!]: prev[deleteDialog.type!].filter((_, i) => i !== deleteDialog.index)
       }));
     }
-    setDeleteDialog({ open: false, type: null, index: -1 });
+    setDeleteDialog({ open: false, type: 'pictureSources', index: -1 });
   };
 
   const handleDeleteCancel = () => {
-    setDeleteDialog({ open: false, type: null, index: -1 });
+    setDeleteDialog({ open: false, type: 'pictureSources', index: -1 });
   };
 
   const handleExportConfig = () => {
     const config = {
-      connections,
-      dashboard,
-      app
+      version: 1,
+      data: {
+        connections,
+        dashboard,
+        app
+      }
     };
     
     const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
@@ -297,6 +304,34 @@ const ConfigureConnections: React.FC = () => {
     e.stopPropagation();
   }, []);
 
+  const parseConfig = (jsonString: string) => {
+    const parsed = JSON.parse(jsonString);
+
+    // Require version and data fields
+    if (!parsed.version || !parsed.data) {
+      throw new Error('Invalid configuration format: Missing version or data field');
+    }
+
+    // Check version
+    if (parsed.version > CURRENT_VERSION) {
+      throw new Error(`Unsupported configuration version: ${parsed.version}. Maximum supported version is ${CURRENT_VERSION}`);
+    }
+
+    const configData = parsed.data;
+    if (!configData.connections || !configData.dashboard || !configData.app) {
+      throw new Error('Invalid configuration format: Missing required fields');
+    }
+
+    return configData;
+  };
+
+  const importConfig = (configData: any) => {
+    setConnections(configData.connections);
+    setDashboard(configData.dashboard);
+    setApp(configData.app);
+    setImportModalOpen(false);
+  };
+
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -305,19 +340,14 @@ const ConfigureConnections: React.FC = () => {
     const file = e.dataTransfer.files[0];
     if (file && file.type === 'application/json') {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = (e) => {
         try {
-          const config = JSON.parse(event.target?.result as string);
-          
-          // Validate the config structure
-          if (config.connections && config.dashboard && config.app) {
-            setConnections(config.connections);
-            setDashboard(config.dashboard);
-            setApp(config.app);
-            setImportModalOpen(false);
-          } else {
-            alert('Invalid configuration file structure');
+          if (!e.target?.result) {
+            throw new Error('Failed to read file');
           }
+
+          const configData = parseConfig(e.target.result as string);
+          importConfig(configData);
         } catch (error) {
           alert('Error parsing configuration file');
         }
@@ -326,6 +356,30 @@ const ConfigureConnections: React.FC = () => {
     } else {
       alert('Please drop a JSON file');
     }
+  }, [setConnections, setDashboard, setApp]);
+
+  const handleFileInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || !event.target.files[0]) {
+      return;
+    }
+
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      try {
+        if (!e.target?.result) {
+          throw new Error('Failed to read file');
+        }
+
+        const configData = parseConfig(e.target.result as string);
+        importConfig(configData);
+      } catch (error) {
+        alert('Error parsing configuration file');
+      }
+    };
+
+    reader.readAsText(file);
   }, [setConnections, setDashboard, setApp]);
 
   const handleReset = () => {
@@ -541,6 +595,7 @@ const ConfigureConnections: React.FC = () => {
               Only .json files are accepted
             </Typography>
           </Box>
+          <input type="file" onChange={handleFileInput} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setImportModalOpen(false)}>Cancel</Button>

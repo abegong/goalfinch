@@ -8,11 +8,24 @@ describe('LocalStorageService', () => {
     storage = new LocalStorageService();
   });
 
-  it('should save and load data', () => {
+  it('should save and load data with versioning', () => {
     const testData = { test: 'data' };
     storage.save(STORAGE_KEYS.APP, testData);
     const loaded = storage.load(STORAGE_KEYS.APP);
     expect(loaded).toEqual(testData);
+
+    // Verify that data is stored with version
+    const rawStored = localStorage.getItem(STORAGE_KEYS.APP);
+    const parsed = JSON.parse(rawStored!);
+    expect(parsed).toHaveProperty('version', 1);
+    expect(parsed).toHaveProperty('data', testData);
+  });
+
+  it('should handle unversioned legacy data', () => {
+    const legacyData = { test: 'legacy' };
+    localStorage.setItem(STORAGE_KEYS.APP, JSON.stringify(legacyData));
+    const loaded = storage.load(STORAGE_KEYS.APP);
+    expect(loaded).toEqual(legacyData);
   });
 
   it('should return null for non-existent data', () => {
@@ -35,6 +48,18 @@ describe('LocalStorageService', () => {
     
     expect(() => {
       storage.load(STORAGE_KEYS.APP);
-    }).toThrow('Failed to load data for key goalfinch_app');
+    }).toThrow('Unexpected token \'i\', "invalid json" is not valid JSON');
+  });
+
+  it('should reject unknown versions', () => {
+    const futureVersionData = {
+      version: 999,
+      data: { test: 'future' }
+    };
+    localStorage.setItem(STORAGE_KEYS.APP, JSON.stringify(futureVersionData));
+    
+    expect(() => {
+      storage.load(STORAGE_KEYS.APP);
+    }).toThrow('Unknown data version: 999');
   });
 });
