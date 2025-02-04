@@ -462,30 +462,16 @@ const ConfigureConnections: React.FC = () => {
           }
         />
         <CardContent sx={{ bgcolor: 'white' }}>
-          <Stack spacing={4}>
-            <Stack spacing={2}>
+          <Stack spacing={8}>
+            <Stack spacing={2} alignItems="flex-start">
               <Typography variant="h6">Self-hosted Backend</Typography>
-              <TextField
-                label="Server URL"
-                size="small"
-                fullWidth
-                value={connections.backend.serverUrl}
-                onChange={handleBackendChange('serverUrl')}
-              />
-              <TextField
-                label="Server Password"
-                size="small"
-                fullWidth
-                type="password"
-                value={connections.backend.serverPassword}
-                onChange={handleBackendChange('serverPassword')}
-              />
+              <Button variant="outlined" disabled>
+                Configure backend
+              </Button>
             </Stack>
 
-            <Divider />
             <SourceList type="pictureSources" title="Pictures" />
-            
-            <Divider />
+
             <SourceList type="goalSources" title="Data" />
           </Stack>
         </CardContent>
