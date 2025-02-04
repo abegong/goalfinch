@@ -80,7 +80,6 @@ const ConfigureSlides: React.FC = () => {
     const [removed] = newSlideGroups.splice(sourceIndex, 1);
     newSlideGroups.splice(targetIndex, 0, removed);
     handleSlideGroupOrderChange(newSlideGroups);
-    setDraggingIndex(null);
   };
 
   const handleSlideGroupDelete = (index: number) => {
@@ -149,7 +148,6 @@ const ConfigureSlides: React.FC = () => {
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            onSlideGroupChange={handleSlideGroupChange}
             onDelete={handleSlideGroupDelete}
             className={draggingIndex === index ? 'dragging' : ''}
           />

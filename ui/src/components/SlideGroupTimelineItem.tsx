@@ -13,7 +13,6 @@ interface SlideGroupTimelineItemProps {
   onDragStart: (e: React.DragEvent, index: number) => void;
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, index: number) => void;
-  onSlideGroupChange: (index: number, newConfig: Partial<SlideGroupConfig>) => void;
   onDelete: (index: number) => void;
   className?: string;
 }
@@ -26,7 +25,6 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   onDragStart,
   onDragOver,
   onDrop,
-  onSlideGroupChange,
   onDelete,
   className,
 }) => {
