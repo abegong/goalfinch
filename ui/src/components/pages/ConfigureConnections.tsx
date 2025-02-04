@@ -16,18 +16,7 @@ import {
   DialogActions,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-interface SourcePair {
-  name: string;
-  url: string;
-}
-
-interface ConfigureConnectionsData {
-  serverUrl: string;
-  serverPassword: string;
-  pictureSources: SourcePair[];
-  goalSources: SourcePair[];
-}
+import { SourceConfig, BackendConfig, ConnectionsConfig } from '../../types/connections';
 
 interface DeleteDialogState {
   open: boolean;
@@ -36,9 +25,11 @@ interface DeleteDialogState {
 }
 
 const ConfigureConnections: React.FC = () => {
-  const [connections, setConnections] = useState<ConfigureConnectionsData>({
-    serverUrl: '',
-    serverPassword: '',
+  const [connections, setConnections] = useState<ConnectionsConfig>({
+    backend: {
+      serverUrl: '',
+      serverPassword: '',
+    },
     pictureSources: [],
     goalSources: [],
   });
@@ -49,15 +40,18 @@ const ConfigureConnections: React.FC = () => {
     index: -1,
   });
 
-  const handleChange = (field: keyof Pick<ConfigureConnectionsData, 'serverUrl' | 'serverPassword'>) => 
+  const handleBackendChange = (field: keyof BackendConfig) => 
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setConnections(prev => ({
         ...prev,
-        [field]: event.target.value
+        backend: {
+          ...prev.backend,
+          [field]: event.target.value
+        }
       }));
   };
 
-  const handleSourceChange = (type: 'pictureSources' | 'goalSources', index: number, field: keyof SourcePair) =>
+  const handleSourceChange = (type: 'pictureSources' | 'goalSources', index: number, field: keyof SourceConfig) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setConnections(prev => {
         const newSources = [...prev[type]];
@@ -159,16 +153,16 @@ const ConfigureConnections: React.FC = () => {
               label="Server URL"
               size="small"
               fullWidth
-              value={connections.serverUrl}
-              onChange={handleChange('serverUrl')}
+              value={connections.backend.serverUrl}
+              onChange={handleBackendChange('serverUrl')}
             />
             <TextField
               label="Server Password"
               size="small"
               fullWidth
               type="password"
-              value={connections.serverPassword}
-              onChange={handleChange('serverPassword')}
+              value={connections.backend.serverPassword}
+              onChange={handleBackendChange('serverPassword')}
             />
           </Stack>
 

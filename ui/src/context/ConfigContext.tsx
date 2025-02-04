@@ -20,7 +20,12 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   });
 
   const [connections, setConnections] = useState<ConnectionsConfig>({
-    connections: []
+    backend: {
+      serverUrl: '',
+      serverPassword: '',
+    },
+    pictureSources: [],
+    goalSources: []
   });
 
   const [app, setApp] = useState<AppConfig>({
