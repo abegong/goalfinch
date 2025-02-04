@@ -14,8 +14,16 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { SourceConfig, BackendConfig, ConnectionsConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
 
@@ -23,6 +31,13 @@ interface DeleteDialogState {
   open: boolean;
   type: 'pictureSources' | 'goalSources' | null;
   index: number;
+}
+
+interface EditDialogState {
+  open: boolean;
+  type: 'pictureSources' | 'goalSources' | null;
+  index: number;
+  source: SourceConfig;
 }
 
 const defaultConfig = {
@@ -55,6 +70,12 @@ const ConfigureConnections: React.FC = () => {
     type: null,
     index: -1,
   });
+  const [editDialog, setEditDialog] = useState<EditDialogState>({
+    open: false,
+    type: null,
+    index: -1,
+    source: { name: '', url: '' }
+  });
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
@@ -68,6 +89,54 @@ const ConfigureConnections: React.FC = () => {
           [field]: event.target.value
         }
       }));
+  };
+
+  const handleEditSource = (type: 'pictureSources' | 'goalSources', index: number) => {
+    setEditDialog({
+      open: true,
+      type,
+      index,
+      source: { ...connections[type][index] }
+    });
+  };
+
+  const handleEditCancel = () => {
+    setEditDialog({
+      open: false,
+      type: null,
+      index: -1,
+      source: { name: '', url: '' }
+    });
+  };
+
+  const handleEditSave = () => {
+    if (editDialog.type && editDialog.index >= 0) {
+      setConnections(prev => {
+        const newSources = [...prev[editDialog.type!]];
+        newSources[editDialog.index] = editDialog.source;
+        return {
+          ...prev,
+          [editDialog.type!]: newSources
+        };
+      });
+    } else if (editDialog.type) {
+      const type = editDialog.type; // Capture the non-null type
+      setConnections(prev => ({
+        ...prev,
+        [type]: [...prev[type], editDialog.source]
+      }));
+    }
+    handleEditCancel();
+  };
+
+  const handleEditChange = (field: keyof SourceConfig) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditDialog(prev => ({
+      ...prev,
+      source: {
+        ...prev.source,
+        [field]: event.target.value
+      }
+    }));
   };
 
   const handleSourceChange = (type: 'pictureSources' | 'goalSources', index: number, field: keyof SourceConfig) =>
@@ -190,33 +259,52 @@ const ConfigureConnections: React.FC = () => {
   const SourceList = ({ type, title }: { type: 'pictureSources' | 'goalSources', title: string }) => (
     <Stack spacing={2}>
       <Typography variant="h6">{title}</Typography>
-      {connections[type].map((source, index) => (
-        <Box key={index} sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-          <TextField
-            label="Name"
-            size="small"
-            value={source.name}
-            onChange={handleSourceChange(type, index, 'name')}
-            sx={{ flex: 1 }}
-          />
-          <TextField
-            label="URL"
-            size="small"
-            value={source.url}
-            onChange={handleSourceChange(type, index, 'url')}
-            sx={{ flex: 2 }}
-          />
-          <IconButton 
-            onClick={() => removeSource(type, index)}
-            size="small"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Box>
-      ))}
+      <TableContainer component={Paper} variant="outlined">
+        <Table size="small">
+          <TableHead sx={{ bgcolor: 'grey.100' }}>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>URL</TableCell>
+              <TableCell sx={{ width: 100 }}></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {connections[type].length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={3} align="center">
+                  <Typography color="text.secondary">
+                    No sources added yet
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ) : (
+              connections[type].map((source, index) => (
+                <TableRow key={index}>
+                  <TableCell>{source.name}</TableCell>
+                  <TableCell>{source.url}</TableCell>
+                  <TableCell align="right">
+                    <IconButton 
+                      onClick={() => handleEditSource(type, index)}
+                      size="small"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton 
+                      onClick={() => removeSource(type, index)}
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Button
         variant="outlined"
-        onClick={() => addSource(type)}
+        onClick={() => handleEditSource(type, connections[type].length)}
         sx={{ alignSelf: 'flex-start' }}
       >
         Add Source
@@ -377,6 +465,51 @@ const ConfigureConnections: React.FC = () => {
           <Button onClick={() => setImportModalOpen(false)}>Cancel</Button>
         </DialogActions>
       </Dialog>
+
+      <Dialog
+        open={editDialog.open}
+        onClose={handleEditCancel}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {editDialog.index >= 0 && editDialog.type && editDialog.index < connections[editDialog.type].length 
+            ? 'Edit Source' 
+            : 'Add Source'}
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={2} sx={{ mt: 2 }}>
+            <TextField
+              label="Name"
+              fullWidth
+              value={editDialog.source.name}
+              onChange={handleEditChange('name')}
+            />
+            <TextField
+              label="URL"
+              fullWidth
+              value={editDialog.source.url}
+              onChange={handleEditChange('url')}
+            />
+            <Button 
+              variant="outlined" 
+              disabled={!editDialog.source.url}
+              sx={{ alignSelf: 'flex-start' }}
+            >
+              Check Connection
+            </Button>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditCancel}>Cancel</Button>
+          <Button onClick={handleEditSave} variant="contained">
+            {editDialog.index >= 0 && editDialog.type && editDialog.index < connections[editDialog.type].length 
+              ? 'Save' 
+              : 'Add'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </>
   );
 };
