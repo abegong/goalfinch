@@ -2,15 +2,27 @@
  * Types related to external service connections in Goal Finch.
  */
 
-export interface ConnectionConfig {
-  type: 'GOOGLE_SHEETS' | 'AIRTABLE';
+/**
+ * Represents a named source with a URL
+ */
+export interface SourceConfig {
   name: string;
-  apiKey?: string;
-  sheetId?: string;
-  baseId?: string;
-  tableId?: string;
+  url: string;
 }
 
+/**
+ * Configuration for the self-hosted backend connection
+ */
+export interface BackendConfig {
+  serverUrl: string;
+  serverPassword: string;
+}
+
+/**
+ * Complete connections configuration for Goal Finch
+ */
 export interface ConnectionsConfig {
-  connections: ConnectionConfig[];
+  backend: BackendConfig;
+  pictureSources: SourceConfig[];
+  goalSources: SourceConfig[];
 }
