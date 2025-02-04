@@ -556,45 +556,53 @@ const ConfigureConnections: React.FC = () => {
             ? 'Edit Source' 
             : 'Add Source'}
         </DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 2 }}>
-            <TextField
-              label="Name"
-              fullWidth
-              value={editDialog.source.name}
-              onChange={handleEditChange('name')}
-              error={!!editDialog.errors.name}
-              helperText={editDialog.errors.name || 'Use lowercase letters, numbers, and hyphens'}
-            />
-            <TextField
-              label="URL"
-              fullWidth
-              value={editDialog.source.url}
-              onChange={handleEditChange('url')}
-              error={!!editDialog.errors.url}
-              helperText={editDialog.errors.url}
-            />
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          if (!editDialog.errors.name && !editDialog.errors.url && 
+              editDialog.source.name && editDialog.source.url) {
+            handleEditSave();
+          }
+        }}>
+          <DialogContent>
+            <Stack spacing={2} sx={{ mt: 2 }}>
+              <TextField
+                label="Name"
+                fullWidth
+                value={editDialog.source.name}
+                onChange={handleEditChange('name')}
+                error={!!editDialog.errors.name}
+                helperText={editDialog.errors.name || 'Use lowercase letters, numbers, and hyphens'}
+              />
+              <TextField
+                label="URL"
+                fullWidth
+                value={editDialog.source.url}
+                onChange={handleEditChange('url')}
+                error={!!editDialog.errors.url}
+                helperText={editDialog.errors.url}
+              />
+              <Button 
+                variant="outlined" 
+                disabled={!editDialog.source.url || !!editDialog.errors.url}
+                sx={{ alignSelf: 'flex-start' }}
+              >
+                Check Connection
+              </Button>
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleEditCancel}>Cancel</Button>
             <Button 
-              variant="outlined" 
-              disabled={!editDialog.source.url || !!editDialog.errors.url}
-              sx={{ alignSelf: 'flex-start' }}
+              type="submit"
+              variant="contained"
+              disabled={!editDialog.source.name || !editDialog.source.url || !!editDialog.errors.name || !!editDialog.errors.url}
             >
-              Check Connection
+              {editDialog.index >= 0 && editDialog.type && editDialog.index < connections[editDialog.type].length 
+                ? 'Save' 
+                : 'Add'}
             </Button>
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleEditCancel}>Cancel</Button>
-          <Button 
-            onClick={handleEditSave} 
-            variant="contained"
-            disabled={!editDialog.source.name || !editDialog.source.url || !!editDialog.errors.name || !!editDialog.errors.url}
-          >
-            {editDialog.index >= 0 && editDialog.type && editDialog.index < connections[editDialog.type].length 
-              ? 'Save' 
-              : 'Add'}
-          </Button>
-        </DialogActions>
+          </DialogActions>
+        </form>
       </Dialog>
 
     </>
