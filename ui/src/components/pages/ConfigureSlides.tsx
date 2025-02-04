@@ -180,7 +180,7 @@ const ConfigureSlides: React.FC = () => {
           <TimelineContent>
             <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
               <SpeedDial
-                ariaLabel="Add slide group"
+                ariaLabel="Slide group actions"
                 icon={<SpeedDialIcon />}
                 direction="right"
                 sx={{
