@@ -32,7 +32,9 @@ describe('LocalStorageService', () => {
 
   it('should handle invalid JSON gracefully', () => {
     localStorage.setItem(STORAGE_KEYS.APP, 'invalid json');
-    const loaded = storage.load(STORAGE_KEYS.APP);
-    expect(loaded).toBeNull();
+    
+    expect(() => {
+      storage.load(STORAGE_KEYS.APP);
+    }).toThrow('Failed to load data for key goalfinch_app');
   });
 });

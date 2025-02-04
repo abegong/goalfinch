@@ -6,21 +6,24 @@ import Home from './components/pages/Home';
 import ConfigureSlides from './components/pages/ConfigureSlides';
 import ConfigureConnections from './components/pages/ConfigureConnections';
 import { ConfigProvider } from './context/ConfigContext';
+import { NotificationProvider } from './context/NotificationContext';
 import './App.css';
 
 function App() {
   return (
     <Router>
-      <ConfigProvider>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/slides" element={<ConfigureSlides />} />
-            <Route path="/connections" element={<ConfigureConnections />} />
-          </Routes>
-        </Layout>
-      </ConfigProvider>
+      <NotificationProvider>
+        <ConfigProvider>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/slides" element={<ConfigureSlides />} />
+              <Route path="/connections" element={<ConfigureConnections />} />
+            </Routes>
+          </Layout>
+        </ConfigProvider>
+      </NotificationProvider>
     </Router>
   );
 }

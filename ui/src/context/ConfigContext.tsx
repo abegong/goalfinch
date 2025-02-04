@@ -3,6 +3,7 @@ import { demoData } from '../data/demo_data';
 import { DashboardConfig, AppConfig } from '../types/config';
 import { ConnectionsConfig } from '../types/connections';
 import { LocalStorageService, STORAGE_KEYS } from '../services/storage';
+import { useNotification } from './NotificationContext';
 
 interface ConfigContextType {
   dashboard: DashboardConfig;
@@ -16,50 +17,90 @@ interface ConfigContextType {
 export const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const storage = new LocalStorageService();
+  const { showError, showWarning } = useNotification();
+  const storage = new LocalStorageService({ showError, showWarning });
 
   // Load initial state from storage or use defaults
   const [dashboard, setDashboard] = useState<DashboardConfig>(() => {
-    const stored = storage.load<DashboardConfig>(STORAGE_KEYS.DASHBOARD);
-    return stored || { slideGroups: demoData };
+    try {
+      const stored = storage.load<DashboardConfig>(STORAGE_KEYS.DASHBOARD);
+      return stored || { slideGroups: demoData };
+    } catch (error) {
+      return { slideGroups: demoData };
+    }
   });
 
   const [connections, setConnections] = useState<ConnectionsConfig>(() => {
-    const stored = storage.load<ConnectionsConfig>(STORAGE_KEYS.CONNECTIONS);
-    return stored || {
-      backend: {
-        serverUrl: '',
-        serverPassword: '',
-      },
-      pictureSources: [],
-      goalSources: []
-    };
+    try {
+      const stored = storage.load<ConnectionsConfig>(STORAGE_KEYS.CONNECTIONS);
+      return stored || {
+        backend: {
+          serverUrl: '',
+          serverPassword: '',
+        },
+        pictureSources: [],
+        goalSources: []
+      };
+    } catch (error) {
+      return {
+        backend: {
+          serverUrl: '',
+          serverPassword: '',
+        },
+        pictureSources: [],
+        goalSources: []
+      };
+    }
   });
 
   const [app, setApp] = useState<AppConfig>(() => {
-    const stored = storage.load<AppConfig>(STORAGE_KEYS.APP);
-    return stored || {
-      appControlBar: {
-        open: false,
-        visible: true
-      },
-      theme: {
-        mode: 'light'
-      }
-    };
+    try {
+      const stored = storage.load<AppConfig>(STORAGE_KEYS.APP);
+      return stored || {
+        appControlBar: {
+          open: false,
+          visible: true
+        },
+        theme: {
+          mode: 'light'
+        }
+      };
+    } catch (error) {
+      return {
+        appControlBar: {
+          open: false,
+          visible: true
+        },
+        theme: {
+          mode: 'light'
+        }
+      };
+    }
   });
 
   // Save to storage whenever state changes
   useEffect(() => {
-    storage.save(STORAGE_KEYS.DASHBOARD, dashboard);
+    try {
+      storage.save(STORAGE_KEYS.DASHBOARD, dashboard);
+    } catch (error) {
+      // Error is already handled by storage service
+    }
   }, [dashboard]);
 
   useEffect(() => {
-    storage.save(STORAGE_KEYS.CONNECTIONS, connections);
+    try {
+      storage.save(STORAGE_KEYS.CONNECTIONS, connections);
+    } catch (error) {
+      // Error is already handled by storage service
+    }
   }, [connections]);
 
   useEffect(() => {
-    storage.save(STORAGE_KEYS.APP, app);
+    try {
+      storage.save(STORAGE_KEYS.APP, app);
+    } catch (error) {
+      // Error is already handled by storage service
+    }
   }, [app]);
 
   return (
