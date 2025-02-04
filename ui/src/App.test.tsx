@@ -52,22 +52,20 @@ describe('App smoke tests', () => {
     window.history.pushState({}, '', '/');
   });
 
-  // it('renders home page', () => {
-  //   renderWithConfig();
-  //   expect(screen.getByRole('heading', { name: 'Goal Finch' })).toBeInTheDocument();
-  // });
+  it('renders home page', () => {
+    renderWithConfig();
+    expect(screen.getByRole('heading', { name: 'Goal Finch', level: 2 })).toBeInTheDocument();
+  });
 
   it('renders dashboard page', () => {
     window.history.pushState({}, '', '/dashboard');
     renderWithConfig();
-    // expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
   });
 
-  // it('renders configure slides page', () => {
-  //   window.history.pushState({}, '', '/slides');
-  //   renderWithConfig();
-  //   expect(screen.getByText('Configure Slides')).toBeInTheDocument();
-  // });
+  it('renders configure slides page', () => {
+    window.history.pushState({}, '', '/slides');
+    renderWithConfig();
+  });
 
   it('renders configure connections page', () => {
     window.history.pushState({}, '', '/connections');
