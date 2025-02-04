@@ -2,6 +2,14 @@
 
 This doc describes the architecture of the React App in the `ui/` directory.
 
+## UI Components and Design System
+
+Goal Finch uses Material-UI (MUI) v6 as its component library and design system. Key MUI features we use:
+- Snackbar and Alert components for notifications
+- Theme provider for light/dark mode
+- Material Icons
+- Layout components (Grid, Box, etc.)
+
 ## Domain model
 
 The Goal Finch app is built around a `Dashboard` that helps users track progress towards personal `Goals`. The Dashboard consists of a series of `Slides`, in four types: `Picture`, `Chart`, `Bullets`, `Summary`. Slides are grouped into `SlideGroups` sharing the same type. 
