@@ -317,7 +317,7 @@ const ConfigureConnections: React.FC = () => {
                 color: 'white',
                 borderColor: 'error.main'
               }
-            }}            
+            }}
           >
             Reset
           </Button>

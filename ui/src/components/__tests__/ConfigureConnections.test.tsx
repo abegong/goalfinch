@@ -70,7 +70,7 @@ describe('ConfigureConnections', () => {
       
       // Submit
       await act(async () => {
-        await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Save' }));
       });
       
       // Verify
@@ -122,7 +122,7 @@ describe('ConfigureConnections', () => {
       
       // Confirm deletion
       await act(async () => {
-        await userEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
       });
       
       // Verify
@@ -154,7 +154,7 @@ describe('ConfigureConnections', () => {
       expect(screen.getByText('This name is already in use')).toBeInTheDocument();
       
       // Verify save button is disabled
-      expect(screen.getByRole('button', { name: 'Add' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
     });
 
     it('should validate URL format', async () => {
@@ -178,7 +178,7 @@ describe('ConfigureConnections', () => {
       expect(screen.getByText('Please enter a valid URL')).toBeInTheDocument();
       
       // Verify save button is disabled
-      expect(screen.getByRole('button', { name: 'Add' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
     });
   });
 
