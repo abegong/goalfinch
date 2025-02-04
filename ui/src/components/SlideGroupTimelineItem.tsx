@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineDot, TimelineContent, TimelineOppositeContent } from '@mui/lab';
-import { Typography, Box } from '@mui/material';
-import { SlideConfig, SlideType } from '../types/slides';
-import SlideGroupEditor, { getSlideIcon } from './editors/SlideGroupEditor';
-import { getSlideGroupName, SlideGroupConfig } from '../types/slide_groups';
+import { TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineConnector, TimelineOppositeContent } from '@mui/lab';
+import { Box, IconButton, Typography } from '@mui/material';
+import { Delete, DragIndicator } from '@mui/icons-material';
+import { SlideGroupConfig, getSlideGroupName } from '../types/slide_groups';
+import { getSlideIcon } from './editors/SlideGroupEditor';
 
 interface SlideGroupTimelineItemProps {
   slideGroup: SlideGroupConfig;
   index: number;
   slideGroups: SlideGroupConfig[];
-  expandedItems: boolean[];
-  onToggleExpanded: (index: number) => void;
+  onToggleExpanded: () => void;
   onDragStart: (e: React.DragEvent, index: number) => void;
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, index: number) => void;
@@ -23,7 +22,6 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   slideGroup,
   index,
   slideGroups,
-  expandedItems,
   onToggleExpanded,
   onDragStart,
   onDragOver,
@@ -46,7 +44,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   };
 
   return (
-    <TimelineItem 
+    <TimelineItem
       key={index}
       draggable
       onDragStart={handleDragStart}
@@ -63,9 +61,9 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         opacity: isDragging ? 0.5 : 1,
         transition: 'opacity 0.2s'
       }}
+      onClick={onToggleExpanded}
     >
       <TimelineOppositeContent
-        onClick={() => onToggleExpanded(index)}
         sx={{ cursor: 'pointer' }}
       >
         <Typography 
@@ -86,11 +84,9 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot
-          onClick={() => onToggleExpanded(index)}
-        >
-          {getSlideIcon(slideGroup.type)}
-        </TimelineDot>
+        <TimelineDot>
+            {getSlideIcon(slideGroup.type)}
+          </TimelineDot>
         {index < slideGroups.length - 1 && (
           <TimelineConnector 
             sx={{ 
@@ -105,14 +101,24 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         )}
       </TimelineSeparator>
       <TimelineContent>
-        {expandedItems[index] && (
-          <SlideGroupEditor
-            type={slideGroup.type}
-            config={slideGroup}
-            onChange={onSlideGroupChange.bind(null, index)}
-            onDelete={() => onDelete(index)}
-          />
-        )}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography>{getSlideGroupName(slideGroup)}</Typography>
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(index);
+            }}
+          >
+            <Delete />
+          </IconButton>
+        </Box>
       </TimelineContent>
     </TimelineItem>
   );
