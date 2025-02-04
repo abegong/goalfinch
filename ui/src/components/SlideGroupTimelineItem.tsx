@@ -80,30 +80,22 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         )}
       </TimelineSeparator>
       <TimelineContent>
-        <Box
+        <Typography 
+          // variant="body2" 
+          color="text.secondary"
+          className="timeline-text"
           sx={{
-            // display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            display: 'inline-block',
+            margin: '4px -24px 0px 0px',
+            padding: '8px 32px 8px 12px',
+            borderRadius: '4px',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            }
           }}
         >
-          <Typography 
-            // variant="body2" 
-            color="text.secondary"
-            className="timeline-text"
-            sx={{
-              display: 'inline-block',
-              margin: '4px -24px 0px 0px',
-              padding: '8px 32px 8px 12px',
-              borderRadius: '4px',
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              }
-            }}
-          >
-            {getSlideGroupName(slideGroup)}
-          </Typography>
-        </Box>
+          {getSlideGroupName(slideGroup)}
+        </Typography>
       </TimelineContent>
     </TimelineItem>
   );

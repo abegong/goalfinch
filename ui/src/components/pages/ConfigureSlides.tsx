@@ -93,10 +93,9 @@ const ConfigureSlides: React.FC = () => {
       <Timeline
         sx={{
         left: "0px",
-        marginLeft: "-200px",
           [`& .${timelineOppositeContentClasses.root}`]: {
-          width: '240px',
-          maxWidth: '240px',
+          width: '0px',
+          maxWidth: '0px',
           padding: '8px 8px',
           marginTop: 0,
           marginBottom: 0
@@ -130,8 +129,8 @@ const ConfigureSlides: React.FC = () => {
           }
         },
         [`& .${TimelineOppositeContent}`]: {
-          flex: '0 0 150px',
-          maxWidth: '150px',
+          // flex: '0 0 150px',
+          maxWidth: '0px',
           padding: '8px 8px',
           marginTop: 0,
           marginBottom: 0

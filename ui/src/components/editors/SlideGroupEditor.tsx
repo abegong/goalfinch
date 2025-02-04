@@ -9,7 +9,7 @@ import {
   Segment,
   SsidChart,
 } from '@mui/icons-material';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Card, CardContent } from '@mui/material';
+import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Card, CardContent, CardHeader } from '@mui/material';
 import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
 import { BulletEditor } from './BulletEditor';
@@ -142,6 +142,9 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 
   return (
     <Card className={styles['slide-group-editor-card']}>
+      <CardHeader
+        title={formatSlideType(type)}
+      />
       <CardContent>
         <div className={styles['slide-group-editor-header']}>
           <Typography variant="h6">{formatSlideType(type)}</Typography>
