@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -26,12 +26,14 @@ interface DeleteDialogState {
 }
 
 const ConfigureConnections: React.FC = () => {
-  const { connections, setConnections, dashboard, app } = useConfig();
+  const { connections, setConnections, dashboard, app, setDashboard, setApp } = useConfig();
   const [deleteDialog, setDeleteDialog] = useState<DeleteDialogState>({
     open: false,
     type: null,
     index: -1,
   });
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleBackendChange = (field: keyof BackendConfig) => 
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +107,54 @@ const ConfigureConnections: React.FC = () => {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
+
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file && file.type === 'application/json') {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const config = JSON.parse(event.target?.result as string);
+          
+          // Validate the config structure
+          if (config.connections && config.dashboard && config.app) {
+            setConnections(config.connections);
+            setDashboard(config.dashboard);
+            setApp(config.app);
+            setImportModalOpen(false);
+          } else {
+            alert('Invalid configuration file structure');
+          }
+        } catch (error) {
+          alert('Error parsing configuration file');
+        }
+      };
+      reader.readAsText(file);
+    } else {
+      alert('Please drop a JSON file');
+    }
+  }, [setConnections, setDashboard, setApp]);
 
   const SourceList = ({ type, title }: { type: 'pictureSources' | 'goalSources', title: string }) => (
     <Stack spacing={2}>
@@ -224,12 +274,50 @@ const ConfigureConnections: React.FC = () => {
             <Button variant="contained" onClick={handleExportConfig}>
               Export Configuration
             </Button>
-            <Button variant="contained">
+            <Button variant="contained" onClick={() => setImportModalOpen(true)}>
               Import Configuration
             </Button>
           </Stack>
         </CardContent>
       </Card>
+
+      <Dialog
+        open={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Import Configuration</DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              border: '2px dashed',
+              borderColor: isDragging ? 'primary.main' : 'grey.300',
+              borderRadius: 1,
+              p: 3,
+              mt: 2,
+              backgroundColor: isDragging ? 'action.hover' : 'background.paper',
+              textAlign: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
+              Drag and drop your configuration file here
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Only .json files are accepted
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setImportModalOpen(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
