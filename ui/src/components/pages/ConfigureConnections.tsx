@@ -27,6 +27,8 @@ import { SourceConfig, BackendConfig, ConnectionsConfig } from '../../types/conn
 import { useConfig } from '../../context/ConfigContext';
 import { LocalStorageService } from '../../services/storage';
 import { SourceList } from '../SourceList';
+import demoData from '../../data/demo_data';
+import { DashboardConfig } from '../../types/config';
 
 interface DeleteDialogState {
   open: boolean;
@@ -55,8 +57,15 @@ const defaultConfig = {
     goalSources: []
   },
   dashboard: {
-    slideGroups: []
-  },
+    slideGroups: [{
+      type: 'picture',
+      slides: [{
+        type: 'picture',
+        content: []
+      }],
+      captions: {}
+    }],
+  } as DashboardConfig,
   app: {
     appControlBar: {
       open: false,
@@ -211,10 +220,16 @@ const ConfigureConnections: React.FC = () => {
     reader.readAsText(file);
   }, [setConnections, setDashboard, setApp]);
 
-  const handleReset = () => {
+  const handleReset = (toDemoData: boolean) => {
     setConnections(defaultConfig.connections);
-    setDashboard(defaultConfig.dashboard);
-    setApp(defaultConfig.app);
+    let newDashboard: DashboardConfig = defaultConfig.dashboard;
+    if(toDemoData) {
+      newDashboard = {
+        slideGroups: demoData
+      }
+    }
+    setDashboard(newDashboard);
+    setApp(defaultConfig.app);    
     setResetModalOpen(false);
   };
 
@@ -309,7 +324,7 @@ const ConfigureConnections: React.FC = () => {
         <DialogActions>
           <Button onClick={() => setResetModalOpen(false)}>Cancel</Button>
           <Button
-            onClick={handleReset}
+            onClick={() => handleReset(true)}
             color="error"
             sx={{ 
               '&:hover': {
@@ -319,7 +334,20 @@ const ConfigureConnections: React.FC = () => {
               }
             }}
           >
-            Reset
+            Reset to demo configuration
+          </Button>
+          <Button
+            onClick={() => handleReset(false)}
+            color="error"
+            sx={{ 
+              '&:hover': {
+                backgroundColor: 'error.main',
+                color: 'white',
+                borderColor: 'error.main'
+              }
+            }}
+          >
+            Clear all configuration
           </Button>
         </DialogActions>
       </Dialog>

@@ -11,22 +11,6 @@ import {
   PictureSlideGroupConfig
 } from '../types/slide_groups';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const preprocessRowCounts = (data: any[]) => {
-  return data.map(d => ({
-      ...d,
-      value: 1
-  }));
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const preprocessRowValue = (data: any[], field: string) => {
-  return data.map(d => ({
-      ...d,
-      value: d[field]
-  }));
-};
-
 export const demoData: SlideGroupConfig[] = [
   {
     type: SlideType.BULLETS,
