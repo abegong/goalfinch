@@ -535,6 +535,13 @@ const ConfigureConnections: React.FC = () => {
               variant="outlined" 
               color="error" 
               onClick={() => setResetModalOpen(true)}
+              sx={{ 
+                '&:hover': {
+                  backgroundColor: 'error.main',
+                  color: 'white',
+                  borderColor: 'error.main'
+                }
+              }}
             >
               Reset Configuration
             </Button>
@@ -557,6 +564,13 @@ const ConfigureConnections: React.FC = () => {
           <Button
             onClick={handleReset}
             color="error"
+            sx={{ 
+              '&:hover': {
+                backgroundColor: 'error.main',
+                color: 'white',
+                borderColor: 'error.main'
+              }
+            }}            
           >
             Reset
           </Button>
