@@ -11,7 +11,7 @@ export const backendConfigSchema = z.object({
 });
 
 export const connectionsConfigSchema = z.object({
-  backend: backendConfigSchema,
+  backend: backendConfigSchema.nullable(),
   pictureSources: z.array(sourceConfigSchema),
   goalSources: z.array(sourceConfigSchema),
 });

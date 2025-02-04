@@ -33,7 +33,7 @@ export function validateStorageData<T>(key: string, data: T): T {
   } catch (error) {
     if (error instanceof z.ZodError) {
       throw new ValidationError(
-        `Invalid data for ${key}: ${error.errors.map(e => e.message).join(', ')}`,
+        `Invalid data for ${key}:\n${error.errors.map(e => `  - At ${e.path.join('.')}: ${e.message}`).join('\n')}`,
         error
       );
     }

@@ -5,10 +5,7 @@ import { ConfigContext } from './context/ConfigContext';
 
 const defaultConfig = {
   connections: {
-    backend: {
-      serverUrl: '',
-      serverPassword: '',
-    },
+    backend: null,
     pictureSources: [],
     goalSources: []
   },

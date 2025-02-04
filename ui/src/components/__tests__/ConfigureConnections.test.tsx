@@ -12,10 +12,7 @@ const mockSources = {
   goalSources: [
     { name: 'data-1', url: 'https://example.com/data' }
   ],
-  backend: {
-    serverUrl: '',
-    serverPassword: ''
-  }
+  backend: null
 };
 
 // Mock context setup

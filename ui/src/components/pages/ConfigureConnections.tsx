@@ -49,10 +49,7 @@ interface EditDialogState {
 
 const defaultConfig = {
   connections: {
-    backend: {
-      serverUrl: '',
-      serverPassword: '',
-    },
+    backend: null,
     pictureSources: [],
     goalSources: []
   },
@@ -90,9 +87,12 @@ const ConfigureConnections: React.FC = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setConnections(prev => ({
         ...prev,
-        backend: {
+        backend: prev.backend ? {
           ...prev.backend,
           [field]: event.target.value
+        } : {
+          serverUrl: field === 'serverUrl' ? event.target.value : '',
+          serverPassword: field === 'serverPassword' ? event.target.value : ''
         }
       }));
   };

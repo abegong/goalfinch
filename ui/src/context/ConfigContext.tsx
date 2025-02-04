@@ -35,19 +35,13 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     try {
       const stored = storage.load<ConnectionsConfig>(STORAGE_KEYS.CONNECTIONS);
       return stored || {
-        backend: {
-          serverUrl: '',
-          serverPassword: '',
-        },
+        backend: null,
         pictureSources: [],
         goalSources: []
       };
     } catch (error) {
       return {
-        backend: {
-          serverUrl: '',
-          serverPassword: '',
-        },
+        backend: null,
         pictureSources: [],
         goalSources: []
       };

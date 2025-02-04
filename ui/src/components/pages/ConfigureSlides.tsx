@@ -33,7 +33,7 @@ const ConfigureSlides: React.FC = () => {
           type,
           slide_count: 1,
           slides: [{ type: SlideType.BULLETS, content: [] }],
-          captions: [""]
+          captions: {}
         } as BulletSlideGroupConfig;
         break;
       case SlideType.CHART:
@@ -41,7 +41,7 @@ const ConfigureSlides: React.FC = () => {
           type,
           slide_count: 1,
           slides: [{ type: SlideType.CHART, content: { url: "", goal: 0, rounding: 0, units: "" } }],
-          captions: [""]
+          captions: {}
         } as ChartSlideGroupConfig;
         break;
       default:
@@ -49,7 +49,7 @@ const ConfigureSlides: React.FC = () => {
           type: SlideType.PICTURE,
           slide_count: 3,
           slides: Array(3).fill({ type: SlideType.PICTURE }),
-          captions: Array(3).fill("")
+          captions: {}
         } as PictureSlideGroupConfig;
     }
     
