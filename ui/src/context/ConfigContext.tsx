@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { demoData } from '../data/demo_data';
 import { DashboardConfig, AppConfig } from '../types/config';
 import { ConnectionsConfig } from '../types/connections';
-import { LocalStorageService, STORAGE_KEYS } from '../services/storage';
+import { LocalStorageService } from '../services/storage';
+import { STORAGE_KEYS } from '../constants';
 import { useNotification } from './NotificationContext';
 
 interface ConfigContextType {
