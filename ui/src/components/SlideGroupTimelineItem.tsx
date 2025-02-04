@@ -61,26 +61,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       }}
       onClick={onToggleExpanded}
     >
-      <TimelineOppositeContent
-        sx={{ cursor: 'pointer' }}
-      >
-        <Typography 
-          variant="body2" 
-          color="text.secondary"
-          className="timeline-text"
-          sx={{
-            display: 'inline-block',
-            margin: '1px -24px 0px 0px',
-            padding: '8px 32px 8px 12px',
-            borderRadius: '4px',
-            '&:hover': {
-              backgroundColor: 'rgba(0, 0, 0, 0.04)',
-            }
-          }}
-        >
-          {getSlideGroupName(slideGroup)}
-        </Typography>
-      </TimelineOppositeContent>
+      <TimelineOppositeContent />
       <TimelineSeparator>
         <TimelineDot>
             {getSlideIcon(slideGroup.type)}
@@ -101,21 +82,27 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       <TimelineContent>
         <Box
           sx={{
-            display: 'flex',
+            // display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
         >
-          <Typography>{getSlideGroupName(slideGroup)}</Typography>
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(index);
+          <Typography 
+            // variant="body2" 
+            color="text.secondary"
+            className="timeline-text"
+            sx={{
+              display: 'inline-block',
+              margin: '4px -24px 0px 0px',
+              padding: '8px 32px 8px 12px',
+              borderRadius: '4px',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              }
             }}
           >
-            <Delete />
-          </IconButton>
+            {getSlideGroupName(slideGroup)}
+          </Typography>
         </Box>
       </TimelineContent>
     </TimelineItem>
