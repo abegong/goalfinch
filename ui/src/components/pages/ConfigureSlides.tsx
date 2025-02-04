@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { Timeline, TimelineItem, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses, TimelineSeparator } from '@mui/lab';
-import { Box, Dialog, DialogContent } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import { Box, Dialog, DialogContent, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import { Add, FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@mui/icons-material';
 import { useConfig } from '../../context/ConfigContext';
 import { SlideType } from '../../types/slides';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
-import { PictureSlideGroupConfig, SlideGroupConfig, getSlideGroupName } from '../../types/slide_groups';
+import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig, getSlideGroupName } from '../../types/slide_groups';
 import SlideGroupEditor from '../editors/SlideGroupEditor';
 
 const ConfigureSlides: React.FC = () => {
@@ -24,11 +24,35 @@ const ConfigureSlides: React.FC = () => {
     setDashboard({ ...dashboard, slideGroups: newSlideGroupConfigs });
   }, [setDashboard, dashboard]);
 
-  const handleAddSlide = () => {
-    const newSlideGroupConfig = {
-      type : SlideType.PICTURE,
-      slide_count: 3,
-    } as PictureSlideGroupConfig;
+  const handleAddSlide = (type: SlideType) => {
+    let newSlideGroupConfig: SlideGroupConfig;
+    
+    switch (type) {
+      case SlideType.BULLETS:
+        newSlideGroupConfig = {
+          type,
+          slide_count: 1,
+          slides: [{ type: SlideType.BULLETS, content: [] }],
+          captions: [""]
+        } as BulletSlideGroupConfig;
+        break;
+      case SlideType.CHART:
+        newSlideGroupConfig = {
+          type,
+          slide_count: 1,
+          slides: [{ type: SlideType.CHART, content: { url: "", goal: 0, rounding: 0, units: "" } }],
+          captions: [""]
+        } as ChartSlideGroupConfig;
+        break;
+      default:
+        newSlideGroupConfig = {
+          type: SlideType.PICTURE,
+          slide_count: 3,
+          slides: Array(3).fill({ type: SlideType.PICTURE }),
+          captions: Array(3).fill("")
+        } as PictureSlideGroupConfig;
+    }
+    
     const newSlideGroups = [...dashboard.slideGroups, newSlideGroupConfig];
     handleSlideGroupOrderChange(newSlideGroups);
   };
@@ -92,48 +116,48 @@ const ConfigureSlides: React.FC = () => {
     <>
       <Timeline
         sx={{
-        left: "0px",
+          left: "0px",
           [`& .${timelineOppositeContentClasses.root}`]: {
           width: '0px',
           maxWidth: '0px',
           padding: '8px 8px',
           marginTop: 0,
           marginBottom: 0
-        },
-        [`& .MuiTimelineItem-root`]: {
-          minHeight: '80px',
-          '&[draggable="true"]': {
-            cursor: 'grab',
-            '&:active': {
-              cursor: 'grabbing'
+          },
+          [`& .MuiTimelineItem-root`]: {
+            minHeight: '80px',
+            '&[draggable="true"]': {
+              cursor: 'grab',
+              '&:active': {
+                cursor: 'grabbing'
+              }
+            },
+            '&.dragging': {
+              opacity: 0.5,
+              '& .timeline-text': {
+                backgroundColor: 'primary.main'
+              }
+            },
+            '&:hover': {
+              '& .timeline-text:not(:empty)': {
+                backgroundColor: 'primary.light',
+                color: 'common.white'
+              },
+              '& .MuiTimelineDot-root': {
+                transform: 'scale(1.1)',
+                backgroundColor: 'primary.light'
+              },
+              '& .MuiTimelineConnector-root': {
+                backgroundColor: 'primary.light'
+              }
             }
           },
-          '&.dragging': {
-            opacity: 0.5,
-            '& .timeline-text': {
-              backgroundColor: 'primary.main'
-            }
-          },
-          '&:hover': {
-            '& .timeline-text:not(:empty)': {
-              backgroundColor: 'primary.light',
-              color: 'common.white'
-            },
-            '& .MuiTimelineDot-root': {
-              transform: 'scale(1.1)',
-              backgroundColor: 'primary.light'
-            },
-            '& .MuiTimelineConnector-root': {
-              backgroundColor: 'primary.light'
-            }
-          }
-        },
-        [`& .${TimelineOppositeContent}`]: {
-          // flex: '0 0 150px',
-          maxWidth: '0px',
-          padding: '8px 8px',
-          marginTop: 0,
-          marginBottom: 0
+          [`& .${TimelineOppositeContent}`]: {
+            // flex: '0 0 150px',
+            maxWidth: '0px',
+            padding: '8px 8px',
+            marginTop: 0,
+            marginBottom: 0
           },
         }}
       >
@@ -153,26 +177,34 @@ const ConfigureSlides: React.FC = () => {
         ))}
         <TimelineItem>
           <TimelineOppositeContent />
-          <TimelineSeparator>
-            <TimelineDot
-            sx={{
-              p: 0,
-              borderRadius: '6px',
-              justifyContent: 'center',
-              backgroundColor: 'primary.main',
-              cursor: 'pointer',
-              transition: 'transform 0.2s, background-color 0.2s',
-              '&:hover': {
-                transform: 'scale(1.1)',
-                backgroundColor: 'primary.dark'
-              }
-            }}
-              onClick={handleAddSlide}
-            >
-              <Add fontSize="large"/>
-            </TimelineDot>
-          </TimelineSeparator>
-          <TimelineContent />
+          <TimelineContent>
+            <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
+              <SpeedDial
+                ariaLabel="Add slide group"
+                icon={<SpeedDialIcon />}
+                direction="right"
+                sx={{
+                  marginLeft: -3
+                }}
+              >
+                <SpeedDialAction
+                  icon={<FormatListBulleted />}
+                  tooltipTitle="Add Bullet List"
+                  onClick={(e) => handleAddSlide(SlideType.BULLETS)}
+                />
+                <SpeedDialAction
+                  icon={<Landscape />}
+                  tooltipTitle="Add Picture Slides"
+                  onClick={(e) => handleAddSlide(SlideType.PICTURE)}
+                />
+                <SpeedDialAction
+                  icon={<TimelineIcon />}
+                  tooltipTitle="Add Chart"
+                  onClick={(e) => handleAddSlide(SlideType.CHART)}
+                />
+              </SpeedDial>
+            </Box>
+          </TimelineContent>
         </TimelineItem>
       </Timeline>
 

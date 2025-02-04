@@ -148,35 +148,6 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       <CardContent>
         <div className={styles['slide-group-editor-header']}>
           <Typography variant="h6">{formatSlideType(type)}</Typography>
-          <div className={styles['slide-group-editor-actions']}>
-            <SpeedDial
-              ariaLabel="Slide group actions"
-              icon={<SpeedDialIcon icon={<Build />} />}
-              onClose={() => setIsSpeedDialOpen(false)}
-              onOpen={() => setIsSpeedDialOpen(true)}
-              open={isSpeedDialOpen}
-              direction="left"
-              className={styles['speed-dial']}
-            >
-              {slideTypes
-                .filter((t) => t !== type)
-                .map((t) => (
-                  <SpeedDialAction
-                    key={t}
-                    icon={getSlideIcon(t)}
-                    tooltipTitle={formatSlideType(t)}
-                    onClick={() => handleTypeChange(t)}
-                  />
-                ))}
-              {onDelete && (
-                <SpeedDialAction
-                  icon={<Delete />}
-                  tooltipTitle="Delete"
-                  onClick={() => setIsDeleteDialogOpen(true)}
-                />
-              )}
-            </SpeedDial>
-          </div>
         </div>
 
         {renderEditor()}
