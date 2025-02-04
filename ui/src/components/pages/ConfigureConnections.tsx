@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { SourceConfig, BackendConfig, ConnectionsConfig } from '../../types/connections';
+import { useConfig } from '../../context/ConfigContext';
 
 interface DeleteDialogState {
   open: boolean;
@@ -25,15 +26,7 @@ interface DeleteDialogState {
 }
 
 const ConfigureConnections: React.FC = () => {
-  const [connections, setConnections] = useState<ConnectionsConfig>({
-    backend: {
-      serverUrl: '',
-      serverPassword: '',
-    },
-    pictureSources: [],
-    goalSources: [],
-  });
-
+  const { connections, setConnections, dashboard, app } = useConfig();
   const [deleteDialog, setDeleteDialog] = useState<DeleteDialogState>({
     open: false,
     type: null,
@@ -93,6 +86,24 @@ const ConfigureConnections: React.FC = () => {
 
   const handleDeleteCancel = () => {
     setDeleteDialog({ open: false, type: null, index: -1 });
+  };
+
+  const handleExportConfig = () => {
+    const config = {
+      connections,
+      dashboard,
+      app
+    };
+    
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'goal-finch-config.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const SourceList = ({ type, title }: { type: 'pictureSources' | 'goalSources', title: string }) => (
@@ -210,7 +221,7 @@ const ConfigureConnections: React.FC = () => {
         />
         <CardContent sx={{ bgcolor: 'white' }}>
           <Stack spacing={2} alignItems="flex-start">
-            <Button variant="contained">
+            <Button variant="contained" onClick={handleExportConfig}>
               Export Configuration
             </Button>
             <Button variant="contained">
