@@ -159,8 +159,6 @@ const ConfigureSlides: React.FC = () => {
             sx={{
               p: 0,
               borderRadius: '6px',
-              width: '50px',
-              height: '50px',
               justifyContent: 'center',
               backgroundColor: 'primary.main',
               cursor: 'pointer',
@@ -172,7 +170,7 @@ const ConfigureSlides: React.FC = () => {
             }}
               onClick={handleAddSlide}
             >
-              <Add />
+              <Add fontSize="large"/>
             </TimelineDot>
           </TimelineSeparator>
           <TimelineContent />
