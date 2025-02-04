@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Timeline, TimelineItem, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses, TimelineSeparator } from '@mui/lab';
-import { Box, Dialog, DialogContent, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { Add, FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@mui/icons-material';
 import { useConfig } from '../../context/ConfigContext';
 import { SlideType } from '../../types/slides';

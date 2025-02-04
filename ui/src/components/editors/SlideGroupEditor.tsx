@@ -8,8 +8,28 @@ import {
   Build,
   Segment,
   SsidChart,
+  DeleteOutline,
+  Add,
+  SpaceBar
 } from '@mui/icons-material';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Card, CardContent, CardHeader } from '@mui/material';
+import { 
+  SpeedDial, 
+  SpeedDialAction, 
+  SpeedDialIcon, 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  DialogActions, 
+  Button, 
+  Typography, 
+  Card, 
+  CardContent, 
+  CardHeader,
+  TextField,
+  IconButton,
+  Box,
+  Paper
+} from '@mui/material';
 import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
 import { BulletEditor } from './BulletEditor';
@@ -62,6 +82,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
+  const [name, setName] = useState("Untitled Slide Group");
 
   useEffect(() => {
     if (onTransitionEnd) {
@@ -141,15 +162,47 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   };
 
   return (
-    <Card className={styles['slide-group-editor-card']}>
-      <CardHeader
-        title={formatSlideType(type)}
-      />
-      <CardContent>
-        <div className={styles['slide-group-editor-header']}>
-          <Typography variant="h6">{formatSlideType(type)}</Typography>
-        </div>
+    <>
+      <Box className={styles.slideGroupHeader}>
+        <TextField
+          variant="outlined"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className={styles.slideGroupName}
+          placeholder="Enter slide group name"
+        />
+        <Typography variant="h6" color="textSecondary">{formatSlideType(type)}</Typography>
+        <Box flexGrow={0.25} />
+        <IconButton 
+          onClick={() => setIsDeleteDialogOpen(true)}
+          className={styles.deleteButton}
+          size="small"
+        >
+          <Delete />
+        </IconButton>
+      </Box>
 
+      <Box className={styles.slideManagement}>
+        <Box className={styles.slideList}>
+          {config.slides?.map((slide, index) => (
+            <Paper
+              key={index}
+              className={styles.slideThumb}
+              elevation={1}
+            >
+              {getSlideIcon(slide.type)}
+            </Paper>
+          ))}
+          <IconButton 
+            className={styles.addSlideButton}
+            size="small"
+          >
+            <Add />
+          </IconButton>
+        </Box>
+      </Box>
+
+      <CardContent>
         {renderEditor()}
 
         <CollapsibleSection title="Captions">
@@ -174,33 +227,32 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
             />
           </div>
         </CollapsibleSection>
-
-        <Dialog
-          open={isDeleteDialogOpen}
-          onClose={() => setIsDeleteDialogOpen(false)}
-        >
-          <DialogTitle>Delete Slide Group</DialogTitle>
-          <DialogContent>
-            <Typography>
-              Are you sure you want to delete this slide group? This action cannot be
-              undone.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
-            <Button
-              onClick={() => {
-                setIsDeleteDialogOpen(false);
-                if (onDelete) onDelete();
-              }}
-              color="error"
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
       </CardContent>
-    </Card>
+
+      <Dialog
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Delete Slide Group?</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete this slide group? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+          <Button 
+            onClick={() => {
+              if (onDelete) onDelete();
+              setIsDeleteDialogOpen(false);
+            }} 
+            color="error"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
