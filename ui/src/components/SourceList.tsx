@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { SourceConfig } from '../../types/connections';
+import { SourceConfig } from '../types/connections';
 
 interface DeleteDialogState {
   open: boolean;

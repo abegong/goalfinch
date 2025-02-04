@@ -26,7 +26,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { SourceConfig, BackendConfig, ConnectionsConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
 import { LocalStorageService } from '../../services/storage';
-import { SourceList } from './SourceList';
+import { SourceList } from '../SourceList';
 
 interface DeleteDialogState {
   open: boolean;
