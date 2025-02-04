@@ -133,68 +133,93 @@ const ConfigureConnections: React.FC = () => {
   );
 
   return (
-    <Card sx={{ maxWidth: 800, margin: 'auto', mt: 4 }}>
-      <CardHeader
-        sx={{ 
-          bgcolor: 'rgb(255, 193, 5)',
-          py: 1
-        }}
-        title={
-          <Typography variant="h5" fontWeight="bold">
-            Configure Connections
-          </Typography>
-        }
-      />
-      <CardContent sx={{ bgcolor: 'white' }}>
-        <Stack spacing={4}>
-          <Stack spacing={2}>
-            <Typography variant="h6">Self-hosted Backend</Typography>
-            <TextField
-              label="Server URL"
-              size="small"
-              fullWidth
-              value={connections.backend.serverUrl}
-              onChange={handleBackendChange('serverUrl')}
-            />
-            <TextField
-              label="Server Password"
-              size="small"
-              fullWidth
-              type="password"
-              value={connections.backend.serverPassword}
-              onChange={handleBackendChange('serverPassword')}
-            />
+    <>
+      <Card sx={{ maxWidth: 800, margin: 'auto', mt: 4 }}>
+        <CardHeader
+          sx={{ 
+            bgcolor: 'rgb(255, 193, 5)',
+            py: 1
+          }}
+          title={
+            <Typography variant="h5" fontWeight="bold">
+              Configure Connections
+            </Typography>
+          }
+        />
+        <CardContent sx={{ bgcolor: 'white' }}>
+          <Stack spacing={4}>
+            <Stack spacing={2}>
+              <Typography variant="h6">Self-hosted Backend</Typography>
+              <TextField
+                label="Server URL"
+                size="small"
+                fullWidth
+                value={connections.backend.serverUrl}
+                onChange={handleBackendChange('serverUrl')}
+              />
+              <TextField
+                label="Server Password"
+                size="small"
+                fullWidth
+                type="password"
+                value={connections.backend.serverPassword}
+                onChange={handleBackendChange('serverPassword')}
+              />
+            </Stack>
+
+            <Divider />
+            <SourceList type="pictureSources" title="Pictures" />
+            
+            <Divider />
+            <SourceList type="goalSources" title="Goal Tracking" />
           </Stack>
+        </CardContent>
+        <Dialog
+          open={deleteDialog.open}
+          onClose={handleDeleteCancel}
+        >
+          <DialogTitle>Delete Source</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to delete this source? This action cannot be undone.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDeleteCancel}>Cancel</Button>
+            <Button
+              onClick={handleDeleteConfirm}
+              color="error"
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Card>
 
-          <Divider />
-          <SourceList type="pictureSources" title="Pictures" />
-          
-          <Divider />
-          <SourceList type="goalSources" title="Goal Tracking" />
-        </Stack>
-      </CardContent>
-
-      <Dialog
-        open={deleteDialog.open}
-        onClose={handleDeleteCancel}
-      >
-        <DialogTitle>Delete Source</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete this source? This action cannot be undone.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteCancel}>Cancel</Button>
-          <Button
-            onClick={handleDeleteConfirm}
-            color="error"
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Card>
+      <Card sx={{ maxWidth: 800, margin: 'auto', mt: 8 }}>
+        <CardHeader
+          sx={{ 
+            bgcolor: 'rgb(255, 193, 5)',
+            py: 1
+          }}
+          title={
+            <Typography variant="h5" fontWeight="bold">
+              Import / Export
+            </Typography>
+          }
+        />
+        <CardContent sx={{ bgcolor: 'white' }}>
+          <Stack spacing={2} alignItems="flex-start">
+            <Button variant="contained">
+              Export Configuration
+            </Button>
+            <Button variant="contained">
+              Import Configuration
+            </Button>
+          </Stack>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 
