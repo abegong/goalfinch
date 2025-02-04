@@ -363,14 +363,16 @@ const ConfigureConnections: React.FC = () => {
                   <TableCell>{source.url}</TableCell>
                   <TableCell align="right">
                     <IconButton 
-                      onClick={() => handleEditSource(type, index)}
                       size="small"
+                      onClick={() => handleEditSource(type, index)}
+                      data-testid={`edit-${source.name}`}
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton 
-                      onClick={() => removeSource(type, index)}
                       size="small"
+                      onClick={() => removeSource(type, index)}
+                      data-testid={`delete-${source.name}`}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -449,7 +451,7 @@ const ConfigureConnections: React.FC = () => {
               onClick={handleDeleteConfirm}
               color="error"
             >
-              Delete
+              Confirm
             </Button>
           </DialogActions>
         </Dialog>
@@ -469,14 +471,14 @@ const ConfigureConnections: React.FC = () => {
         />
         <CardContent sx={{ bgcolor: 'white' }}>
           <Stack spacing={2} alignItems="flex-start">
-            <Button variant="contained" onClick={handleExportConfig}>
+            <Button variant="outlined" onClick={handleExportConfig}>
               Export Configuration
             </Button>
-            <Button variant="contained" onClick={() => setImportModalOpen(true)}>
+            <Button variant="outlined" onClick={() => setImportModalOpen(true)}>
               Import Configuration
             </Button>
             <Button 
-              variant="contained" 
+              variant="outlined" 
               color="error" 
               onClick={() => setResetModalOpen(true)}
             >
@@ -571,7 +573,7 @@ const ConfigureConnections: React.FC = () => {
                 value={editDialog.source.name}
                 onChange={handleEditChange('name')}
                 error={!!editDialog.errors.name}
-                helperText={editDialog.errors.name || 'Use lowercase letters, numbers, and hyphens'}
+                helperText={editDialog.errors.name ? 'This name is already in use' : 'Use lowercase letters, numbers, and hyphens'}
               />
               <TextField
                 label="URL"

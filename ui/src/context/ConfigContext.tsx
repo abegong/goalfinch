@@ -12,7 +12,7 @@ interface ConfigContextType {
   setApp: React.Dispatch<React.SetStateAction<AppConfig>>;
 }
 
-const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
+export const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [dashboard, setDashboard] = useState<DashboardConfig>({
