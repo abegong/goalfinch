@@ -38,6 +38,10 @@ interface EditDialogState {
   type: 'pictureSources' | 'goalSources' | null;
   index: number;
   source: SourceConfig;
+  errors: {
+    name: string;
+    url: string;
+  };
 }
 
 const defaultConfig = {
@@ -74,7 +78,8 @@ const ConfigureConnections: React.FC = () => {
     open: false,
     type: null,
     index: -1,
-    source: { name: '', url: '' }
+    source: { name: '', url: '' },
+    errors: { name: '', url: '' }
   });
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -96,7 +101,8 @@ const ConfigureConnections: React.FC = () => {
       open: true,
       type,
       index,
-      source: { ...connections[type][index] }
+      source: { ...connections[type][index] },
+      errors: { name: '', url: '' }
     });
   };
 
@@ -105,38 +111,103 @@ const ConfigureConnections: React.FC = () => {
       open: false,
       type: null,
       index: -1,
-      source: { name: '', url: '' }
+      source: { name: '', url: '' },
+      errors: { name: '', url: '' }
     });
   };
 
+  const validateSourceConfig = (field: keyof SourceConfig, value: string): string => {
+    if (field === 'name') {
+      if (!value) {
+        return 'Name is required';
+      }
+      if (!/^[a-z0-9-]+$/.test(value)) {
+        return 'Name must contain only lowercase letters, numbers, and hyphens';
+      }
+      
+      // Check for duplicates, excluding the current source being edited
+      const isDuplicate = [...connections.pictureSources, ...connections.goalSources].some(
+        (source, idx) => {
+          // If we're editing an existing source, don't compare with itself
+          if (editDialog.type && idx === editDialog.index && 
+              ((editDialog.type === 'pictureSources' && idx < connections.pictureSources.length) ||
+               (editDialog.type === 'goalSources' && idx >= connections.pictureSources.length))) {
+            return false;
+          }
+          return source.name === value;
+        }
+      );
+      
+      if (isDuplicate) {
+        return 'This name is already in use';
+      }
+      return '';
+    }
+    if (field === 'url') {
+      if (!value) {
+        return 'URL is required';
+      }
+      try {
+        new URL(value);
+        return '';
+      } catch {
+        return 'Please enter a valid URL';
+      }
+    }
+    return '';
+  };
+
+  const handleEditChange = (field: keyof SourceConfig) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const error = validateSourceConfig(field, value);
+    
+    setEditDialog(prev => ({
+      ...prev,
+      source: {
+        ...prev.source,
+        [field]: value
+      },
+      errors: {
+        ...prev.errors,
+        [field]: error
+      }
+    }));
+  };
+
   const handleEditSave = () => {
+    // Validate both fields
+    const nameError = validateSourceConfig('name', editDialog.source.name);
+    const urlError = validateSourceConfig('url', editDialog.source.url);
+
+    if (nameError || urlError) {
+      setEditDialog(prev => ({
+        ...prev,
+        errors: {
+          name: nameError,
+          url: urlError
+        }
+      }));
+      return;
+    }
+
     if (editDialog.type && editDialog.index >= 0) {
+      const type = editDialog.type;
       setConnections(prev => {
-        const newSources = [...prev[editDialog.type!]];
+        const newSources = [...prev[type]];
         newSources[editDialog.index] = editDialog.source;
         return {
           ...prev,
-          [editDialog.type!]: newSources
+          [type]: newSources
         };
       });
     } else if (editDialog.type) {
-      const type = editDialog.type; // Capture the non-null type
+      const type = editDialog.type;
       setConnections(prev => ({
         ...prev,
         [type]: [...prev[type], editDialog.source]
       }));
     }
     handleEditCancel();
-  };
-
-  const handleEditChange = (field: keyof SourceConfig) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditDialog(prev => ({
-      ...prev,
-      source: {
-        ...prev.source,
-        [field]: event.target.value
-      }
-    }));
   };
 
   const handleSourceChange = (type: 'pictureSources' | 'goalSources', index: number, field: keyof SourceConfig) =>
@@ -351,7 +422,7 @@ const ConfigureConnections: React.FC = () => {
             <SourceList type="pictureSources" title="Pictures" />
             
             <Divider />
-            <SourceList type="goalSources" title="Goal Tracking" />
+            <SourceList type="goalSources" title="Data" />
           </Stack>
         </CardContent>
         <Dialog
@@ -484,16 +555,20 @@ const ConfigureConnections: React.FC = () => {
               fullWidth
               value={editDialog.source.name}
               onChange={handleEditChange('name')}
+              error={!!editDialog.errors.name}
+              helperText={editDialog.errors.name || 'Use lowercase letters, numbers, and hyphens'}
             />
             <TextField
               label="URL"
               fullWidth
               value={editDialog.source.url}
               onChange={handleEditChange('url')}
+              error={!!editDialog.errors.url}
+              helperText={editDialog.errors.url}
             />
             <Button 
               variant="outlined" 
-              disabled={!editDialog.source.url}
+              disabled={!editDialog.source.url || !!editDialog.errors.url}
               sx={{ alignSelf: 'flex-start' }}
             >
               Check Connection
@@ -502,7 +577,11 @@ const ConfigureConnections: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditCancel}>Cancel</Button>
-          <Button onClick={handleEditSave} variant="contained">
+          <Button 
+            onClick={handleEditSave} 
+            variant="contained"
+            disabled={!editDialog.source.name || !editDialog.source.url || !!editDialog.errors.name || !!editDialog.errors.url}
+          >
             {editDialog.index >= 0 && editDialog.type && editDialog.index < connections[editDialog.type].length 
               ? 'Save' 
               : 'Add'}
