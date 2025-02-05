@@ -6,28 +6,34 @@ import { BulletSlideConfig } from '../../types/slides';
 
 interface BulletEditorProps {
   config: BulletSlideGroupConfig;
+  selectedSlideIndex: number;
   onChange: (config: Partial<BulletSlideGroupConfig>) => void;
 }
 
 export const BulletEditor: React.FC<BulletEditorProps> = ({
   config,
+  selectedSlideIndex,
   onChange,
 }) => {
-  const handleSlideChange = (index: number, update: Partial<BulletSlideConfig>) => {
+  const handleSlideChange = (update: Partial<BulletSlideConfig>) => {
     const newSlides = [...(config.slides || [])];
-    newSlides[index] = { ...newSlides[index], ...update };
+    newSlides[selectedSlideIndex] = { ...newSlides[selectedSlideIndex], ...update };
     onChange({ slides: newSlides });
   };
 
+  // If there are no slides, don't render anything
+  if (!config.slides?.length) {
+    return null;
+  }
+
+  const selectedSlide = config.slides[selectedSlideIndex];
+
   return (
     <div>
-      {config.slides.map((slideConfig, index) => (
-        <BulletSlideEditor
-          key={index}
-          config={slideConfig}
-          onChange={(update) => handleSlideChange(index, update)}
-        />
-      ))}
+      <BulletSlideEditor
+        config={selectedSlide}
+        onChange={handleSlideChange}
+      />
     </div>
   );
 };

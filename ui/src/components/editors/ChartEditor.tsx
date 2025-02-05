@@ -7,27 +7,32 @@ import { SourceConfig } from '../../types/connections';
 
 interface ChartEditorProps {
   configs: ChartSlideConfig[];
+  selectedSlideIndex: number;
   captions?: Captions;
   onChange: (configs: ChartSlideConfig[]) => void;
 }
 
-export const ChartEditor: React.FC<ChartEditorProps> = ({ configs, captions, onChange }) => {
-  const handleSlideChange = (index: number, update: Partial<ChartSlideConfig>) => {
+export const ChartEditor: React.FC<ChartEditorProps> = ({ configs, selectedSlideIndex, captions, onChange }) => {
+  const handleSlideChange = (update: Partial<ChartSlideConfig>) => {
     const newConfigs = [...configs];
-    newConfigs[index] = { ...configs[index], ...update };
+    newConfigs[selectedSlideIndex] = { ...configs[selectedSlideIndex], ...update };
     onChange(newConfigs);
   };
 
+  // If there are no slides, don't render anything
+  if (!configs?.length) {
+    return null;
+  }
+
+  const selectedConfig = configs[selectedSlideIndex];
+
   return (
     <div>
-      {configs.map((config, index) => (
-        <ChartSlideEditor
-          key={index}
-          config={config}
-          captions={captions}
-          onChange={(update) => handleSlideChange(index, update)}
-        />
-      ))}
+      <ChartSlideEditor
+        config={selectedConfig}
+        captions={captions}
+        onChange={handleSlideChange}
+      />
     </div>
   );
 };

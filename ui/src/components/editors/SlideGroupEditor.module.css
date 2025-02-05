@@ -392,3 +392,12 @@ button:hover {
   border-color: #bdbdbd;
   background-color: #f5f5f5;
 }
+
+.selectedSlide {
+  border-color: #1976d2;
+  background-color: #e3f2fd;
+}
+
+.selectedSlide:hover {
+  background-color: #e3f2fd;
+}
