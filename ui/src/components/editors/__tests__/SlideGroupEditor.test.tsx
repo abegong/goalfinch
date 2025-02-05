@@ -48,37 +48,30 @@ describe('SlideGroupEditor', () => {
     });
   });
 
-  it('renders captions section', () => {
+  it('renders bullet list editor for bullet list slide groups', () => {
     const props = {
       type: SlideType.BULLETS,
       config: {
         ...defaultConfig,
-        captions: {
-          top_center: 'Top caption',
-          bottom_center: 'Bottom caption',
-          bottom_right: 'Bottom right caption'
-        },
       },
     };
     render(<SlideGroupEditor {...props} onChange={jest.fn()} />);
     
-    expect(screen.getByDisplayValue('Top caption')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Bottom caption')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Bottom right caption')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Test bullet point')).toBeInTheDocument();
   });
 
-  it('updates captions when edited', () => {
+  it('updates bullet points when edited', () => {
     const onChange = jest.fn();
     render(<SlideGroupEditor type={SlideType.BULLETS} config={defaultConfig} onChange={onChange} />);
     
-    const input = screen.getByPlaceholderText('Top Center');
-    fireEvent.change(input, { target: { value: 'New caption' } });
+    const input = screen.getByDisplayValue('Test bullet point');
+    fireEvent.change(input, { target: { value: 'New bullet point' } });
     
     expect(onChange).toHaveBeenCalledWith({
-      captions: {
-        ...defaultConfig.captions,
-        top_center: 'New caption'
-      }
+      slides: [{
+        type: SlideType.BULLETS,
+        bullets: ['New bullet point']
+      }]
     });
   });
 
