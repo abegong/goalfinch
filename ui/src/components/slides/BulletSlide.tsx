@@ -29,7 +29,7 @@ const BulletSlide: React.FC<BulletSlideProps> = ({ slideConfig, text, ...slidePr
           margin: 0,
           listStyleType: 'square',
         }}>
-          {slideConfig.content.map((item: string, index: number) => (
+          {slideConfig.bullets.map((item: string, index: number) => (
             <li 
               key={index}
               style={{

@@ -1,15 +1,6 @@
 import { z } from 'zod';
 import { SlideType } from '../types/slides';
 
-export const chartSlideContentSchema = z.object({
-  url: z.string().url(),
-  goal: z.number(),
-  rounding: z.number().int().min(0),
-  units: z.string(),
-  asOfDate: z.string().optional(),
-  caption: z.string().optional(),
-});
-
 export const captionsSchema = z.object({
   top_center: z.string().optional(),
   bottom_center: z.string().optional(),
@@ -19,17 +10,21 @@ export const captionsSchema = z.object({
 
 export const bulletSlideSchema = z.object({
   type: z.literal(SlideType.BULLETS),
-  content: z.array(z.string()),
+  bullets: z.array(z.string()),
 });
 
 export const chartSlideSchema = z.object({
   type: z.literal(SlideType.CHART),
-  content: chartSlideContentSchema,
+  source: z.string(),
+  goal: z.number(),
+  rounding: z.number().int().min(0),
+  units: z.string(),
+  title: z.string().optional(),
+  asOfDate: z.string().optional(),
 });
 
 export const pictureSlideSchema = z.object({
   type: z.literal(SlideType.PICTURE),
-  content: z.unknown().optional(),
 });
 
 export const slideSchema = z.discriminatedUnion('type', [
@@ -39,6 +34,7 @@ export const slideSchema = z.discriminatedUnion('type', [
 ]);
 
 export const baseSlideGroupSchema = z.object({
+  name: z.string(),
   type: z.nativeEnum(SlideType),
   captions: captionsSchema,
 });
@@ -55,6 +51,8 @@ export const chartSlideGroupSchema = baseSlideGroupSchema.extend({
 
 export const pictureSlideGroupSchema = baseSlideGroupSchema.extend({
   type: z.literal(SlideType.PICTURE),
+  source: z.string(),
+  slide_count: z.number().int().min(1),
   slides: z.array(pictureSlideSchema),
 });
 

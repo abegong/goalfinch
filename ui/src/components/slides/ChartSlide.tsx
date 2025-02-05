@@ -20,7 +20,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
     const fetchData = async () => {
       try {
         setLoading(true);
-        const chartData = await loadChartData(slideConfig.content.url, slideConfig.content.asOfDate);
+        const chartData = await loadChartData(slideConfig.source, slideConfig.asOfDate);
         setData(chartData);
         setError(null);
       } catch (err) {
@@ -31,7 +31,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
     };
 
     fetchData();
-  }, [slideConfig.content.url, slideConfig.content.asOfDate]);
+  }, [slideConfig.source, slideConfig.asOfDate]);
 
   console.log(slideConfig);
 
@@ -52,7 +52,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
           mt: '10%'  // Add margin to move everything down
         }}
       >
-        {slideConfig.content.caption && (
+        {slideConfig.title && (
           <Typography 
             variant="h4" 
             align="center"
@@ -62,7 +62,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
               fontWeight: 500
             }}
           >
-            {slideConfig.content.caption}
+            {slideConfig.title}
           </Typography>
         )}
         {loading ? (
@@ -72,10 +72,10 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
         ) : data ? (
           <Chart 
             data={data} 
-            goal={slideConfig.content.goal}
-            rounding={slideConfig.content.rounding}
-            units={slideConfig.content.units}
-            asOfDate={slideConfig.content.asOfDate}
+            goal={slideConfig.goal}
+            rounding={slideConfig.rounding}
+            units={slideConfig.units}
+            asOfDate={slideConfig.asOfDate}
           />
         ) : null}
       </Box>

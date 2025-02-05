@@ -98,7 +98,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           type: SlideType.BULLETS,
           slides: [{
             type: SlideType.BULLETS,
-            content: [''],
+            bullets: [''],
           }],
         };
         break;
@@ -107,12 +107,12 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           type: SlideType.CHART,
           slides: [{
             type: SlideType.CHART,
-            content: {
-              url: '',
-              goal: 0,
-              rounding: 0,
-              units: '',
-            }
+            source: '',
+            goal: 0,
+            rounding: 0,
+            units: '',
+            asOfDate: '',
+            title: '',
           }],
         };
         break;
@@ -120,6 +120,11 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         newConfig = {
           type: SlideType.PICTURE,
           slide_count: 1,
+          source: '',
+          slides: [{
+            type: SlideType.PICTURE,
+          }],
+          captions: {}
         };
         break;
       default:

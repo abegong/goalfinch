@@ -2,6 +2,9 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import App from './App';
 import { ConfigContext } from './context/ConfigContext';
+import { SlideType } from './types/slides';
+import { BulletSlideGroupConfig } from './types/slide_groups';
+import { DashboardConfig } from './types/config';
 
 const defaultConfig = {
   connections: {
@@ -10,8 +13,16 @@ const defaultConfig = {
     goalSources: []
   },
   dashboard: {
-    slideGroups: []
-  },
+    slideGroups: [{
+      type: SlideType.BULLETS as const,
+      name: "Bullet Slides",
+      slides: [{
+        type: SlideType.BULLETS as const,
+        bullets: ['Test bullet point', 'Another test bullet point']
+      }],
+      captions: {}
+    } as BulletSlideGroupConfig]
+  } as DashboardConfig,
   app: {
     appControlBar: {
       open: false,

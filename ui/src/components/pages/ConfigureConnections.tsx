@@ -6,26 +6,14 @@ import {
   Stack,
   Typography,
   Button,
-  IconButton,
   Box,
-  Divider,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { SourceConfig, BackendConfig, ConnectionsConfig } from '../../types/connections';
+import { SourceConfig, BackendConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
-import { LocalStorageService } from '../../services/storage';
 import { SourceList } from '../SourceList';
 import demoData from '../../data/demo_data';
 import { DashboardConfig } from '../../types/config';
@@ -58,10 +46,9 @@ const defaultConfig = {
       type: 'picture',
       slides: [{
         type: 'picture',
-        content: []
       }],
       captions: {}
-    }],
+    }]
   } as DashboardConfig,
   app: {
     appControlBar: {

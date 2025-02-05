@@ -42,17 +42,17 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   onChange,
 }) => {
   const handleBulletChange = (index: number, value: string) => {
-    const newContent = [...(config.content || [])];
+    const newContent = [...(config.bullets || [])];
     newContent[index] = value;
-    onChange({ content: newContent });
+    onChange({ bullets: newContent });
   };
 
   const handleDeleteBullet = (index: number) => {
-    const newContent = (config.content || []).filter((_, i) => i !== index);
-    onChange({ content: newContent });
+    const newContent = (config.bullets || []).filter((_, i) => i !== index);
+    onChange({ bullets: newContent });
     
     // If we just deleted the last bullet, focus the new last bullet
-    if (index === (config.content || []).length - 1 && index > 0) {
+    if (index === (config.bullets || []).length - 1 && index > 0) {
       setTimeout(() => {
         const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
         const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
@@ -68,18 +68,18 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const newContent = [...(config.content || [])];
+      const newContent = [...(config.bullets || [])];
       newContent.splice(index + 1, 0, '');
-      onChange({ content: newContent });
+      onChange({ bullets: newContent });
       // Focus the new input after React re-renders
       setTimeout(() => {
         const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
         const nextInput = inputs[index + 1] as HTMLInputElement;
         if (nextInput) nextInput.focus();
       }, 0);
-    } else if ((e.key === 'Backspace' || e.key === 'Delete') && (config.content || [])[index] === '') {
+    } else if ((e.key === 'Backspace' || e.key === 'Delete') && (config.bullets || [])[index] === '') {
       e.preventDefault();
-      if ((config.content || []).length > 1) {
+      if ((config.bullets || []).length > 1) {
         handleDeleteBullet(index);
       }
     }
@@ -88,7 +88,7 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   return (
     <CollapsibleSection title="Bullet List">
       <div className={styles['bullet-list']}>
-        {(config.content || []).map((bullet, index) => (
+        {(config.bullets || []).map((bullet, index) => (
           <div key={index} className={styles['bullet-row']}>
             <input
               type="text"

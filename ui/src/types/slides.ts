@@ -23,23 +23,10 @@ export const slideTypes = [
 ]
 
 /**
- * Interface for the content of a chart slide.
- */
-export interface ChartSlideContent {
-  url: string;
-  goal: number;
-  rounding: number;
-  units: string;
-  asOfDate?: string;
-  caption?: string;
-}
-
-/**
  * Base slide interface that all specific slide types must implement.
  */
 export interface BaseSlideConfig {
   type: SlideType;
-  content?: unknown;
 }
 
 /**
@@ -47,7 +34,7 @@ export interface BaseSlideConfig {
  */
 export interface BulletSlideConfig extends BaseSlideConfig {
   type: SlideType.BULLETS;
-  content: string[];
+  bullets: string[];
 }
 
 /**
@@ -55,7 +42,14 @@ export interface BulletSlideConfig extends BaseSlideConfig {
  */
 export interface ChartSlideConfig extends BaseSlideConfig {
   type: SlideType.CHART;
-  content: ChartSlideContent;
+  source: string;
+
+  title?: string;
+  goal: number;
+  rounding: number;
+  units: string;
+
+  asOfDate?: string;
 }
 
 /**

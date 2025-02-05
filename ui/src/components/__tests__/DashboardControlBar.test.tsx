@@ -1,14 +1,15 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import DashboardControlBar from '../DashboardControlBar';
-import { SlideType } from '../../types/slides';
 import { SlideGroupConfig } from '../../types/slide_groups';
+import { SlideType } from '../../types/slides';
 
 describe('DashboardControlBar', () => {
   test('handles slide groups with undefined captions', () => {
     const mockSlideGroups: SlideGroupConfig[] = [{
       type: SlideType.BULLETS,
-      slides: [{ type: SlideType.BULLETS, content: ['Test bullet'] }],
+      name: "Test Bullet Group",
+      slides: [{ type: SlideType.BULLETS, bullets: ['Test bullet'] }],
       // Missing captions field to recreate the error
     } as SlideGroupConfig];
 
@@ -34,7 +35,8 @@ describe('DashboardControlBar', () => {
   test('uses available caption from any position', () => {
     const mockSlideGroups: SlideGroupConfig[] = [{
       type: SlideType.BULLETS,
-      slides: [{ type: SlideType.BULLETS, content: ['Test bullet'] }],
+      name: "Test Bullet Group",
+      slides: [{ type: SlideType.BULLETS, bullets: ['Test bullet'] }],
       captions: {
         bottom_right: 'Bottom Right Caption',
       }

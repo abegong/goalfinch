@@ -31,22 +31,30 @@ const ConfigureSlides: React.FC = () => {
       case SlideType.BULLETS:
         newSlideGroupConfig = {
           type,
-          slide_count: 1,
-          slides: [{ type: SlideType.BULLETS, content: [] }],
+          name: "",
+          slides: [{ type: SlideType.BULLETS, bullets: [] }],
           captions: {}
         } as BulletSlideGroupConfig;
         break;
       case SlideType.CHART:
         newSlideGroupConfig = {
           type,
-          slide_count: 1,
-          slides: [{ type: SlideType.CHART, content: { url: "", goal: 0, rounding: 0, units: "" } }],
+          name: "",
+          slides: [{ 
+            type: SlideType.CHART, 
+            source: "", 
+            goal: 0, 
+            rounding: 0, 
+            units: "" 
+          }],
           captions: {}
         } as ChartSlideGroupConfig;
         break;
       default:
         newSlideGroupConfig = {
           type: SlideType.PICTURE,
+          name: "",
+          source: "",
           slide_count: 3,
           slides: Array(3).fill({ type: SlideType.PICTURE }),
           captions: {}

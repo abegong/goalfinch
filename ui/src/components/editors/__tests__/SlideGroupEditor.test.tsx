@@ -6,9 +6,10 @@ import { BulletSlideGroupConfig } from '../../../types/slide_groups';
 
 const defaultConfig = {
   type: SlideType.BULLETS,
+  name: "Test Bullet Group",
   slides: [{
     type: SlideType.BULLETS,
-    content: ['Test bullet point']
+    bullets: ['Test bullet point']
   }],
   captions: {
     top_center: '',
@@ -42,7 +43,7 @@ describe('SlideGroupEditor', () => {
     expect(onChange).toHaveBeenCalledWith({
       slides: [{
         type: SlideType.BULLETS,
-        content: ['Test bullet point updated']
+        bullets: ['Test bullet point updated']
       }]
     });
   });
@@ -94,5 +95,4 @@ describe('SlideGroupEditor', () => {
     // Should still render without crashing
     expect(screen.getByRole('heading', { level: 6, name: 'Bullet List' })).toBeInTheDocument();
   });
-
 });

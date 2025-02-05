@@ -25,6 +25,7 @@ export interface Captions {
  * Base interface for all editor configurations.
  */
 export interface BaseSlideGroupConfig {
+  name: string;
   type: SlideType;
   captions: Captions;
 }
@@ -51,6 +52,7 @@ export interface ChartSlideGroupConfig extends BaseSlideGroupConfig {
 export interface PictureSlideGroupConfig extends BaseSlideGroupConfig {
   type: SlideType.PICTURE;
   slide_count: number;
+  source: string;
   slides: PictureSlideConfig[];
 }
 

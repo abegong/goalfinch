@@ -52,15 +52,15 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
         <input
           id="data-url"
           type="text"
-          value={config.content.url}
-          onChange={(e) => handleChange({ content: { ...config.content, url: e.target.value } })}
+          value={config.source}
+          onChange={(e) => handleChange({ source: e.target.value })}
         />
         <label htmlFor="goal">Goal Value</label>
         <input
           id="goal"
           type="number"
-          value={config.content.goal}
-          onChange={(e) => handleChange({ content: { ...config.content, goal: Number(e.target.value) } })}
+          value={config.goal}
+          onChange={(e) => handleChange({ goal: Number(e.target.value) })}
         />
         <label htmlFor="rounding">Decimal Places</label>
         <input
@@ -68,15 +68,15 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
           type="number"
           min="0"
           max="10"
-          value={config.content.rounding}
-          onChange={(e) => handleChange({ content: { ...config.content, rounding: Number(e.target.value) } })}
+          value={config.rounding}
+          onChange={(e) => handleChange({ rounding: Number(e.target.value) })}
         />
         <label htmlFor="units">Units</label>
         <input
           id="units"
           type="text"
-          value={config.content.units}
-          onChange={(e) => handleChange({ content: { ...config.content, units: e.target.value } })}
+          value={config.units}
+          onChange={(e) => handleChange({ units: e.target.value })}
         />
       </div>
     </CollapsibleSection>
