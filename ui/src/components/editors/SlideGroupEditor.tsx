@@ -232,7 +232,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       <CardContent>
         {renderEditor()}
 
-        <CollapsibleSection title="Captions">
+        {/* <CollapsibleSection title="Captions">
           <div className={styles['caption-config']}>
             <input
               type="text"
@@ -253,7 +253,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               onChange={(e) => onChange({ captions: { ...config.captions, bottom_right: e.target.value } })}
             />
           </div>
-        </CollapsibleSection>
+        </CollapsibleSection> */}
       </CardContent>
 
       <Dialog

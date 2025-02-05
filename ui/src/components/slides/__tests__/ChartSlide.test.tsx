@@ -10,6 +10,10 @@ describe('ChartSlide', () => {
   const mockSlideConfig = {
     type: SlideType.CHART as const,
     source: 'test.csv',
+    csv_extraction: {
+      date_column: 'date',
+      value_column: 'value'
+    },
     goal: 100,
     rounding: 1,
     units: 'points'
