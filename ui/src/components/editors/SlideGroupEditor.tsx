@@ -147,6 +147,49 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
     setIsSpeedDialOpen(false);
   };
 
+  const handleAddSlide = () => {
+    let bulletConfig: BulletSlideGroupConfig;
+    let chartConfig: ChartSlideGroupConfig;
+    let pictureConfig: PictureSlideGroupConfig;
+    
+    switch (type) {
+      case SlideType.BULLETS:
+        bulletConfig = config as BulletSlideGroupConfig;
+        onChange({
+          slides: [...(bulletConfig.slides || []), {
+            type: SlideType.BULLETS,
+            bullets: ['']
+          }]
+        } as Partial<BulletSlideGroupConfig>);
+        break;
+      case SlideType.CHART:
+        chartConfig = config as ChartSlideGroupConfig;
+        onChange({
+          slides: [...(chartConfig.slides || []), {
+            type: SlideType.CHART,
+            source: '',
+            csv_extraction: null,
+            goal: 0,
+            rounding: 0,
+            units: '',
+            asOfDate: '',
+            title: '',
+          }]
+        } as Partial<ChartSlideGroupConfig>);
+        break;
+      case SlideType.PICTURE:
+        pictureConfig = config as PictureSlideGroupConfig;
+        onChange({
+          slides: [...(pictureConfig.slides || []), {
+            type: SlideType.PICTURE,
+          }]
+        } as Partial<PictureSlideGroupConfig>);
+        break;
+      default:
+        throw new Error(`Unsupported slide type: ${type}`);
+    }
+  };
+
   const renderEditor = () => {
     switch (type) {
       case SlideType.BULLETS:
@@ -223,6 +266,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           <IconButton 
             className={styles.addSlideButton}
             size="small"
+            onClick={handleAddSlide}
           >
             <Add />
           </IconButton>
