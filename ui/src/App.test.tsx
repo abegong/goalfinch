@@ -10,7 +10,7 @@ const defaultConfig = {
   connections: {
     backend: null,
     pictureSources: [],
-    goalSources: []
+    dataSources: []
   },
   dashboard: {
     slideGroups: [{

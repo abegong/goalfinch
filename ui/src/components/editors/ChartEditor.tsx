@@ -1,9 +1,9 @@
-import React from 'react';
-import { CollapsibleSection } from './CollapsibleSection';
+import React, { useContext } from 'react';
 import { ChartSlideConfig } from '../../types/slides';
 import { Captions } from '../../types/slide_groups';
-import styles from './SlideGroupEditor.module.css';
-import { Box, TextField, Typography, Stack, Divider } from '@mui/material';
+import { Box, TextField, Typography, Stack, Autocomplete } from '@mui/material';
+import { ConfigContext } from '../../context/ConfigContext';
+import { SourceConfig } from '../../types/connections';
 
 interface ChartEditorProps {
   configs: ChartSlideConfig[];
@@ -42,8 +42,16 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
   config,
   onChange,
 }) => {
-  const handleChange = (update: Partial<ChartSlideConfig>) => {
-    onChange({ ...config, ...update });
+  const context = useContext(ConfigContext);
+  
+  if (!context) {
+    throw new Error('ChartSlideEditor must be used within a ConfigProvider');
+  }
+  
+  const { connections } = context;
+
+  const handleChange = (updates: Partial<ChartSlideConfig>) => {
+    onChange(updates);
   };
 
   return (
@@ -56,14 +64,23 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
       }}>
         <Typography variant="subtitle1" sx={{ mb: 2 }}>Data Configuration</Typography>
         <Stack spacing={2}>
-          <TextField
+          <Autocomplete<SourceConfig>
             id="source"
-            fullWidth
-            label="Source"
-            variant="outlined"
-            size="small"
-            value={config.source}
-            onChange={(e) => handleChange({ source: e.target.value })}
+            options={connections.dataSources}
+            getOptionLabel={(option: SourceConfig) => option.name}
+            value={connections.dataSources.find((source: SourceConfig) => source.url === config.source) || null}
+            onChange={(_, newValue) => {
+              handleChange({ source: newValue?.url || '' });
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Source"
+                variant="outlined"
+                size="small"
+                fullWidth
+              />
+            )}
           />
                     
           <TextField

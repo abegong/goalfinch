@@ -20,13 +20,13 @@ import { DashboardConfig } from '../../types/config';
 
 interface DeleteDialogState {
   open: boolean;
-  type: 'pictureSources' | 'goalSources';
+  type: 'pictureSources' | 'dataSources';
   index: number;
 }
 
 interface EditDialogState {
   open: boolean;
-  type: 'pictureSources' | 'goalSources' | null;
+  type: 'pictureSources' | 'dataSources' | null;
   index: number;
   source: SourceConfig;
   errors: {
@@ -39,7 +39,7 @@ const defaultConfig = {
   connections: {
     backend: null,
     pictureSources: [],
-    goalSources: []
+    dataSources: []
   },
   dashboard: {
     slideGroups: [{
@@ -87,7 +87,7 @@ const ConfigureConnections: React.FC = () => {
       }));
   };
 
-  const handleSourcesChange = (type: 'pictureSources' | 'goalSources', newSources: SourceConfig[]) => {
+  const handleSourcesChange = (type: 'pictureSources' | 'dataSources', newSources: SourceConfig[]) => {
     setConnections(prev => ({
       ...prev,
       [type]: newSources
@@ -254,9 +254,9 @@ const ConfigureConnections: React.FC = () => {
             />
 
             <SourceList 
-              type="goalSources" 
+              type="dataSources" 
               title="Data" 
-              sources={connections.goalSources}
+              sources={connections.dataSources}
               onSourcesChange={handleSourcesChange}
             />
           </Stack>

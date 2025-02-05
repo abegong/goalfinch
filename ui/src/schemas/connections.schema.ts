@@ -13,7 +13,7 @@ export const backendConfigSchema = z.object({
 export const connectionsConfigSchema = z.object({
   backend: backendConfigSchema.nullable(),
   pictureSources: z.array(sourceConfigSchema),
-  goalSources: z.array(sourceConfigSchema),
+  dataSources: z.array(sourceConfigSchema),
 });
 
 export type ConnectionsConfigSchemaType = z.infer<typeof connectionsConfigSchema>;

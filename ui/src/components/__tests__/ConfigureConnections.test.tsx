@@ -9,7 +9,7 @@ const mockSources = {
   pictureSources: [
     { name: 'pictures-1', url: 'https://example.com/pics' }
   ],
-  goalSources: [
+  dataSources: [
     { name: 'data-1', url: 'https://example.com/data' }
   ],
   backend: null
@@ -187,7 +187,7 @@ describe('ConfigureConnections', () => {
         connections: {
           ...mockSources,
           pictureSources: [],
-          goalSources: []
+          dataSources: []
         }
       });
       

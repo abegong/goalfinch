@@ -37,13 +37,13 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       return stored || {
         backend: null,
         pictureSources: [],
-        goalSources: []
+        dataSources: []
       };
     } catch (error) {
       return {
         backend: null,
         pictureSources: [],
-        goalSources: []
+        dataSources: []
       };
     }
   });

@@ -24,5 +24,5 @@ export interface BackendConfig {
 export interface ConnectionsConfig {
   backend: BackendConfig | null;
   pictureSources: SourceConfig[];
-  goalSources: SourceConfig[];
+  dataSources: SourceConfig[];
 }
