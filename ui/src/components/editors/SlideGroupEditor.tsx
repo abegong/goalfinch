@@ -171,9 +171,14 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           className={styles.slideGroupName}
           placeholder="Enter slide group name"
         />
-        <Typography variant="h6" color="textSecondary">{formatSlideType(type)}</Typography>
+        <Box sx={{ ml: 2, mr: 1 }} color="textSecondary">
+          {getSlideIcon(type)}
+        </Box>
+        <Typography variant="h6" color="textSecondary">
+          {formatSlideType(type)}
+        </Typography>
         <Box flexGrow={0.25} />
-        <IconButton 
+        <IconButton
           onClick={() => setIsDeleteDialogOpen(true)}
           className={styles.deleteButton}
           size="small"
