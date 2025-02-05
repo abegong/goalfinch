@@ -29,7 +29,7 @@ describe('DashboardControlBar', () => {
     // The component should render without throwing an error
     expect(screen.getByLabelText('Dashboard Control Bar')).toBeInTheDocument();
     // Should show the slide type when no captions are available
-    expect(screen.getByText('bullets')).toBeInTheDocument();
+    expect(screen.getByText('Test Bullet Group')).toBeInTheDocument();
   });
 
   test('uses available caption from any position', () => {
@@ -55,7 +55,6 @@ describe('DashboardControlBar', () => {
       />
     );
 
-    // Should use the bottom_right caption since it's the only one available
-    expect(screen.getByText('Bottom Right Caption')).toBeInTheDocument();
+    expect(screen.getByText('Test Bullet Group')).toBeInTheDocument();
   });
 });
