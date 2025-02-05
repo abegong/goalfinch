@@ -367,6 +367,7 @@ button:hover {
   cursor: pointer;
   transition: all 0.2s ease;
   border: 2px solid transparent;
+  position: relative;
 }
 
 .slideThumb:hover {
@@ -400,4 +401,25 @@ button:hover {
 
 .selectedSlide:hover {
   background-color: #e3f2fd;
+}
+
+.deleteSlideButton {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 1;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.slideThumb:hover .deleteSlideButton {
+  opacity: 1;
+}
+
+.deleteSlideButton svg {
+  color: #666;
+}
+
+.deleteSlideButton:hover svg {
+  color: #f44336;
 }

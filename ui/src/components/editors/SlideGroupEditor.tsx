@@ -83,6 +83,9 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
   const [name, setName] = useState(config.name || "Untitled Slide Group");
+  const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
+  const [slideToDelete, setSlideToDelete] = useState<number | null>(null);
+  const [isDeleteSlideDialogOpen, setIsDeleteSlideDialogOpen] = useState(false);
 
   // Add keyboard event handler for Enter key
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -190,12 +193,60 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
     }
   };
 
+  const handleDeleteSlide = (indexToDelete: number) => {
+    setSlideToDelete(indexToDelete);
+    setIsDeleteSlideDialogOpen(true);
+  };
+
+  const confirmDeleteSlide = () => {
+    if (slideToDelete === null) return;
+
+    // Don't allow deleting the last slide
+    if (!config.slides || config.slides.length <= 1) {
+      return;
+    }
+
+    // Create new slides array without the deleted slide
+    switch (type) {
+      case SlideType.BULLETS: {
+        const bulletConfig = config as BulletSlideGroupConfig;
+        const newSlides = bulletConfig.slides.filter((_: BulletSlideConfig, index: number) => index !== slideToDelete);
+        onChange({ slides: newSlides } as Partial<BulletSlideGroupConfig>);
+        break;
+      }
+      case SlideType.CHART: {
+        const chartConfig = config as ChartSlideGroupConfig;
+        const newSlides = chartConfig.slides.filter((_: ChartSlideConfig, index: number) => index !== slideToDelete);
+        onChange({ slides: newSlides } as Partial<ChartSlideGroupConfig>);
+        break;
+      }
+      case SlideType.PICTURE: {
+        const pictureConfig = config as PictureSlideGroupConfig;
+        const newSlides = pictureConfig.slides.filter((_: PictureSlideConfig, index: number) => index !== slideToDelete);
+        onChange({ slides: newSlides } as Partial<PictureSlideGroupConfig>);
+        break;
+      }
+      default:
+        throw new Error(`Unsupported slide type: ${type}`);
+    }
+    
+    // Update the selected slide index if needed
+    if (selectedSlideIndex >= slideToDelete && selectedSlideIndex > 0) {
+      setSelectedSlideIndex(selectedSlideIndex - 1);
+    }
+
+    // Close the dialog and reset the slideToDelete
+    setIsDeleteSlideDialogOpen(false);
+    setSlideToDelete(null);
+  };
+
   const renderEditor = () => {
     switch (type) {
       case SlideType.BULLETS:
         return (
           <BulletEditor
             config={config as BulletSlideGroupConfig}
+            selectedSlideIndex={selectedSlideIndex}
             onChange={onChange}
           />
         );
@@ -203,6 +254,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         return (
           <ChartEditor
             configs={(config as ChartSlideGroupConfig).slides}
+            selectedSlideIndex={selectedSlideIndex}
             onChange={(newSlides) => {
               onChange({
                 slides: newSlides
@@ -257,10 +309,34 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           {config.slides?.map((slide, index) => (
             <Paper
               key={index}
-              className={styles.slideThumb}
+              className={clsx(styles.slideThumb, {
+                [styles.selectedSlide]: index === selectedSlideIndex
+              })}
               elevation={1}
+              sx={{ cursor: 'pointer', position: 'relative' }}
             >
-              {getSlideIcon(slide.type)}
+              <Box onClick={() => setSelectedSlideIndex(index)}>
+                {getSlideIcon(slide.type)}
+              </Box>
+              {config.slides && config.slides.length > 1 && (
+                <IconButton 
+                  size="small"
+                  className={styles.deleteSlideButton}
+                  onClick={() => handleDeleteSlide(index)}
+                  sx={{
+                    position: 'absolute',
+                    top: -8,
+                    right: -8,
+                    padding: '4px',
+                    backgroundColor: 'white',
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5'
+                    }
+                  }}
+                >
+                  <DeleteOutline sx={{ fontSize: 16 }} />
+                </IconButton>
+              )}
             </Paper>
           ))}
           <IconButton 
@@ -318,6 +394,38 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               if (onDelete) onDelete();
               setIsDeleteDialogOpen(false);
             }} 
+            color="error"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={isDeleteSlideDialogOpen}
+        onClose={() => {
+          setIsDeleteSlideDialogOpen(false);
+          setSlideToDelete(null);
+        }}
+        onKeyDown={handleKeyDown}
+      >
+        <DialogTitle>Delete Slide?</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete this slide? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={() => {
+              setIsDeleteSlideDialogOpen(false);
+              setSlideToDelete(null);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={confirmDeleteSlide} 
             color="error"
           >
             Delete
