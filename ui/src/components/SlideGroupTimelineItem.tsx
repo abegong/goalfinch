@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineConnector, TimelineOppositeContent } from '@mui/lab';
 import { Box, IconButton, Typography } from '@mui/material';
 import { Delete, DragIndicator } from '@mui/icons-material';
-import { SlideGroupConfig, getSlideGroupName } from '../types/slide_groups';
+import { SlideGroupConfig } from '../types/slide_groups';
 import { getSlideIcon } from './editors/SlideGroupEditor';
 
 interface SlideGroupTimelineItemProps {
@@ -94,7 +94,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
             }
           }}
         >
-          {getSlideGroupName(slideGroup)}
+          {slideGroup.name}
         </Typography>
       </TimelineContent>
     </TimelineItem>

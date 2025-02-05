@@ -2,7 +2,7 @@ import React from 'react';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { Landscape, ShowChart, SsidChart, FormatListBulleted, Segment } from '@mui/icons-material';
 import { SlideType } from '../types/slides';
-import { SlideGroupConfig, getSlideGroupName } from '../types/slide_groups';
+import { SlideGroupConfig } from '../types/slide_groups';
 
 
 interface DashboardControlBarProps {
@@ -61,7 +61,7 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
                 }
               }}
             >
-              <ListItemText primary={getSlideGroupName(slideGroup)} />
+              <ListItemText primary={slideGroup.name} />
             </ListItem>
             
             {/* Individual Slides */}

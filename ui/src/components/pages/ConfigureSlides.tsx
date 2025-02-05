@@ -5,7 +5,7 @@ import { Add, FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@m
 import { useConfig } from '../../context/ConfigContext';
 import { SlideType } from '../../types/slides';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
-import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig, getSlideGroupName } from '../../types/slide_groups';
+import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
 import SlideGroupEditor from '../editors/SlideGroupEditor';
 
 const ConfigureSlides: React.FC = () => {
@@ -76,7 +76,7 @@ const ConfigureSlides: React.FC = () => {
   const handleDragStart = (e: React.DragEvent, index: number) => {
     const dragPreview = document.createElement('div');
     dragPreview.className = 'drag-preview';
-    dragPreview.textContent = getSlideGroupName(dashboard.slideGroups[index]);
+    dragPreview.textContent = dashboard.slideGroups[index].name;
     dragPreview.style.cssText = `
       position: fixed;
       top: -1000px;

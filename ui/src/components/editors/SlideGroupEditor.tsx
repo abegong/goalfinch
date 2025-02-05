@@ -82,13 +82,18 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
-  const [name, setName] = useState("Untitled Slide Group");
+  const [name, setName] = useState(config.name || "Untitled Slide Group");
 
   useEffect(() => {
     if (onTransitionEnd) {
       onTransitionEnd();
     }
   }, [type, onTransitionEnd]);
+
+  useEffect(() => {
+    // Update name when config changes
+    setName(config.name || "Untitled Slide Group");
+  }, [config.name]);
 
   const handleTypeChange = (newType: SlideType) => {
     let newConfig: Partial<SlideGroupConfig>;
@@ -172,7 +177,11 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         <TextField
           variant="outlined"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            const newName = e.target.value;
+            setName(newName);
+            onChange({ name: newName });
+          }}
           className={styles.slideGroupName}
           placeholder="Enter slide group name"
         />
