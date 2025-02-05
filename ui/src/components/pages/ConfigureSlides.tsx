@@ -120,6 +120,12 @@ const ConfigureSlides: React.FC = () => {
     handleSlideGroupOrderChange(newSlideGroups);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      handleCloseModal();
+    }
+  };
+
   return (
     <>
       <Timeline
@@ -219,6 +225,7 @@ const ConfigureSlides: React.FC = () => {
       <Dialog
         open={editingIndex !== null}
         onClose={handleCloseModal}
+        onKeyDown={handleKeyDown}
         maxWidth="md"
         fullWidth
       >

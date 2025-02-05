@@ -84,6 +84,13 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
   const [name, setName] = useState(config.name || "Untitled Slide Group");
 
+  // Add keyboard event handler for Enter key
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !event.shiftKey && onTransitionEnd) {
+      onTransitionEnd();
+    }
+  };
+
   useEffect(() => {
     if (onTransitionEnd) {
       onTransitionEnd();
@@ -251,6 +258,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       <Dialog
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
+        onKeyDown={handleKeyDown}
       >
         <DialogTitle>Delete Slide Group?</DialogTitle>
         <DialogContent>
