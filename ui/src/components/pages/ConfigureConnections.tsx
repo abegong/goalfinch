@@ -44,6 +44,9 @@ const defaultConfig = {
   dashboard: {
     slideGroups: [{
       type: 'picture',
+      name: 'My Pictures',
+      slide_count: 1,
+      source: '',
       slides: [{
         type: 'picture',
       }],
