@@ -3,7 +3,7 @@ import { CollapsibleSection } from './CollapsibleSection';
 import { ChartSlideConfig } from '../../types/slides';
 import { Captions } from '../../types/slide_groups';
 import styles from './SlideGroupEditor.module.css';
-import { Divider, Box } from '@mui/material';
+import { Box, TextField, Typography, Stack, Divider } from '@mui/material';
 
 interface ChartEditorProps {
   configs: ChartSlideConfig[];
@@ -47,22 +47,31 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
   };
 
   return (
-    <>
-      <Box p={2} sx={{ width: '100%', border: '1px solid #ccc' }}>
-        <label htmlFor="data-url">Data Source</label>
-        <input
-          id="data-url"
-          type="text"
-          value={config.source}
-          onChange={(e) => handleChange({ source: e.target.value })}
-        />
-        </Box>
-
-        <Box p={2} sx={{ width: '100%', border: '1px solid #ccc' }}>
-          <label htmlFor="date-column">Date Column</label>
-          <input
+    <Stack spacing={3} sx={{ width: '100%' }}>
+      <Box sx={{ 
+        p: 2, 
+        border: '1px solid #e0e0e0', 
+        borderRadius: 1,
+        backgroundColor: '#fff'
+      }}>
+        <Typography variant="subtitle1" sx={{ mb: 2 }}>Data Configuration</Typography>
+        <Stack spacing={2}>
+          <TextField
+            id="source"
+            fullWidth
+            label="Source"
+            variant="outlined"
+            size="small"
+            value={config.source}
+            onChange={(e) => handleChange({ source: e.target.value })}
+          />
+                    
+          <TextField
             id="date-column"
-            type="text"
+            fullWidth
+            label="Date Column"
+            variant="outlined"
+            size="small"
             value={config.csv_extraction?.date_column ?? ''}
             onChange={(e) => {
               const newValue = e.target.value;
@@ -79,10 +88,12 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             }}
           />
 
-          <label htmlFor="value-column">Value Column</label>
-          <input
+          <TextField
             id="value-column"
-            type="text"
+            fullWidth
+            label="Value Column"
+            variant="outlined"
+            size="small"
             value={config.csv_extraction?.value_column ?? ''}
             onChange={(e) => {
               const newValue = e.target.value;
@@ -99,10 +110,12 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             }}
           />
 
-          <label htmlFor="filter-column">Filter Column (Optional)</label>
-          <input
+          <TextField
             id="filter-column"
-            type="text"
+            fullWidth
+            label="Filter Column (Optional)"
+            variant="outlined"
+            size="small"
             value={config.csv_extraction?.filter_column ?? ''}
             onChange={(e) => {
               const newValue = e.target.value;
@@ -119,10 +132,12 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             }}
           />
 
-          <label htmlFor="filter-value">Filter Value (Optional)</label>
-          <input
+          <TextField
             id="filter-value"
-            type="text"
+            fullWidth
+            label="Filter Value (Optional)"
+            variant="outlined"
+            size="small"
             value={config.csv_extraction?.filter_value ?? ''}
             onChange={(e) => {
               const newValue = e.target.value;
@@ -139,43 +154,61 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             }}
           />
 
-          <label htmlFor="goal">Goal Value</label>
-          <input
+          <TextField
             id="goal"
+            fullWidth
+            label="Goal Value"
             type="number"
+            variant="outlined"
+            size="small"
             value={config.goal}
             onChange={(e) => handleChange({ goal: Number(e.target.value) })}
           />
-        </Box>
+        </Stack>
+      </Box>
         
-        <Box sx={{ width: '100%', border: '1px solid #ccc' }}>
-          <label htmlFor="title">Title (Optional)</label>
-          <input
+      <Box sx={{ 
+        p: 2, 
+        border: '1px solid #e0e0e0', 
+        borderRadius: 1,
+        backgroundColor: '#fff'
+      }}>
+        <Typography variant="subtitle1" sx={{ mb: 2 }}>Display Settings</Typography>
+        <Stack spacing={2}>
+          <TextField
             id="title"
-            type="text"
+            fullWidth
+            label="Title (Optional)"
+            variant="outlined"
+            size="small"
             value={config.title ?? ''}
             onChange={(e) => handleChange({ title: e.target.value || undefined })}
           />
 
-          <label htmlFor="rounding">Decimal Places</label>
-          <input
+          <TextField
             id="rounding"
+            fullWidth
+            label="Decimal Places"
             type="number"
-            min="0"
-            max="10"
+            variant="outlined"
+            size="small"
+            inputProps={{ min: 0, max: 10 }}
             value={config.rounding}
             onChange={(e) => handleChange({ rounding: Number(e.target.value) })}
           />
 
-          <label htmlFor="units">Units</label>
-          <input
+          <TextField
             id="units"
-            type="text"
+            fullWidth
+            label="Units"
+            variant="outlined"
+            size="small"
             value={config.units}
             onChange={(e) => handleChange({ units: e.target.value })}
           />
-        </Box>
-    </>
+        </Stack>
+      </Box>
+    </Stack>
   );
 };
 
