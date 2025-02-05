@@ -120,6 +120,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           slides: [{
             type: SlideType.CHART,
             source: '',
+            csv_extraction: null,
             goal: 0,
             rounding: 0,
             units: '',

@@ -22,6 +22,14 @@ export const slideTypes = [
   SlideType.CHART,
 ]
 
+
+export interface CsvExtractionConfig {
+  date_column: string;
+  value_column: string;
+  filter_column?: string;
+  filter_value?: string;
+}
+
 /**
  * Base slide interface that all specific slide types must implement.
  */
@@ -42,10 +50,12 @@ export interface BulletSlideConfig extends BaseSlideConfig {
  */
 export interface ChartSlideConfig extends BaseSlideConfig {
   type: SlideType.CHART;
+
   source: string;
+  csv_extraction: CsvExtractionConfig | null;
+  goal: number;
 
   title?: string;
-  goal: number;
   rounding: number;
   units: string;
 
