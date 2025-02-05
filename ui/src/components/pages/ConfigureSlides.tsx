@@ -25,13 +25,24 @@ const ConfigureSlides: React.FC = () => {
   }, [setDashboard, dashboard]);
 
   const handleAddSlide = (type: SlideType) => {
+    // Count existing slideGroups of this type to determine the next number
+    const existingCount = dashboard.slideGroups.filter(group => group.type === type).length;
+    const nextNumber = existingCount + 1;
+    
+    // Generate the default name based on type
+    const defaultName = type === SlideType.PICTURE 
+      ? `Pictures ${nextNumber}`
+      : type === SlideType.CHART 
+        ? `Charts ${nextNumber}`
+        : `Bullets ${nextNumber}`;
+    
     let newSlideGroupConfig: SlideGroupConfig;
     
     switch (type) {
       case SlideType.BULLETS:
         newSlideGroupConfig = {
           type,
-          name: "",
+          name: defaultName,
           slides: [{ type: SlideType.BULLETS, bullets: [] }],
           captions: {}
         } as BulletSlideGroupConfig;
@@ -39,7 +50,7 @@ const ConfigureSlides: React.FC = () => {
       case SlideType.CHART:
         newSlideGroupConfig = {
           type,
-          name: "",
+          name: defaultName,
           slides: [{ 
             type: SlideType.CHART, 
             source: "", 
@@ -53,7 +64,7 @@ const ConfigureSlides: React.FC = () => {
       default:
         newSlideGroupConfig = {
           type: SlideType.PICTURE,
-          name: "",
+          name: defaultName,
           source: "",
           slide_count: 3,
           slides: Array(3).fill({ type: SlideType.PICTURE }),
