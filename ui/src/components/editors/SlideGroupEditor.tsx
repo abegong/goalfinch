@@ -35,7 +35,6 @@ import clsx from 'clsx';
 import { BulletEditor } from './BulletEditor';
 import { ChartEditor } from './ChartEditor';
 import { SlideConfig, PictureSlideConfig, BulletSlideConfig, ChartSlideConfig } from '../../types/slides';
-import { CollapsibleSection } from './CollapsibleSection';
 import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
 import PictureEditor from './PictureEditor';
 
@@ -352,7 +351,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       <CardContent>
         {renderEditor()}
 
-        {/* <CollapsibleSection title="Captions">
+        {/*
           <div className={styles['caption-config']}>
             <input
               type="text"
@@ -373,7 +372,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               onChange={(e) => onChange({ captions: { ...config.captions, bottom_right: e.target.value } })}
             />
           </div>
-        </CollapsibleSection> */}
+        */}
       </CardContent>
 
       <Dialog

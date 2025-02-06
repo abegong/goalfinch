@@ -1,5 +1,4 @@
 import React from 'react';
-import { CollapsibleSection } from './CollapsibleSection';
 import styles from './SlideGroupEditor.module.css';
 import { BulletSlideGroupConfig } from '../../types/slide_groups';
 import { BulletSlideConfig } from '../../types/slides';
@@ -92,21 +91,19 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   };
 
   return (
-    <CollapsibleSection title="Bullet List">
-      <div className={styles['bullet-list']}>
-        {(config.bullets || []).map((bullet, index) => (
-          <div key={index} className={styles['bullet-row']}>
-            <input
-              type="text"
-              value={bullet}
-              onChange={(e) => handleBulletChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              placeholder={`Bullet ${index + 1}`}
-            />
-          </div>
-        ))}
-      </div>
-    </CollapsibleSection>
+    <div className={styles['bullet-list']}>
+      {(config.bullets || []).map((bullet, index) => (
+        <div key={index} className={styles['bullet-row']}>
+          <input
+            type="text"
+            value={bullet}
+            onChange={(e) => handleBulletChange(index, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
+            placeholder={`Bullet ${index + 1}`}
+          />
+        </div>
+      ))}
+    </div>
   );
 };
 

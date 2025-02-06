@@ -1,5 +1,4 @@
 import React from 'react';
-import { CollapsibleSection } from './CollapsibleSection';
 import { PictureSlideConfig } from '../../types/slides';
 import styles from './SlideGroupEditor.module.css';
 
@@ -13,9 +12,7 @@ export const PictureEditor: React.FC<PictureEditorProps> = ({
   onChange,
 }) => {
   return (
-    <CollapsibleSection title="Picture">
-      <div></div>
-    </CollapsibleSection>
+    <div></div>
   );
 };
 
