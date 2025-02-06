@@ -86,13 +86,6 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   const [slideToDelete, setSlideToDelete] = useState<number | null>(null);
   const [isDeleteSlideDialogOpen, setIsDeleteSlideDialogOpen] = useState(false);
 
-  // Add keyboard event handler for Enter key
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' && !event.shiftKey && onTransitionEnd) {
-      onTransitionEnd();
-    }
-  };
-
   useEffect(() => {
     if (onTransitionEnd) {
       onTransitionEnd();
@@ -103,51 +96,6 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
     // Update name when config changes
     setName(config.name || "Untitled Slide Group");
   }, [config.name]);
-
-  const handleTypeChange = (newType: SlideType) => {
-    let newConfig: Partial<SlideGroupConfig>;
-    switch (newType) {
-      case SlideType.BULLETS:
-        newConfig = {
-          type: SlideType.BULLETS,
-          slides: [{
-            type: SlideType.BULLETS,
-            bullets: [''],
-          }],
-        };
-        break;
-      case SlideType.CHART:
-        newConfig = {
-          type: SlideType.CHART,
-          slides: [{
-            type: SlideType.CHART,
-            source: '',
-            csv_extraction: null,
-            goal: 0,
-            rounding: 0,
-            units: '',
-            asOfDate: '',
-            title: '',
-          }],
-        };
-        break;
-      case SlideType.PICTURE:
-        newConfig = {
-          type: SlideType.PICTURE,
-          slide_count: 1,
-          source: '',
-          slides: [{
-            type: SlideType.PICTURE,
-          }],
-          captions: {}
-        };
-        break;
-      default:
-        throw new Error(`Unsupported slide type: ${newType}`);
-    }
-    onChange(newConfig);
-    setIsSpeedDialOpen(false);
-  };
 
   const handleAddSlide = () => {
     let bulletConfig: BulletSlideGroupConfig;
@@ -378,7 +326,6 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       <Dialog
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
-        onKeyDown={handleKeyDown}
       >
         <DialogTitle>Delete Slide Group?</DialogTitle>
         <DialogContent>
@@ -406,7 +353,6 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           setIsDeleteSlideDialogOpen(false);
           setSlideToDelete(null);
         }}
-        onKeyDown={handleKeyDown}
       >
         <DialogTitle>Delete Slide?</DialogTitle>
         <DialogContent>
