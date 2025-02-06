@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Timeline, TimelineItem, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses, TimelineSeparator } from '@mui/lab';
-import { Box, Dialog, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, Fade } from '@mui/material';
 import { Add, FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@mui/icons-material';
 import { useConfig } from '../../context/ConfigContext';
 import { SlideType } from '../../types/slides';
@@ -12,6 +12,7 @@ const ConfigureSlides: React.FC = () => {
   const { dashboard, setDashboard } = useConfig();
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
 
   const handleSlideGroupChange = (index: number, newConfig: Partial<SlideGroupConfig>) => {
     const newSlideGroups = [...dashboard.slideGroups];
@@ -81,6 +82,11 @@ const ConfigureSlides: React.FC = () => {
   }, []);
 
   const handleCloseModal = () => {
+    setIsClosing(true);
+  };
+
+  const handleExited = () => {
+    setIsClosing(false);
     setEditingIndex(null);
   };
 
@@ -234,11 +240,16 @@ const ConfigureSlides: React.FC = () => {
       </Timeline>
 
       <Dialog
-        open={editingIndex !== null}
+        open={editingIndex !== null && !isClosing}
         onClose={handleCloseModal}
         onKeyDown={handleKeyDown}
         maxWidth="md"
         fullWidth
+        TransitionComponent={Fade}
+        TransitionProps={{
+          timeout: 300,
+          onExited: handleExited
+        }}
       >
         <DialogContent>
           {editingIndex !== null && (
