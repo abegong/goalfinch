@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  LinearProgress
 } from '@mui/material';
 import { SourceConfig, BackendConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
@@ -68,9 +69,10 @@ const defaultConfig = {
 const CURRENT_VERSION = 1;
 
 const ConfigureConnections: React.FC = () => {
-  const { connections, setConnections, dashboard, app, setDashboard, setApp } = useConfig();
+  const { connections, setConnections, dashboard, setDashboard, app, setApp } = useConfig();
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
 
   const handleBackendChange = (field: keyof BackendConfig) => 
@@ -154,10 +156,16 @@ const ConfigureConnections: React.FC = () => {
   };
 
   const importConfig = (configData: any) => {
-    setConnections(configData.connections);
-    setDashboard(configData.dashboard);
-    setApp(configData.app);
-    setImportModalOpen(false);
+    setIsImporting(true);
+    // Small delay to ensure the progress bar is visible even for fast imports
+    setTimeout(() => {
+      setIsImporting(false);
+
+      setConnections(configData.connections);
+      setDashboard(configData.dashboard);
+      setApp(configData.app);
+      setImportModalOpen(false);
+    }, 500);
   };
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -224,7 +232,7 @@ const ConfigureConnections: React.FC = () => {
   };
 
   return (
-    <>
+    <Box sx={{ position: 'relative' }}>
       <Card sx={{ maxWidth: 800, margin: 'auto', mt: 4 }}>
         <CardHeader
           sx={{ 
@@ -344,14 +352,27 @@ const ConfigureConnections: React.FC = () => {
 
       <Dialog
         open={importModalOpen}
-        onClose={() => setImportModalOpen(false)}
+        onClose={() => !isImporting && setImportModalOpen(false)}
         maxWidth="sm"
-        fullWidth
+        fullWidth        
       >
-        <DialogTitle>Import Configuration</DialogTitle>
-        <DialogContent>
-          <Box
-            sx={{
+        {isImporting ? (
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            p: 4,
+            height: '100%'
+          }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>Importing Configuration...</Typography>
+            <LinearProgress sx={{ width: '100%' }} />
+          </Box>
+        ) : (
+          <>
+            <DialogTitle>Import Configuration</DialogTitle>
+            <DialogContent
+              sx={{
               border: '2px dashed',
               borderColor: isDragging ? 'primary.main' : 'grey.300',
               borderRadius: 1,
@@ -360,27 +381,42 @@ const ConfigureConnections: React.FC = () => {
               backgroundColor: isDragging ? 'action.hover' : 'background.paper',
               textAlign: 'center',
               cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                borderColor: 'primary.main'
+              }
             }}
-            onDragEnter={handleDragEnter}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
-              Drag and drop your configuration file here
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Only .json files are accepted
-            </Typography>
-          </Box>
-          <input type="file" onChange={handleFileInput} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setImportModalOpen(false)}>Cancel</Button>
-        </DialogActions>
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography>
+                  Drag and drop a configuration file here, or
+                </Typography>
+                <Button
+                  component="label"
+                  variant="contained"
+                  sx={{ mt: 2 }}
+                >
+                  Choose File
+                  <input
+                    type="file"
+                    hidden
+                    accept="application/json"
+                    onChange={handleFileInput}
+                  />
+                </Button>
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setImportModalOpen(false)}>Cancel</Button>
+            </DialogActions>
+          </>
+        )}
       </Dialog>
-    </>
+    </Box>
   );
 };
 
