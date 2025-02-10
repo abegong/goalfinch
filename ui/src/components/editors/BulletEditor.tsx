@@ -48,6 +48,7 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   onChange,
 }) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
 
   const handleBulletChange = (index: number, value: string) => {
     const newContent = [...(config.bullets || [])];
@@ -95,12 +96,21 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     setDraggedIndex(index);
+    setDropTargetIndex(index);
     e.dataTransfer.effectAllowed = 'move';
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    if (draggedIndex !== null && index !== dropTargetIndex) {
+      setDropTargetIndex(index);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDropTargetIndex(null);
   };
 
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
@@ -112,6 +122,7 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
     newBullets.splice(dropIndex, 0, draggedItem);
     onChange({ bullets: newBullets });
     setDraggedIndex(null);
+    setDropTargetIndex(null);
   };
 
   return (
@@ -119,10 +130,11 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
       {(config.bullets || []).map((bullet, index) => (
         <div 
           key={index} 
-          className={styles['bullet-row']}
+          className={`${styles['bullet-row']} ${draggedIndex === index ? styles['dragging'] : ''} ${dropTargetIndex === index && draggedIndex !== index ? styles['drop-target'] : ''}`}
           draggable
           onDragStart={(e) => handleDragStart(e, index)}
-          onDragOver={handleDragOver}
+          onDragOver={(e) => handleDragOver(e, index)}
+          onDragEnd={handleDragEnd}
           onDrop={(e) => handleDrop(e, index)}
         >
           <div className={styles['drag-handle']}>

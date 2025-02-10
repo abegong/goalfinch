@@ -223,7 +223,8 @@ button:hover {
   align-items: center;
   padding: 4px;
   border-radius: var(--border-radius-sm);
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .bullet-row:hover {
@@ -232,6 +233,21 @@ button:hover {
 
 .bullet-row[draggable="true"] {
   cursor: move;
+}
+
+.bullet-row.dragging {
+  opacity: 0.5;
+}
+
+.bullet-row.drop-target::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+  border-radius: 1px;
 }
 
 .drag-handle {
