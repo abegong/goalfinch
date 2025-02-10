@@ -73,7 +73,7 @@ Each page has a dedicated route in `App.tsx`. In the future, pages may support a
 
 ## Persistence
 
-Not implemented yet: Pages interact with persistent state through the ConfigContext, which:
+Pages interact with persistent state through the ConfigContext, which:
 - Saves to local storage
-- Syncs with Self-Hosted Backend when available
 - Handles config validation and migration
+- Not implemented yet: Syncs with Goal Finch Backend when available
