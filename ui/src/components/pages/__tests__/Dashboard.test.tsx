@@ -10,27 +10,29 @@ import { SlideType } from '../../../types/slides';
 const mockSlideGroups = [
   {
     type: SlideType.BULLETS,
+    name: "Test Bullet Group",
     slides: [{
       type: SlideType.BULLETS,
-      content: ['Test bullet point']
+      bullets: ['Test bullet point']
     }],
     captions: {}
   } as BulletSlideGroupConfig,
   {
     type: SlideType.CHART,
+    name: "Test Chart Group",
     slides: [{
       type: SlideType.CHART,
-      content: {
-        url: 'test-url',
-        goal: 100,
-        rounding: 0,
-        units: 'units'
-      }
+      source: 'test-url',
+      goal: 100,
+      rounding: 0,
+      units: 'units'
     }],
     captions: {}
   } as ChartSlideGroupConfig,
   {
     type: SlideType.PICTURE,
+    name: "Test Picture Group",
+    source: "test-source",
     slides: [
       { type: SlideType.PICTURE },
       { type: SlideType.PICTURE },

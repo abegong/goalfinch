@@ -9,13 +9,10 @@ const mockSources = {
   pictureSources: [
     { name: 'pictures-1', url: 'https://example.com/pics' }
   ],
-  goalSources: [
+  dataSources: [
     { name: 'data-1', url: 'https://example.com/data' }
   ],
-  backend: {
-    serverUrl: '',
-    serverPassword: ''
-  }
+  backend: null
 };
 
 // Mock context setup
@@ -190,7 +187,7 @@ describe('ConfigureConnections', () => {
         connections: {
           ...mockSources,
           pictureSources: [],
-          goalSources: []
+          dataSources: []
         }
       });
       

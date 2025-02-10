@@ -4,7 +4,7 @@ import {
   BulletSlideConfig,
   PictureSlideConfig
 } from '../types/slides';
-import {
+import { 
   SlideGroupConfig,
   BulletSlideGroupConfig,
   ChartSlideGroupConfig,
@@ -14,9 +14,10 @@ import {
 export const demoData: SlideGroupConfig[] = [
   {
     type: SlideType.BULLETS,
+    name: "Life goals",
     slides: [{
       type: SlideType.BULLETS,
-      content: [
+      bullets: [
         "Become a wizard-level swordsman",
         "Find the six-fingered man",
         "Avenge my father"
@@ -28,6 +29,9 @@ export const demoData: SlideGroupConfig[] = [
   } as BulletSlideGroupConfig,
   {
     type: SlideType.PICTURE,
+    name: "Pictures",
+    source: "",
+    slide_count: 3,
     slides: [
       {
         type: SlideType.PICTURE,
@@ -43,59 +47,50 @@ export const demoData: SlideGroupConfig[] = [
   } as PictureSlideGroupConfig,
   {
     type: SlideType.CHART,
+    name: "Goals",
     captions: {
       bottom_right: "Practice fencing techniques"
     },
     slides: [
       {
         type: SlideType.CHART,
-        content: {
-          url: "SPREADSHEET_URL_1",
-          goal: 40,
-          rounding: 0,
-          units: "hours",
-          caption: "Bonetti"
-        },
+        source: "SPREADSHEET_URL_1",
+        goal: 40,
+        rounding: 0,
+        units: "hours",
+        title: "Bonetti"
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
-        content: {
-          url: "SPREADSHEET_URL_2",
-          goal: 40,
-          rounding: 0,
-          units: "hours",
-          caption: "Thibault"
-        },
+        source: "SPREADSHEET_URL_2",
+        goal: 40,
+        rounding: 0,
+        units: "hours",
+        title: "Thibault"
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
-        content: {
-          url: "SPREADSHEET_URL_3",
-          goal: 40,
-          rounding: 0,
-          units: "hours",
-          caption: "McBone"
-        },
+        source: "SPREADSHEET_URL_3",
+        goal: 40,
+        rounding: 0,
+        units: "hours",
+        title: "McBone"
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
-        content: {
-          url: "SPREADSHEET_URL_3",
-          goal: 40,
-          rounding: 0,
-          units: "hours",
-          caption: "Agrippa"
-        },
+        source: "SPREADSHEET_URL_3",
+        goal: 40,
+        rounding: 0,
+        units: "hours",
+        title: "Agrippa"
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
-        content: {
-          url: "SPREADSHEET_URL_3",
-          goal: 40,
-          rounding: 0,
-          units: "hours",
-          caption: "Capo Ferro"
-        },
+        source: "SPREADSHEET_URL_3",
+        goal: 40,
+        rounding: 0,
+        units: "hours",
+        title: "Capo Ferro"
       } as ChartSlideConfig,
     ]
   } as ChartSlideGroupConfig,

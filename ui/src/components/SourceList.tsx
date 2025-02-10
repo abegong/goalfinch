@@ -23,13 +23,13 @@ import { SourceConfig } from '../types/connections';
 
 interface DeleteDialogState {
   open: boolean;
-  type: 'pictureSources' | 'goalSources';
+  type: 'pictureSources' | 'dataSources';
   index: number;
 }
 
 interface EditDialogState {
   open: boolean;
-  type: 'pictureSources' | 'goalSources' | null;
+  type: 'pictureSources' | 'dataSources' | null;
   index: number;
   source: SourceConfig;
   errors: {
@@ -39,10 +39,10 @@ interface EditDialogState {
 }
 
 interface SourceListProps {
-  type: 'pictureSources' | 'goalSources';
+  type: 'pictureSources' | 'dataSources';
   title: string;
   sources: SourceConfig[];
-  onSourcesChange: (type: 'pictureSources' | 'goalSources', newSources: SourceConfig[]) => void;
+  onSourcesChange: (type: 'pictureSources' | 'dataSources', newSources: SourceConfig[]) => void;
 }
 
 export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, onSourcesChange }) => {

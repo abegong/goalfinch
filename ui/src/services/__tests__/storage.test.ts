@@ -1,4 +1,5 @@
-import { LocalStorageService, STORAGE_KEYS } from '../storage';
+import { LocalStorageService } from '../storage';
+import { STORAGE_KEYS } from '../../constants';
 
 describe('LocalStorageService', () => {
   let storage: LocalStorageService;
@@ -8,24 +9,36 @@ describe('LocalStorageService', () => {
     storage = new LocalStorageService();
   });
 
+  const validAppConfig = {
+    appControlBar: {
+      open: true,
+      visible: true
+    },
+    theme: {
+      mode: 'light' as const
+    }
+  };
+
+  const validDashboardConfig = {
+    slideGroups: []
+  };
+
   it('should save and load data with versioning', () => {
-    const testData = { test: 'data' };
-    storage.save(STORAGE_KEYS.APP, testData);
+    storage.save(STORAGE_KEYS.APP, validAppConfig);
     const loaded = storage.load(STORAGE_KEYS.APP);
-    expect(loaded).toEqual(testData);
+    expect(loaded).toEqual(validAppConfig);
 
     // Verify that data is stored with version
     const rawStored = localStorage.getItem(STORAGE_KEYS.APP);
     const parsed = JSON.parse(rawStored!);
     expect(parsed).toHaveProperty('version', 1);
-    expect(parsed).toHaveProperty('data', testData);
+    expect(parsed).toHaveProperty('data', validAppConfig);
   });
 
   it('should handle unversioned legacy data', () => {
-    const legacyData = { test: 'legacy' };
-    localStorage.setItem(STORAGE_KEYS.APP, JSON.stringify(legacyData));
+    localStorage.setItem(STORAGE_KEYS.APP, JSON.stringify(validAppConfig));
     const loaded = storage.load(STORAGE_KEYS.APP);
-    expect(loaded).toEqual(legacyData);
+    expect(loaded).toEqual(validAppConfig);
   });
 
   it('should return null for non-existent data', () => {
@@ -34,8 +47,8 @@ describe('LocalStorageService', () => {
   });
 
   it('should clear all stored data', () => {
-    storage.save(STORAGE_KEYS.APP, { test: 'data' });
-    storage.save(STORAGE_KEYS.DASHBOARD, { test: 'data2' });
+    storage.save(STORAGE_KEYS.APP, validAppConfig);
+    storage.save(STORAGE_KEYS.DASHBOARD, validDashboardConfig);
     
     storage.clear();
     
@@ -54,7 +67,7 @@ describe('LocalStorageService', () => {
   it('should reject unknown versions', () => {
     const futureVersionData = {
       version: 999,
-      data: { test: 'future' }
+      data: validAppConfig
     };
     localStorage.setItem(STORAGE_KEYS.APP, JSON.stringify(futureVersionData));
     
