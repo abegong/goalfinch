@@ -126,14 +126,18 @@ const ConfigureSlides: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
     const sourceIndex = parseInt(e.dataTransfer.getData('text/plain'));
-    if (sourceIndex === targetIndex) return;
-
-    const newSlideGroups = [...dashboard.slideGroups];
-    const [removed] = newSlideGroups.splice(sourceIndex, 1);
-    newSlideGroups.splice(targetIndex, 0, removed);
-    handleSlideGroupOrderChange(newSlideGroups);
+    
+    // Clear states regardless of whether we're dropping in a new spot
     setDraggingIndex(null);
     setDragOverIndex(null);
+    
+    // Only reorder if dropping in a different spot
+    if (sourceIndex !== targetIndex) {
+      const newSlideGroups = [...dashboard.slideGroups];
+      const [removed] = newSlideGroups.splice(sourceIndex, 1);
+      newSlideGroups.splice(targetIndex, 0, removed);
+      handleSlideGroupOrderChange(newSlideGroups);
+    }
   };
 
   const handleSlideGroupDelete = (index: number) => {
