@@ -252,47 +252,43 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       </Box>
 
       <Box className={styles.slideManagement}>
-        <Box className={styles.slideList}>
-          {config.slides?.map((slide, index) => (
-            <Paper
-              key={index}
-              className={clsx(styles.slideThumb, {
-                [styles.selectedSlide]: index === selectedSlideIndex
-              })}
-              elevation={1}
-              sx={{ cursor: 'pointer', position: 'relative' }}
-            >
-              <Box onClick={() => setSelectedSlideIndex(index)}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box className={styles.slideList}>
+            {config.slides?.map((slide, index) => (
+              <Paper
+                key={index}
+                className={clsx(styles.slideThumb, {
+                  [styles.selectedSlide]: index === selectedSlideIndex
+                })}
+                elevation={1}
+                sx={{ cursor: 'pointer' }}
+                onClick={() => setSelectedSlideIndex(index)}
+              >
                 {getSlideIcon(slide.type)}
-              </Box>
-              {config.slides && config.slides.length > 1 && (
-                <IconButton 
-                  size="small"
-                  className={styles.deleteSlideButton}
-                  onClick={() => handleDeleteSlide(index)}
-                  sx={{
-                    position: 'absolute',
-                    top: -8,
-                    right: -8,
-                    padding: '4px',
-                    backgroundColor: 'white',
-                    '&:hover': {
-                      backgroundColor: '#f5f5f5'
-                    }
-                  }}
-                >
-                  <DeleteOutline sx={{ fontSize: 16 }} />
-                </IconButton>
-              )}
-            </Paper>
-          ))}
-          <IconButton 
-            className={styles.addSlideButton}
-            size="small"
-            onClick={handleAddSlide}
-          >
-            <Add />
-          </IconButton>
+              </Paper>
+            ))}
+            <IconButton 
+              className={styles.addSlideButton}
+              onClick={handleAddSlide}
+              sx={{ padding: '8px' }}
+            >
+              <Add sx={{ fontSize: 24 }} />
+            </IconButton>
+          </Box>
+          {config.slides && config.slides.length > 1 && (
+            <IconButton 
+              onClick={() => handleDeleteSlide(selectedSlideIndex)}
+              sx={{
+                padding: '8px',
+                backgroundColor: 'white',
+                '&:hover': {
+                  backgroundColor: '#f5f5f5'
+                }
+              }}
+            >
+              <DeleteOutline sx={{ fontSize: 24 }} />
+            </IconButton>
+          )}
         </Box>
       </Box>
 
