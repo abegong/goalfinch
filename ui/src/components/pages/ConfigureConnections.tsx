@@ -240,7 +240,7 @@ const ConfigureConnections: React.FC = () => {
         <CardContent sx={{ bgcolor: 'white' }}>
           <Stack spacing={8}>
             <Stack spacing={2} alignItems="flex-start">
-              <Typography variant="h6">Self-hosted Backend</Typography>
+              <Typography variant="h6">Goal Finch Backend</Typography>
               <Button variant="outlined" disabled>
                 Configure backend
               </Button>

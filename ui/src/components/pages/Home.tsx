@@ -45,7 +45,7 @@ const Home: React.FC = () => {
         <p style={{ marginTop: "20px" }}>You can read more in the <a href="https://docs.goalfinch.com" target="_blank" rel="noopener noreferrer">technical documentation</a>.</p>
 
         {/* <Typography variant="h4" component="h3" gutterBottom sx={{ mt: 4 }}>
-          Self-hosting
+          Goal Finch Backend
         </Typography> */}
       </Box>
 

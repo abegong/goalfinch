@@ -9,7 +9,7 @@ The application's persisted state is managed through three main configuration ob
 1. **DashboardConfig**
    - Contains all SlideGroup configurations
    - Represents the complete state of the dashboard
-   - Persisted in local storage and synced with SHB when available
+   - Persisted in local storage and synced with the GFB when available
 
 2. **ConnectionsConfig**
    - Stores external service configurations (URLs, API keys)

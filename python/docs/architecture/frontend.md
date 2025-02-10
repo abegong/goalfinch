@@ -16,11 +16,11 @@ The Goal Finch app is built around a `Dashboard` that helps users track progress
 
 Goals are inferred from slide configuration. Any time a Chart Slide is has a target value, or a Bullets Slide is configured with checkboxes enabled, the app treats the contents of the Slide as a Goal.
 
-In order to populate the different kinds of Slides, users can configure several kinds of `Connection`. These are typically web services that serve pictures or data. A special case is the `Self-Hosted Backend` (SHB), which both acts as Connections for any data the user wants, and also makes additional APIs available. When the Self-Hosted Backend is enabled, new functionality becomes available in the app.
+In order to populate the different kinds of Slides, users can configure several kinds of `Connection`. These are typically web services that serve pictures or data. A special case is the `Goal Finch Backend` (GFB), which both acts as Connections for any data the user wants, and also makes additional APIs available. When the GFB is enabled, new functionality becomes available in the app.
 
 ### State and persistence
 
-At the highest level, the app tracks three kinds of state: `DashboardConfig`, `ConnectionsConfig`, and `AppConfig`. These objects are singletons, managed through a Context called `ConfigContext`. The are persisted via local storage. When the SHB is available, state is also synced to the backend.
+At the highest level, the app tracks three kinds of state: `DashboardConfig`, `ConnectionsConfig`, and `AppConfig`. These objects are singletons, managed through a Context called `ConfigContext`. The are persisted via local storage. When the GFB is available, state is also synced to the backend.
 
 * The DashboardConfig contains all the information necessary to populate SlideGroups. This information is stored in `SlideGroupConfigs`, with subclasses `PictureGroupConfig`, `ChartGroupConfig`, and `BulletGroupConfig`. In turn, these objects can contain `PictureConfig`s, `ChartConfig`s, and `BulletListConfig`s.
 * The ConnectionConfig stores information such as URLs, API keys, etc. for connecting to services that provide data for charts (Ex: self-hosted backend, online CSVs, Google sheets) and pictures (Ex: Unsplash API, picture manifests).
@@ -55,9 +55,28 @@ Components for editing Slides are stored in the `src/components/editors` directo
 
 A few other component types are stored in `src/components/`. In general, I avoid creating specific types, unless they are reused with inheritance (like Slides) or are so big and complex that they need to be pulled into files of their own (like Pages).
 
-# Component documentation
-
 Each of the component subdirectories contains a markdown file (ex: `src/components/editors/editors.md`) that documents the purpose, behavior, and general shape of implementation of the components.These documentation files serve as living documentation that should be kept up to date as components evolve.
+
+# Connections
+
+`Goal Finch` recognizes two types of `Connection`. `DataConnections` fetch data, and `PictureConnections` fetch images. Both are simply configured with a unique name and URL.
+
+In the case of a `Data Connection`, the URL must point to a CSV file. It's expected to have a header row containing column names. It must include a date column formatted in `MM/DD/YYYY` format. At least one other column must be numeric, to provide a source of data for chart slides. Optionally, you can include a column to filter the data by. The CSV can contain any number of additional columns. They will be ignored for data rendering.
+
+It's also possible to configure multiple Charts using the same source CSV, by configuring different sources or filters.
+
+In the case of a `Picture Connection`, the URL is used to fetch a manifest of images. The manifest must be a JSON file with the following structure:
+
+```json
+{
+  "FILENAME": "FILE HASH",
+  "amazing-picture.jpg": "d5642d2f79e80b2d6212a98e92dc54b2",
+  "another-cool-image.png": "6c0824a5cb583ede5f6e9904beb1ab22",
+  ...
+}
+```
+
+FILENAME is assumed to be a path relative to the manifest URL. FILE HASH can be used to determine if the file has changed.
 
 # Testing
 
