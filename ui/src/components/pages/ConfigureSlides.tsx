@@ -11,6 +11,7 @@ import SlideGroupEditor from '../editors/SlideGroupEditor';
 const ConfigureSlides: React.FC = () => {
   const { dashboard, setDashboard } = useConfig();
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [isClosing, setIsClosing] = useState(false);
 
@@ -111,12 +112,14 @@ const ConfigureSlides: React.FC = () => {
     
     e.dataTransfer.setData('text/plain', index.toString());
     setDraggingIndex(index);
+    setDragOverIndex(null);
     e.stopPropagation();
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     e.stopPropagation();
+    setDragOverIndex(index);
   };
 
   const handleDrop = (e: React.DragEvent, targetIndex: number) => {
@@ -129,6 +132,8 @@ const ConfigureSlides: React.FC = () => {
     const [removed] = newSlideGroups.splice(sourceIndex, 1);
     newSlideGroups.splice(targetIndex, 0, removed);
     handleSlideGroupOrderChange(newSlideGroups);
+    setDraggingIndex(null);
+    setDragOverIndex(null);
   };
 
   const handleSlideGroupDelete = (index: number) => {
@@ -194,9 +199,10 @@ const ConfigureSlides: React.FC = () => {
             slideGroups={dashboard.slideGroups}
             onToggleExpanded={() => handleClick(index)}
             onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
+            onDragOver={(e) => handleDragOver(e, index)}
             onDrop={handleDrop}
             onDelete={handleSlideGroupDelete}
+            isBeingDraggedOver={dragOverIndex === index}
             className={draggingIndex === index ? 'dragging' : ''}
           />
         ))}

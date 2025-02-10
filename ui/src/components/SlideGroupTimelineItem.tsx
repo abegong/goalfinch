@@ -4,6 +4,8 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { Delete, DragIndicator } from '@mui/icons-material';
 import { SlideGroupConfig } from '../types/slide_groups';
 import { getSlideIcon } from './editors/SlideGroupEditor';
+import styles from './SlideGroupTimelineItem.module.css';
+import clsx from 'clsx';
 
 interface SlideGroupTimelineItemProps {
   slideGroup: SlideGroupConfig;
@@ -14,6 +16,7 @@ interface SlideGroupTimelineItemProps {
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, index: number) => void;
   onDelete: (index: number) => void;
+  isBeingDraggedOver: boolean;
   className?: string;
 }
 
@@ -26,19 +29,44 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   onDragOver,
   onDrop,
   onDelete,
+  isBeingDraggedOver,
   className,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [dropPosition, setDropPosition] = useState<'above' | 'below' | null>(null);
 
   useEffect(() => {
-    const handleDragEnd = () => setIsDragging(false);
+    const handleDragEnd = () => {
+      setIsDragging(false);
+      setDropPosition(null);
+    };
     document.addEventListener('dragend', handleDragEnd);
     return () => document.removeEventListener('dragend', handleDragEnd);
   }, []);
 
+  useEffect(() => {
+    if (!isBeingDraggedOver) {
+      setDropPosition(null);
+    }
+  }, [isBeingDraggedOver]);
+
   const handleDragStart = (e: React.DragEvent) => {
     setIsDragging(true);
     onDragStart(e, index);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const midY = rect.top + rect.height / 2;
+    setDropPosition(e.clientY < midY ? 'above' : 'below');
+    onDragOver(e);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    onDrop(e, index);
+    setIsDragging(false);
+    setDropPosition(null);
   };
 
   return (
@@ -46,12 +74,17 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       key={index}
       draggable
       onDragStart={handleDragStart}
-      onDragOver={onDragOver}
-      onDrop={(e) => {
-        onDrop(e, index);
-        setIsDragging(false);
-      }}
-      className={[className, isDragging ? 'dragging' : ''].filter(Boolean).join(' ')}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      className={clsx(
+        styles.timelineItem,
+        className,
+        {
+          [styles.dragging]: isDragging,
+          [styles.dropAbove]: dropPosition === 'above',
+          [styles.dropBelow]: dropPosition === 'below',
+        }
+      )}
       data-dragging={isDragging}
       data-testid="timeline-item"
       sx={{ 
@@ -64,8 +97,8 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       <TimelineOppositeContent />
       <TimelineSeparator>
         <TimelineDot>
-            {getSlideIcon(slideGroup.type)}
-          </TimelineDot>
+          {getSlideIcon(slideGroup.type)}
+        </TimelineDot>
         {index < slideGroups.length - 1 && (
           <TimelineConnector 
             sx={{ 
@@ -81,9 +114,8 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       </TimelineSeparator>
       <TimelineContent>
         <Typography 
-          // variant="body2" 
           color="text.secondary"
-          className="timeline-text"
+          className={clsx("timeline-text", styles.timelineText)}
           sx={{
             display: 'inline-block',
             margin: '4px -24px 0px 0px',
