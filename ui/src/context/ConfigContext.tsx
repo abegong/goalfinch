@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { demoData } from '../data/demo_data';
+import { demoSlides, demoConnections } from '../data/demo_data';
 import { DashboardConfig, AppConfig } from '../types/config';
 import { ConnectionsConfig } from '../types/connections';
 import { LocalStorageService } from '../services/storage';
@@ -25,26 +25,18 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [dashboard, setDashboard] = useState<DashboardConfig>(() => {
     try {
       const stored = storage.load<DashboardConfig>(STORAGE_KEYS.DASHBOARD);
-      return stored || { slideGroups: demoData };
+      return stored || { slideGroups: demoSlides };
     } catch (error) {
-      return { slideGroups: demoData };
+      return { slideGroups: demoSlides };
     }
   });
 
   const [connections, setConnections] = useState<ConnectionsConfig>(() => {
     try {
       const stored = storage.load<ConnectionsConfig>(STORAGE_KEYS.CONNECTIONS);
-      return stored || {
-        backend: null,
-        pictureSources: [],
-        dataSources: []
-      };
+      return stored || demoConnections;
     } catch (error) {
-      return {
-        backend: null,
-        pictureSources: [],
-        dataSources: []
-      };
+      return demoConnections;
     }
   });
 

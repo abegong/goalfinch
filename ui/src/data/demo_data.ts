@@ -10,8 +10,9 @@ import {
   ChartSlideGroupConfig,
   PictureSlideGroupConfig
 } from '../types/slide_groups';
+import { ConnectionsConfig, SourceConfig } from '../types/connections';
 
-export const demoData: SlideGroupConfig[] = [
+export const demoSlides: SlideGroupConfig[] = [
   {
     type: SlideType.BULLETS,
     name: "Life goals",
@@ -30,7 +31,7 @@ export const demoData: SlideGroupConfig[] = [
   {
     type: SlideType.PICTURE,
     name: "Pictures",
-    source: "",
+    source: "Good memories",
     slide_count: 3,
     slides: [
       {
@@ -54,7 +55,7 @@ export const demoData: SlideGroupConfig[] = [
     slides: [
       {
         type: SlideType.CHART,
-        source: "SPREADSHEET_URL_1",
+        source: "Training progress",
         goal: 40,
         rounding: 0,
         units: "hours",
@@ -62,7 +63,7 @@ export const demoData: SlideGroupConfig[] = [
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
-        source: "SPREADSHEET_URL_2",
+        source: "Training progress",
         goal: 40,
         rounding: 0,
         units: "hours",
@@ -70,7 +71,7 @@ export const demoData: SlideGroupConfig[] = [
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
-        source: "SPREADSHEET_URL_3",
+        source: "Training progress",
         goal: 40,
         rounding: 0,
         units: "hours",
@@ -78,7 +79,7 @@ export const demoData: SlideGroupConfig[] = [
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
-        source: "SPREADSHEET_URL_3",
+        source: "Training progress",
         goal: 40,
         rounding: 0,
         units: "hours",
@@ -86,7 +87,7 @@ export const demoData: SlideGroupConfig[] = [
       } as ChartSlideConfig,
       {
         type: SlideType.CHART,
-        source: "SPREADSHEET_URL_3",
+        source: "Training progress",
         goal: 40,
         rounding: 0,
         units: "hours",
@@ -96,4 +97,20 @@ export const demoData: SlideGroupConfig[] = [
   } as ChartSlideGroupConfig,
 ];
 
-export default demoData;
+export const demoConnections: ConnectionsConfig = {
+  backend: null,
+  pictureSources: [
+    {
+      name: "Good memories",
+      url: "https://goal-finch.s3.us-east-1.amazonaws.com/princess-bride/manifest.json"
+    }
+  ],
+  dataSources: [
+    {
+      name: "Training progress",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7hsKbxKmjj6H0037LSRIz41P1UzpZFmJRGv2c9z-imk3nTaKpLXQbDs1CQ5wmxEbYDTCTeQJsRAyD/pub?output=csv"
+    }
+  ]
+};
+
+export default demoSlides;

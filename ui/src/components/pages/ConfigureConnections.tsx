@@ -15,7 +15,7 @@ import {
 import { SourceConfig, BackendConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
 import { SourceList } from '../SourceList';
-import demoData from '../../data/demo_data';
+import demoData, { demoConnections } from '../../data/demo_data';
 import { DashboardConfig } from '../../types/config';
 
 interface DeleteDialogState {
@@ -211,7 +211,7 @@ const ConfigureConnections: React.FC = () => {
   }, [setConnections, setDashboard, setApp]);
 
   const handleReset = (toDemoData: boolean) => {
-    setConnections(defaultConfig.connections);
+    setConnections(toDemoData ? demoConnections : defaultConfig.connections);
     let newDashboard: DashboardConfig = defaultConfig.dashboard;
     if(toDemoData) {
       newDashboard = {

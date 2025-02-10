@@ -30,7 +30,7 @@ export async function loadChartData(url: string, asOfDate?: string) {
             const demoAsOfDate = new Date(now.getFullYear(), now.getMonth(), 20).toLocaleDateString();
             
             const dates = getDatesInMonth(demoAsOfDate);
-            const demoData = dates
+            const demoSlides = dates
                 .filter(d => {
                     const day = parseInt(d.date.split('/')[1]);
                     return day <= 20;  // Only keep first 20 days
@@ -40,7 +40,7 @@ export async function loadChartData(url: string, asOfDate?: string) {
                     date: d.date,
                     value: Math.floor(Math.random() * 8)
                 }));
-            return preprocessChartData(demoData, demoAsOfDate);
+            return preprocessChartData(demoSlides, demoAsOfDate);
         }
 
         // Otherwise load from actual URL
