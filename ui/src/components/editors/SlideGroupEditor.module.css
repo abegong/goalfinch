@@ -211,40 +211,91 @@ button:hover {
   padding: 0;
 }
 
+.bullet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .bullet-row {
   display: flex;
-  align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
-  width: 100%;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s ease;
+}
+
+.bullet-row:hover {
+  background-color: var(--surface-color-hover);
+}
+
+.bullet-row[draggable="true"] {
+  cursor: move;
+}
+
+.drag-handle {
+  display: flex;
+  align-items: center;
+  color: var(--text-color-secondary);
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.bullet-row:hover .drag-handle {
+  opacity: 1;
 }
 
 .bullet-row input {
   flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+}
+
+.bullet-row input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-light);
 }
 
 .delete-button {
   padding: 4px 8px;
-  background-color: transparent;
-  border: none;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1;
+  color: var(--text-color-secondary);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
-  color: #6c757d;
+  transition: all 0.2s ease;
 }
 
 .delete-button:hover {
-  color: #495057;
+  color: var(--error-color);
+  border-color: var(--error-color);
+  background-color: var(--error-color-light);
 }
 
-.bullet-list-config {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.bullet-list-config > button {
+.add-button {
+  margin-top: 8px;
+  padding: 4px 8px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-color-secondary);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
   align-self: flex-start;
+}
+
+.add-button:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-color: var(--primary-color-light);
 }
 
 .slide-group-editor {
@@ -321,6 +372,70 @@ button:hover {
 .bullet-row button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.bullet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bullet-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bullet-row input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+}
+
+.bullet-row input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-light);
+}
+
+.delete-button {
+  padding: 4px 8px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-color-secondary);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-button:hover {
+  color: var(--error-color);
+  border-color: var(--error-color);
+  background-color: var(--error-color-light);
+}
+
+.add-button {
+  margin-top: 8px;
+  padding: 4px 8px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-color-secondary);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.add-button:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-color: var(--primary-color-light);
 }
 
 .slideGroupCard {

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './SlideGroupEditor.module.css';
 import { BulletSlideGroupConfig } from '../../types/slide_groups';
 import { BulletSlideConfig } from '../../types/slides';
+import { DragIndicator } from '@mui/icons-material';
 
 interface BulletEditorProps {
   config: BulletSlideGroupConfig;
@@ -46,6 +47,8 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   config,
   onChange,
 }) => {
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+
   const handleBulletChange = (index: number, value: string) => {
     const newContent = [...(config.bullets || [])];
     newContent[index] = value;
@@ -90,19 +93,75 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
     }
   };
 
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === dropIndex) return;
+
+    const newBullets = [...(config.bullets || [])];
+    const [draggedItem] = newBullets.splice(draggedIndex, 1);
+    newBullets.splice(dropIndex, 0, draggedItem);
+    onChange({ bullets: newBullets });
+    setDraggedIndex(null);
+  };
+
   return (
     <div className={styles['bullet-list']}>
       {(config.bullets || []).map((bullet, index) => (
-        <div key={index} className={styles['bullet-row']}>
+        <div 
+          key={index} 
+          className={styles['bullet-row']}
+          draggable
+          onDragStart={(e) => handleDragStart(e, index)}
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, index)}
+        >
+          <div className={styles['drag-handle']}>
+            <DragIndicator />
+          </div>
           <input
             type="text"
             value={bullet}
             onChange={(e) => handleBulletChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(index, e)}
-            placeholder={`Bullet ${index + 1}`}
+            placeholder="Enter bullet point text"
           />
+          <button
+            type="button"
+            onClick={() => handleDeleteBullet(index)}
+            className={styles['delete-button']}
+            title="Delete bullet point"
+          >
+            ×
+          </button>
         </div>
       ))}
+      <button
+        type="button"
+        onClick={() => {
+          const newContent = [...(config.bullets || []), ''];
+          onChange({ bullets: newContent });
+          // Focus the new input after React re-renders
+          setTimeout(() => {
+            const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
+            const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
+            if (lastInput) lastInput.focus();
+          }, 0);
+        }}
+        className={styles['add-button']}
+        title="Add bullet point"
+      >
+        +
+      </button>
     </div>
   );
 };
