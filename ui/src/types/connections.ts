@@ -22,7 +22,7 @@ export interface BackendConfig {
  * Complete connections configuration for Goal Finch
  */
 export interface ConnectionsConfig {
-  backend: BackendConfig;
+  backend: BackendConfig | null;
   pictureSources: SourceConfig[];
-  goalSources: SourceConfig[];
+  dataSources: SourceConfig[];
 }

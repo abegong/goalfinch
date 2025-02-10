@@ -9,12 +9,14 @@ jest.mock('../../charts/Chart');
 describe('ChartSlide', () => {
   const mockSlideConfig = {
     type: SlideType.CHART as const,
-    content: {
-      url: 'test.csv',
-      goal: 100,
-      rounding: 1,
-      units: 'points'
-    }
+    source: 'test.csv',
+    csv_extraction: {
+      date_column: 'date',
+      value_column: 'value'
+    },
+    goal: 100,
+    rounding: 1,
+    units: 'points'
   };
 
   it('renders loading state initially', () => {

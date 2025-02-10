@@ -38,7 +38,6 @@ const Dashboard: React.FC = () => {
    * Otherwise, go to the next slide in the current group.
    */
   const goToNextSlide = useCallback(() => {
-    console.log('goToNextSlide', slideGroupIndex, slideIndex);
     const currentGroup = slideGroups[slideGroupIndex];
     let nextSlideIndex = slideIndex + 1;
     let nextGroupIndex = slideGroupIndex;

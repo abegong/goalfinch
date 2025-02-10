@@ -1,12 +1,9 @@
+import { ValidationError, validateStorageData } from './validation';
+import { STORAGE_KEYS } from '../constants';
+
 /**
  * Storage service for persisting application configuration.
  */
-
-export const STORAGE_KEYS = {
-  DASHBOARD: 'goalfinch_dashboard',
-  CONNECTIONS: 'goalfinch_connections',
-  APP: 'goalfinch_app',
-} as const;
 
 export interface StorageError extends Error {
   type: 'save' | 'load' | 'clear';
@@ -87,10 +84,13 @@ export class LocalStorageService implements StorageService {
         throw new Error('localStorage is not available');
       }
 
+      // Validate data before saving
+      const validatedData = validateStorageData(key, data);
+
       // Wrap data with version
       const versionedData: VersionedData<T> = {
         version: this.CURRENT_VERSION,
-        data
+        data: validatedData
       };
 
       // Check remaining storage space (rough estimate)
@@ -137,25 +137,29 @@ export class LocalStorageService implements StorageService {
       const parsed = JSON.parse(serialized);
       
       // Handle both versioned and unversioned data for backward compatibility
+      let data: T;
       if (parsed && typeof parsed === 'object' && 'version' in parsed && 'data' in parsed) {
-        return this.migrateData(parsed as VersionedData<T>);
+        data = this.migrateData(parsed as VersionedData<T>);
+      } else {
+        // If data is not versioned, treat it as version 1
+        data = parsed as T;
       }
-      
-      // If data is not versioned, treat it as version 1
-      return parsed as T;
+
+      // Validate loaded data
+      return validateStorageData(key, data);
     } catch (error) {
       console.error(`Failed to load data for key ${key}:`, error);
       
       const storageError = this.createError('load', error, key);
       
       if (this.notify) {
-        if (error instanceof Error) {
+        if (error instanceof ValidationError) {
+          this.notify.showError(`Invalid data in storage: ${error.message}`);
+        } else if (error instanceof Error) {
           if (error.message.includes('not available')) {
-            this.notify.showWarning('Unable to load saved data: storage is not available in private browsing mode.');
-          } else if (error.message.includes('Unknown data version')) {
-            this.notify.showWarning('Unable to load saved data: incompatible data version.');
+            this.notify.showWarning('Unable to load data: storage is not available in private browsing mode.');
           } else {
-            this.notify.showWarning('Unable to load saved data. Using default settings.');
+            this.notify.showError('Failed to load data. Please try again.');
           }
         }
       }

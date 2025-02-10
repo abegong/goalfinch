@@ -6,39 +6,27 @@ import {
   Stack,
   Typography,
   Button,
-  IconButton,
   Box,
-  Divider,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { SourceConfig, BackendConfig, ConnectionsConfig } from '../../types/connections';
+import { SourceConfig, BackendConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
-import { LocalStorageService } from '../../services/storage';
 import { SourceList } from '../SourceList';
 import demoData from '../../data/demo_data';
 import { DashboardConfig } from '../../types/config';
 
 interface DeleteDialogState {
   open: boolean;
-  type: 'pictureSources' | 'goalSources';
+  type: 'pictureSources' | 'dataSources';
   index: number;
 }
 
 interface EditDialogState {
   open: boolean;
-  type: 'pictureSources' | 'goalSources' | null;
+  type: 'pictureSources' | 'dataSources' | null;
   index: number;
   source: SourceConfig;
   errors: {
@@ -49,22 +37,21 @@ interface EditDialogState {
 
 const defaultConfig = {
   connections: {
-    backend: {
-      serverUrl: '',
-      serverPassword: '',
-    },
+    backend: null,
     pictureSources: [],
-    goalSources: []
+    dataSources: []
   },
   dashboard: {
     slideGroups: [{
       type: 'picture',
+      name: 'My Pictures',
+      slide_count: 1,
+      source: '',
       slides: [{
         type: 'picture',
-        content: []
       }],
       captions: {}
-    }],
+    }]
   } as DashboardConfig,
   app: {
     appControlBar: {
@@ -90,14 +77,17 @@ const ConfigureConnections: React.FC = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setConnections(prev => ({
         ...prev,
-        backend: {
+        backend: prev.backend ? {
           ...prev.backend,
           [field]: event.target.value
+        } : {
+          serverUrl: field === 'serverUrl' ? event.target.value : '',
+          serverPassword: field === 'serverPassword' ? event.target.value : ''
         }
       }));
   };
 
-  const handleSourcesChange = (type: 'pictureSources' | 'goalSources', newSources: SourceConfig[]) => {
+  const handleSourcesChange = (type: 'pictureSources' | 'dataSources', newSources: SourceConfig[]) => {
     setConnections(prev => ({
       ...prev,
       [type]: newSources
@@ -264,9 +254,9 @@ const ConfigureConnections: React.FC = () => {
             />
 
             <SourceList 
-              type="goalSources" 
+              type="dataSources" 
               title="Data" 
-              sources={connections.goalSources}
+              sources={connections.dataSources}
               onSourcesChange={handleSourcesChange}
             />
           </Stack>

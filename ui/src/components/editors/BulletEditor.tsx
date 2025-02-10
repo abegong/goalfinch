@@ -1,33 +1,39 @@
-import React from 'react';
-import { CollapsibleSection } from './CollapsibleSection';
+import React, { useState } from 'react';
 import styles from './SlideGroupEditor.module.css';
 import { BulletSlideGroupConfig } from '../../types/slide_groups';
 import { BulletSlideConfig } from '../../types/slides';
+import { DragIndicator } from '@mui/icons-material';
 
 interface BulletEditorProps {
   config: BulletSlideGroupConfig;
+  selectedSlideIndex: number;
   onChange: (config: Partial<BulletSlideGroupConfig>) => void;
 }
 
 export const BulletEditor: React.FC<BulletEditorProps> = ({
   config,
+  selectedSlideIndex,
   onChange,
 }) => {
-  const handleSlideChange = (index: number, update: Partial<BulletSlideConfig>) => {
+  const handleSlideChange = (update: Partial<BulletSlideConfig>) => {
     const newSlides = [...(config.slides || [])];
-    newSlides[index] = { ...newSlides[index], ...update };
+    newSlides[selectedSlideIndex] = { ...newSlides[selectedSlideIndex], ...update };
     onChange({ slides: newSlides });
   };
 
+  // If there are no slides, don't render anything
+  if (!config.slides?.length) {
+    return null;
+  }
+
+  const selectedSlide = config.slides[selectedSlideIndex];
+
   return (
     <div>
-      {config.slides.map((slideConfig, index) => (
-        <BulletSlideEditor
-          key={index}
-          config={slideConfig}
-          onChange={(update) => handleSlideChange(index, update)}
-        />
-      ))}
+      <BulletSlideEditor
+        config={selectedSlide}
+        onChange={handleSlideChange}
+      />
     </div>
   );
 };
@@ -41,18 +47,21 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   config,
   onChange,
 }) => {
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
+
   const handleBulletChange = (index: number, value: string) => {
-    const newContent = [...(config.content || [])];
+    const newContent = [...(config.bullets || [])];
     newContent[index] = value;
-    onChange({ content: newContent });
+    onChange({ bullets: newContent });
   };
 
   const handleDeleteBullet = (index: number) => {
-    const newContent = (config.content || []).filter((_, i) => i !== index);
-    onChange({ content: newContent });
+    const newContent = (config.bullets || []).filter((_, i) => i !== index);
+    onChange({ bullets: newContent });
     
     // If we just deleted the last bullet, focus the new last bullet
-    if (index === (config.content || []).length - 1 && index > 0) {
+    if (index === (config.bullets || []).length - 1 && index > 0) {
       setTimeout(() => {
         const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
         const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
@@ -68,39 +77,104 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const newContent = [...(config.content || [])];
+      const newContent = [...(config.bullets || [])];
       newContent.splice(index + 1, 0, '');
-      onChange({ content: newContent });
+      onChange({ bullets: newContent });
       // Focus the new input after React re-renders
       setTimeout(() => {
         const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
         const nextInput = inputs[index + 1] as HTMLInputElement;
         if (nextInput) nextInput.focus();
       }, 0);
-    } else if ((e.key === 'Backspace' || e.key === 'Delete') && (config.content || [])[index] === '') {
+    } else if ((e.key === 'Backspace' || e.key === 'Delete') && (config.bullets || [])[index] === '') {
       e.preventDefault();
-      if ((config.content || []).length > 1) {
+      if ((config.bullets || []).length > 1) {
         handleDeleteBullet(index);
       }
     }
   };
 
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    setDropTargetIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (draggedIndex !== null && index !== dropTargetIndex) {
+      setDropTargetIndex(index);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDropTargetIndex(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === dropIndex) return;
+
+    const newBullets = [...(config.bullets || [])];
+    const [draggedItem] = newBullets.splice(draggedIndex, 1);
+    newBullets.splice(dropIndex, 0, draggedItem);
+    onChange({ bullets: newBullets });
+    setDraggedIndex(null);
+    setDropTargetIndex(null);
+  };
+
   return (
-    <CollapsibleSection title="Bullet List">
-      <div className={styles['bullet-list']}>
-        {(config.content || []).map((bullet, index) => (
-          <div key={index} className={styles['bullet-row']}>
-            <input
-              type="text"
-              value={bullet}
-              onChange={(e) => handleBulletChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              placeholder={`Bullet ${index + 1}`}
-            />
+    <div className={styles['bullet-list']}>
+      {(config.bullets || []).map((bullet, index) => (
+        <div 
+          key={index} 
+          className={`${styles['bullet-row']} ${draggedIndex === index ? styles['dragging'] : ''} ${dropTargetIndex === index && draggedIndex !== index ? styles['drop-target'] : ''}`}
+          draggable
+          onDragStart={(e) => handleDragStart(e, index)}
+          onDragOver={(e) => handleDragOver(e, index)}
+          onDragEnd={handleDragEnd}
+          onDrop={(e) => handleDrop(e, index)}
+        >
+          <div className={styles['drag-handle']}>
+            <DragIndicator />
           </div>
-        ))}
-      </div>
-    </CollapsibleSection>
+          <input
+            type="text"
+            value={bullet}
+            onChange={(e) => handleBulletChange(index, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
+            placeholder="Enter bullet point text"
+          />
+          <button
+            type="button"
+            onClick={() => handleDeleteBullet(index)}
+            className={styles['delete-button']}
+            title="Delete bullet point"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => {
+          const newContent = [...(config.bullets || []), ''];
+          onChange({ bullets: newContent });
+          // Focus the new input after React re-renders
+          setTimeout(() => {
+            const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
+            const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
+            if (lastInput) lastInput.focus();
+          }, 0);
+        }}
+        className={styles['add-button']}
+        title="Add bullet point"
+      >
+        +
+      </button>
+    </div>
   );
 };
 

@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { demoData } from '../data/demo_data';
 import { DashboardConfig, AppConfig } from '../types/config';
 import { ConnectionsConfig } from '../types/connections';
-import { LocalStorageService, STORAGE_KEYS } from '../services/storage';
+import { LocalStorageService } from '../services/storage';
+import { STORAGE_KEYS } from '../constants';
 import { useNotification } from './NotificationContext';
 
 interface ConfigContextType {
@@ -34,21 +35,15 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     try {
       const stored = storage.load<ConnectionsConfig>(STORAGE_KEYS.CONNECTIONS);
       return stored || {
-        backend: {
-          serverUrl: '',
-          serverPassword: '',
-        },
+        backend: null,
         pictureSources: [],
-        goalSources: []
+        dataSources: []
       };
     } catch (error) {
       return {
-        backend: {
-          serverUrl: '',
-          serverPassword: '',
-        },
+        backend: null,
         pictureSources: [],
-        goalSources: []
+        dataSources: []
       };
     }
   });

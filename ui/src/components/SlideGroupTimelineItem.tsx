@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { TimelineItem, TimelineSeparator, TimelineConnector, TimelineDot, TimelineContent, TimelineOppositeContent } from '@mui/lab';
-import { Typography, Box } from '@mui/material';
-import { SlideConfig, SlideType } from '../types/slides';
-import SlideGroupEditor, { getSlideIcon } from './editors/SlideGroupEditor';
-import { getSlideGroupName, SlideGroupConfig } from '../types/slide_groups';
+import { TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineConnector, TimelineOppositeContent } from '@mui/lab';
+import { Box, IconButton, Typography } from '@mui/material';
+import { Delete, DragIndicator } from '@mui/icons-material';
+import { SlideGroupConfig } from '../types/slide_groups';
+import { getSlideIcon } from './editors/SlideGroupEditor';
+import styles from './SlideGroupTimelineItem.module.css';
+import clsx from 'clsx';
 
 interface SlideGroupTimelineItemProps {
   slideGroup: SlideGroupConfig;
   index: number;
   slideGroups: SlideGroupConfig[];
-  expandedItems: boolean[];
-  onToggleExpanded: (index: number) => void;
+  onToggleExpanded: () => void;
   onDragStart: (e: React.DragEvent, index: number) => void;
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, index: number) => void;
-  onSlideGroupChange: (index: number, newConfig: Partial<SlideGroupConfig>) => void;
   onDelete: (index: number) => void;
+  isBeingDraggedOver: boolean;
   className?: string;
 }
 
@@ -23,39 +24,67 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   slideGroup,
   index,
   slideGroups,
-  expandedItems,
   onToggleExpanded,
   onDragStart,
   onDragOver,
   onDrop,
-  onSlideGroupChange,
   onDelete,
+  isBeingDraggedOver,
   className,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [dropPosition, setDropPosition] = useState<'above' | 'below' | null>(null);
 
   useEffect(() => {
-    const handleDragEnd = () => setIsDragging(false);
+    const handleDragEnd = () => {
+      setIsDragging(false);
+      setDropPosition(null);
+    };
     document.addEventListener('dragend', handleDragEnd);
     return () => document.removeEventListener('dragend', handleDragEnd);
   }, []);
+
+  useEffect(() => {
+    if (!isBeingDraggedOver) {
+      setDropPosition(null);
+    }
+  }, [isBeingDraggedOver]);
 
   const handleDragStart = (e: React.DragEvent) => {
     setIsDragging(true);
     onDragStart(e, index);
   };
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const midY = rect.top + rect.height / 2;
+    setDropPosition(e.clientY < midY ? 'above' : 'below');
+    onDragOver(e);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    onDrop(e, index);
+    setIsDragging(false);
+    setDropPosition(null);
+  };
+
   return (
-    <TimelineItem 
+    <TimelineItem
       key={index}
       draggable
       onDragStart={handleDragStart}
-      onDragOver={onDragOver}
-      onDrop={(e) => {
-        onDrop(e, index);
-        setIsDragging(false);
-      }}
-      className={[className, isDragging ? 'dragging' : ''].filter(Boolean).join(' ')}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      className={clsx(
+        styles.timelineItem,
+        className,
+        {
+          [styles.dragging]: isDragging,
+          [styles.dropAbove]: dropPosition === 'above',
+          [styles.dropBelow]: dropPosition === 'below',
+        }
+      )}
       data-dragging={isDragging}
       data-testid="timeline-item"
       sx={{ 
@@ -63,32 +92,11 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         opacity: isDragging ? 0.5 : 1,
         transition: 'opacity 0.2s'
       }}
+      onClick={onToggleExpanded}
     >
-      <TimelineOppositeContent
-        onClick={() => onToggleExpanded(index)}
-        sx={{ cursor: 'pointer' }}
-      >
-        <Typography 
-          variant="body2" 
-          color="text.secondary"
-          className="timeline-text"
-          sx={{
-            display: 'inline-block',
-            margin: '1px -24px 0px 0px',
-            padding: '8px 32px 8px 12px',
-            borderRadius: '4px',
-            '&:hover': {
-              backgroundColor: 'rgba(0, 0, 0, 0.04)',
-            }
-          }}
-        >
-          {getSlideGroupName(slideGroup)}
-        </Typography>
-      </TimelineOppositeContent>
+      <TimelineOppositeContent />
       <TimelineSeparator>
-        <TimelineDot
-          onClick={() => onToggleExpanded(index)}
-        >
+        <TimelineDot>
           {getSlideIcon(slideGroup.type)}
         </TimelineDot>
         {index < slideGroups.length - 1 && (
@@ -105,14 +113,21 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
         )}
       </TimelineSeparator>
       <TimelineContent>
-        {expandedItems[index] && (
-          <SlideGroupEditor
-            type={slideGroup.type}
-            config={slideGroup}
-            onChange={onSlideGroupChange.bind(null, index)}
-            onDelete={() => onDelete(index)}
-          />
-        )}
+        <Typography 
+          color="text.secondary"
+          className={clsx("timeline-text", styles.timelineText)}
+          sx={{
+            display: 'inline-block',
+            margin: '4px -24px 0px 0px',
+            padding: '8px 32px 8px 12px',
+            borderRadius: '4px',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            }
+          }}
+        >
+          {slideGroup.name}
+        </Typography>
       </TimelineContent>
     </TimelineItem>
   );
