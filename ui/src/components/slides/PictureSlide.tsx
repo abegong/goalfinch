@@ -1,7 +1,7 @@
 import React from 'react';
 import Slide from './Slide';
-import { Captions, PictureSlideGroupConfig } from '../../types/slide_groups';
-import { PictureSlideConfig } from '../../types/slides';
+import { type Captions, PictureSlideGroupConfig } from '../../types/slide_groups';
+import { type PictureSlideConfig } from '../../types/slides';
 import { Box } from '@mui/material';
 
 interface PictureSlideProps {

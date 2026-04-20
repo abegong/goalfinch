@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, type ReactNode, useEffect } from 'react';
 import { demoSlides, demoConnections } from '../data/demo_data';
-import { DashboardConfig, AppConfig } from '../types/config';
-import { ConnectionsConfig } from '../types/connections';
+import { type DashboardConfig, type AppConfig } from '../types/config';
+import { type ConnectionsConfig } from '../types/connections';
 import { LocalStorageService } from '../services/storage';
 import { STORAGE_KEYS } from '../constants';
 import { useNotification } from './NotificationContext';

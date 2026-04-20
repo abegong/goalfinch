@@ -1,11 +1,11 @@
 import React from 'react';
 import { VegaLite } from 'react-vega';
-import { TopLevelSpec } from 'vega-lite';
+import { type TopLevelSpec } from 'vega-lite';
 import { Typography } from '@mui/material';
 import { roundToDigits } from '../../utils/chart';
 
 interface ChartProps {
-  data: Array<{date: string; value: number}>;
+  data: {date: string; value: number}[];
   goal: number;
   rounding: number;
   units: string;
@@ -173,11 +173,11 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) 
     };
 
     // Use JSON parse/stringify for deep cloning
-    const safeData = JSON.parse(JSON.stringify(data)) as Array<{
+    const safeData = JSON.parse(JSON.stringify(data)) as {
       date: string;
       value: number;
       showPoint?: boolean;
-    }>;
+    }[];
 
     // Add showPoint property to data
     safeData.forEach((d, i: number) => {

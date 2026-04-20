@@ -2,13 +2,13 @@ import React from 'react';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import { Landscape, ShowChart, SsidChart, FormatListBulleted, Segment } from '@mui/icons-material';
 import { SlideType } from '../types/slides';
-import { SlideGroupConfig } from '../types/slide_groups';
+import { type SlideGroupConfig } from '../types/slide_groups';
 
 
 interface DashboardControlBarProps {
   visible: boolean;
   onClose: () => void;
-  slideGroups: Array<SlideGroupConfig>;
+  slideGroups: SlideGroupConfig[];
   visibleColorIndex: number;
   activeSlideIndex: number;
   onSlideClick: (groupIndex: number, slideIndex: number) => void;
@@ -51,7 +51,7 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
           <React.Fragment key={groupIndex}>
             {/* Slide Group Header */}
             <ListItem
-              onClick={() => onSlideClick(groupIndex, 0)}
+              onClick={() => { onSlideClick(groupIndex, 0); }}
               sx={{
                 cursor: 'pointer',
                 m: 0,
@@ -68,7 +68,7 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
             {slideGroup.slides.map((_, slideIndex) => (
               <ListItem
                 key={`${groupIndex}-${slideIndex}`}
-                onClick={() => onSlideClick(groupIndex, slideIndex)}
+                onClick={() => { onSlideClick(groupIndex, slideIndex); }}
                 sx={{
                   cursor: 'pointer',
                   m: 0,
@@ -101,7 +101,7 @@ const DashboardControlBar: React.FC<DashboardControlBarProps> = ({
         control={
           <Checkbox 
             checked={isPaused} 
-            onChange={(e) => onPauseChange(e.target.checked)}
+            onChange={(e) => { onPauseChange(e.target.checked); }}
             sx={{ color: 'black', '&.Mui-checked': { color: 'black' } }}
           />
         }

@@ -34,8 +34,8 @@ import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
 import { BulletEditor } from './BulletEditor';
 import { ChartEditor } from './ChartEditor';
-import { SlideConfig, PictureSlideConfig, BulletSlideConfig, ChartSlideConfig } from '../../types/slides';
-import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
+import { SlideConfig, type PictureSlideConfig, type BulletSlideConfig, type ChartSlideConfig } from '../../types/slides';
+import { type BulletSlideGroupConfig, type ChartSlideGroupConfig, type PictureSlideGroupConfig, type SlideGroupConfig } from '../../types/slide_groups';
 import PictureEditor from './PictureEditor';
 
 interface SlideGroupEditorProps {
@@ -243,7 +243,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         </Typography>
         <Box flexGrow={0.25} />
         <IconButton
-          onClick={() => setIsDeleteDialogOpen(true)}
+          onClick={() => { setIsDeleteDialogOpen(true); }}
           className={styles.deleteButton}
           size="small"
         >
@@ -262,7 +262,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
                 })}
                 elevation={1}
                 sx={{ cursor: 'pointer' }}
-                onClick={() => setSelectedSlideIndex(index)}
+                onClick={() => { setSelectedSlideIndex(index); }}
               >
                 {getSlideIcon(slide.type)}
               </Paper>
@@ -277,7 +277,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           </Box>
           {config.slides && config.slides.length > 1 && (
             <IconButton 
-              onClick={() => handleDeleteSlide(selectedSlideIndex)}
+              onClick={() => { handleDeleteSlide(selectedSlideIndex); }}
               sx={{
                 padding: '8px',
                 backgroundColor: 'white',
@@ -321,7 +321,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 
       <Dialog
         open={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
+        onClose={() => { setIsDeleteDialogOpen(false); }}
       >
         <DialogTitle>Delete Slide Group?</DialogTitle>
         <DialogContent>
@@ -330,7 +330,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setIsDeleteDialogOpen(false); }}>Cancel</Button>
           <Button 
             onClick={() => {
               if (onDelete) onDelete();

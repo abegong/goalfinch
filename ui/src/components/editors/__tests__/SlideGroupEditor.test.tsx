@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import SlideGroupEditor from '../SlideGroupEditor';
 import { SlideType } from '../../../types/slides';
-import { BulletSlideGroupConfig } from '../../../types/slide_groups';
+import { type BulletSlideGroupConfig } from '../../../types/slide_groups';
 
 const defaultConfig = {
   type: SlideType.BULLETS,

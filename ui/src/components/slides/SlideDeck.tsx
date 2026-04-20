@@ -8,7 +8,7 @@ import React, {
 import Reveal from 'reveal.js';
 import type { RevealApi, RevealConfig } from 'reveal.js';
 import 'reveal.js/reveal.css';
-import { SlideGroupConfig } from '../../types/slide_groups';
+import { type SlideGroupConfig } from '../../types/slide_groups';
 import SlideGroup from './SlideGroup';
 
 export interface SlideDeckHandle {

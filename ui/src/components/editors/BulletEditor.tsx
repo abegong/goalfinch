@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './SlideGroupEditor.module.css';
-import { BulletSlideGroupConfig } from '../../types/slide_groups';
-import { BulletSlideConfig } from '../../types/slides';
+import { type BulletSlideGroupConfig } from '../../types/slide_groups';
+import { type BulletSlideConfig } from '../../types/slides';
 import { DragIndicator } from '@mui/icons-material';
 
 interface BulletEditorProps {
@@ -130,12 +130,12 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
       {(config.bullets || []).map((bullet, index) => (
         <div 
           key={index} 
-          className={`${styles['bullet-row']} ${draggedIndex === index ? styles['dragging'] : ''} ${dropTargetIndex === index && draggedIndex !== index ? styles['drop-target'] : ''}`}
+          className={`${styles['bullet-row']} ${draggedIndex === index ? styles.dragging : ''} ${dropTargetIndex === index && draggedIndex !== index ? styles['drop-target'] : ''}`}
           draggable
-          onDragStart={(e) => handleDragStart(e, index)}
-          onDragOver={(e) => handleDragOver(e, index)}
+          onDragStart={(e) => { handleDragStart(e, index); }}
+          onDragOver={(e) => { handleDragOver(e, index); }}
           onDragEnd={handleDragEnd}
-          onDrop={(e) => handleDrop(e, index)}
+          onDrop={(e) => { handleDrop(e, index); }}
         >
           <div className={styles['drag-handle']}>
             <DragIndicator />
@@ -143,13 +143,13 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
           <input
             type="text"
             value={bullet}
-            onChange={(e) => handleBulletChange(index, e.target.value)}
-            onKeyDown={(e) => handleKeyDown(index, e)}
+            onChange={(e) => { handleBulletChange(index, e.target.value); }}
+            onKeyDown={(e) => { handleKeyDown(index, e); }}
             placeholder="Enter bullet point text"
           />
           <button
             type="button"
-            onClick={() => handleDeleteBullet(index)}
+            onClick={() => { handleDeleteBullet(index); }}
             className={styles['delete-button']}
             title="Delete bullet point"
           >

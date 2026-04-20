@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { ChartSlideConfig } from '../../types/slides';
-import { Captions } from '../../types/slide_groups';
+import { type ChartSlideConfig } from '../../types/slides';
+import { type Captions } from '../../types/slide_groups';
 import { Box, TextField, Typography, Stack, Autocomplete, Grid } from '@mui/material';
 import { ConfigContext } from '../../context/ConfigContext';
-import { SourceConfig } from '../../types/connections';
+import { type SourceConfig } from '../../types/connections';
 
 interface ChartEditorProps {
   configs: ChartSlideConfig[];
@@ -99,7 +99,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               variant="outlined"
               size="small"
               value={config.goal}
-              onChange={(e) => handleChange({ goal: Number(e.target.value) })}
+              onChange={(e) => { handleChange({ goal: Number(e.target.value) }); }}
             />
           </Grid>
 
@@ -217,7 +217,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               variant="outlined"
               size="small"
               value={config.title ?? ''}
-              onChange={(e) => handleChange({ title: e.target.value || undefined })}
+              onChange={(e) => { handleChange({ title: e.target.value || undefined }); }}
             />
           </Grid>
 
@@ -231,7 +231,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               size="small"
               inputProps={{ min: 0, max: 10 }}
               value={config.rounding}
-              onChange={(e) => handleChange({ rounding: Number(e.target.value) })}
+              onChange={(e) => { handleChange({ rounding: Number(e.target.value) }); }}
             />
           </Grid>
 
@@ -243,7 +243,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               variant="outlined"
               size="small"
               value={config.units}
-              onChange={(e) => handleChange({ units: e.target.value })}
+              onChange={(e) => { handleChange({ units: e.target.value }); }}
             />
           </Grid>
         </Grid>

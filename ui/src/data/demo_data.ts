@@ -1,16 +1,16 @@
 import { 
   SlideType,
-  ChartSlideConfig,
-  BulletSlideConfig,
-  PictureSlideConfig
+  type ChartSlideConfig,
+  type BulletSlideConfig,
+  type PictureSlideConfig
 } from '../types/slides';
 import { 
-  SlideGroupConfig,
-  BulletSlideGroupConfig,
-  ChartSlideGroupConfig,
-  PictureSlideGroupConfig
+  type SlideGroupConfig,
+  type BulletSlideGroupConfig,
+  type ChartSlideGroupConfig,
+  type PictureSlideGroupConfig
 } from '../types/slide_groups';
-import { ConnectionsConfig, SourceConfig } from '../types/connections';
+import { type ConnectionsConfig, SourceConfig } from '../types/connections';
 
 export const demoSlides: SlideGroupConfig[] = [
   {

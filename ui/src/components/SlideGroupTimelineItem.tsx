@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineConnector, TimelineOppositeContent } from '@mui/lab';
 import { Box, IconButton, Typography } from '@mui/material';
 import { Delete, DragIndicator } from '@mui/icons-material';
-import { SlideGroupConfig } from '../types/slide_groups';
+import { type SlideGroupConfig } from '../types/slide_groups';
 import { getSlideIcon } from './editors/SlideGroupEditor';
 import styles from './SlideGroupTimelineItem.module.css';
 import clsx from 'clsx';
@@ -41,7 +41,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       setDropPosition(null);
     };
     document.addEventListener('dragend', handleDragEnd);
-    return () => document.removeEventListener('dragend', handleDragEnd);
+    return () => { document.removeEventListener('dragend', handleDragEnd); };
   }, []);
 
   useEffect(() => {

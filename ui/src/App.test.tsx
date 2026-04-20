@@ -6,8 +6,8 @@ import App from './App';
 import { createAppRouter } from './router';
 import { ConfigContext } from './context/ConfigContext';
 import { SlideType } from './types/slides';
-import { BulletSlideGroupConfig } from './types/slide_groups';
-import { DashboardConfig } from './types/config';
+import { type BulletSlideGroupConfig } from './types/slide_groups';
+import { type DashboardConfig } from './types/config';
 
 const defaultConfig = {
   connections: {

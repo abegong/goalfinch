@@ -1,7 +1,7 @@
 import React from 'react';
 import Slide from './Slide';
-import { BulletSlideGroupConfig, Captions } from '../../types/slide_groups';
-import { BulletSlideConfig } from '../../types/slides';
+import { BulletSlideGroupConfig, type Captions } from '../../types/slide_groups';
+import { type BulletSlideConfig } from '../../types/slides';
 import { Box } from '@mui/material';
 
 interface BulletSlideProps {

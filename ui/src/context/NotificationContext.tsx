@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, type ReactNode } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 
 interface NotificationContextType {
@@ -34,9 +34,9 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
     });
   };
 
-  const showError = (message: string) => showNotification(message, 'error');
-  const showWarning = (message: string) => showNotification(message, 'warning');
-  const showInfo = (message: string) => showNotification(message, 'info');
+  const showError = (message: string) => { showNotification(message, 'error'); };
+  const showWarning = (message: string) => { showNotification(message, 'warning'); };
+  const showInfo = (message: string) => { showNotification(message, 'info'); };
 
   return (
     <NotificationContext.Provider value={{ showError, showWarning, showInfo }}>

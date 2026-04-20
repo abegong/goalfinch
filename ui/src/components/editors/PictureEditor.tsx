@@ -1,6 +1,6 @@
 import React from 'react';
-import { PictureSlideGroupConfig } from '../../types/slide_groups';
-import { SourceConfig } from '../../types/connections';
+import { type PictureSlideGroupConfig } from '../../types/slide_groups';
+import { type SourceConfig } from '../../types/connections';
 import styles from './SlideGroupEditor.module.css';
 import { Autocomplete, TextField } from '@mui/material';
 import { useConfig } from '../../context/ConfigContext';

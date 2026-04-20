@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Slide from './Slide';
-import { ChartSlideConfig } from '../../types/slides';
+import { type ChartSlideConfig } from '../../types/slides';
 import Chart from '../charts/Chart';
 import LoadingIndicator from '../charts/LoadingIndicator';
 import ErrorDisplay from '../charts/ErrorDisplay';

@@ -5,7 +5,7 @@ import { Add, FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@m
 import { useConfig } from '../../context/ConfigContext';
 import { SlideType } from '../../types/slides';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
-import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
+import { type BulletSlideGroupConfig, type ChartSlideGroupConfig, type PictureSlideGroupConfig, type SlideGroupConfig } from '../../types/slide_groups';
 import SlideGroupEditor from '../editors/SlideGroupEditor';
 
 const ConfigureSlides: React.FC = () => {
@@ -201,9 +201,9 @@ const ConfigureSlides: React.FC = () => {
             slideGroup={slideGroup}
             index={index}
             slideGroups={dashboard.slideGroups}
-            onToggleExpanded={() => handleClick(index)}
+            onToggleExpanded={() => { handleClick(index); }}
             onDragStart={handleDragStart}
-            onDragOver={(e) => handleDragOver(e, index)}
+            onDragOver={(e) => { handleDragOver(e, index); }}
             onDrop={handleDrop}
             onDelete={handleSlideGroupDelete}
             isBeingDraggedOver={dragOverIndex === index}
@@ -225,17 +225,17 @@ const ConfigureSlides: React.FC = () => {
                 <SpeedDialAction
                   icon={<FormatListBulleted />}
                   tooltipTitle="Add Bullet List"
-                  onClick={(e) => handleAddSlide(SlideType.BULLETS)}
+                  onClick={(e) => { handleAddSlide(SlideType.BULLETS); }}
                 />
                 <SpeedDialAction
                   icon={<Landscape />}
                   tooltipTitle="Add Picture Slides"
-                  onClick={(e) => handleAddSlide(SlideType.PICTURE)}
+                  onClick={(e) => { handleAddSlide(SlideType.PICTURE); }}
                 />
                 <SpeedDialAction
                   icon={<TimelineIcon />}
                   tooltipTitle="Add Chart"
-                  onClick={(e) => handleAddSlide(SlideType.CHART)}
+                  onClick={(e) => { handleAddSlide(SlideType.CHART); }}
                 />
               </SpeedDial>
             </Box>
@@ -259,7 +259,7 @@ const ConfigureSlides: React.FC = () => {
             <SlideGroupEditor
               type={dashboard.slideGroups[editingIndex].type}
               config={dashboard.slideGroups[editingIndex]}
-              onChange={(newConfig) => handleSlideGroupChange(editingIndex, newConfig)}
+              onChange={(newConfig) => { handleSlideGroupChange(editingIndex, newConfig); }}
               onDelete={() => {
                 handleSlideGroupDelete(editingIndex);
                 handleCloseModal();

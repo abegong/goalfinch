@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { SourceConfig } from '../types/connections';
+import { type SourceConfig } from '../types/connections';
 
 interface DeleteDialogState {
   open: boolean;
@@ -198,14 +198,14 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
                     <TableCell align="right">
                       <IconButton 
                         size="small"
-                        onClick={() => handleEditSource(index)}
+                        onClick={() => { handleEditSource(index); }}
                         data-testid={`edit-${source.name}`}
                       >
                         <EditIcon />
                       </IconButton>
                       <IconButton 
                         size="small"
-                        onClick={() => handleDeleteSource(index)}
+                        onClick={() => { handleDeleteSource(index); }}
                         data-testid={`delete-${source.name}`}
                       >
                         <DeleteIcon />
@@ -219,7 +219,7 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
         </TableContainer>
         <Button
           variant="outlined"
-          onClick={() => handleEditSource(sources.length)}
+          onClick={() => { handleEditSource(sources.length); }}
           sx={{ alignSelf: 'flex-start' }}
         >
           Add Source

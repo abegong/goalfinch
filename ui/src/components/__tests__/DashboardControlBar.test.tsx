@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import DashboardControlBar from '../DashboardControlBar';
-import { SlideGroupConfig } from '../../types/slide_groups';
+import { type SlideGroupConfig } from '../../types/slide_groups';
 import { SlideType } from '../../types/slides';
 
 describe('DashboardControlBar', () => {

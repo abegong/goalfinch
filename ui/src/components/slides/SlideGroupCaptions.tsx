@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { Captions } from '../../types/slide_groups';
+import { type Captions } from '../../types/slide_groups';
 
 interface SlideGroupCaptionsProps {
   captions: Captions;

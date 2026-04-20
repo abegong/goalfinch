@@ -12,11 +12,11 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
-import { SourceConfig, BackendConfig } from '../../types/connections';
+import { type SourceConfig, type BackendConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
 import { SourceList } from '../SourceList';
 import demoData, { demoConnections } from '../../data/demo_data';
-import { DashboardConfig } from '../../types/config';
+import { type DashboardConfig } from '../../types/config';
 
 interface DeleteDialogState {
   open: boolean;
@@ -166,7 +166,7 @@ const ConfigureConnections: React.FC = () => {
     setIsDragging(false);
 
     const file = e.dataTransfer.files[0];
-    if (file && file.type === 'application/json') {
+    if (file?.type === 'application/json') {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
@@ -187,7 +187,7 @@ const ConfigureConnections: React.FC = () => {
   }, [setConnections, setDashboard, setApp]);
 
   const handleFileInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files || !event.target.files[0]) {
+    if (!event.target.files?.[0]) {
       return;
     }
 
@@ -280,13 +280,13 @@ const ConfigureConnections: React.FC = () => {
             <Button variant="outlined" onClick={handleExportConfig}>
               Export Configuration
             </Button>
-            <Button variant="outlined" onClick={() => setImportModalOpen(true)}>
+            <Button variant="outlined" onClick={() => { setImportModalOpen(true); }}>
               Import Configuration
             </Button>
             <Button 
               variant="outlined" 
               color="error" 
-              onClick={() => setResetModalOpen(true)}
+              onClick={() => { setResetModalOpen(true); }}
               sx={{ 
                 '&:hover': {
                   backgroundColor: 'error.main',
@@ -303,7 +303,7 @@ const ConfigureConnections: React.FC = () => {
 
       <Dialog
         open={resetModalOpen}
-        onClose={() => setResetModalOpen(false)}
+        onClose={() => { setResetModalOpen(false); }}
       >
         <DialogTitle>Reset Configuration</DialogTitle>
         <DialogContent>
@@ -312,9 +312,9 @@ const ConfigureConnections: React.FC = () => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setResetModalOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setResetModalOpen(false); }}>Cancel</Button>
           <Button
-            onClick={() => handleReset(true)}
+            onClick={() => { handleReset(true); }}
             color="error"
             sx={{ 
               '&:hover': {
@@ -327,7 +327,7 @@ const ConfigureConnections: React.FC = () => {
             Reset to demo configuration
           </Button>
           <Button
-            onClick={() => handleReset(false)}
+            onClick={() => { handleReset(false); }}
             color="error"
             sx={{ 
               '&:hover': {
@@ -344,7 +344,7 @@ const ConfigureConnections: React.FC = () => {
 
       <Dialog
         open={importModalOpen}
-        onClose={() => setImportModalOpen(false)}
+        onClose={() => { setImportModalOpen(false); }}
         maxWidth="sm"
         fullWidth
       >
@@ -377,7 +377,7 @@ const ConfigureConnections: React.FC = () => {
           <input type="file" onChange={handleFileInput} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setImportModalOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setImportModalOpen(false); }}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </>

@@ -4,7 +4,7 @@ import { describe, it, vi } from 'vitest';
 import Dashboard from '../Dashboard';
 import { ConfigProvider } from '../../../context/ConfigContext';
 import { LayoutContext } from '../../Layout';
-import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig } from '../../../types/slide_groups';
+import { type BulletSlideGroupConfig, type ChartSlideGroupConfig, type PictureSlideGroupConfig } from '../../../types/slide_groups';
 import { SlideType } from '../../../types/slides';
 
 const mockSlideGroups = [

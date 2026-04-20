@@ -4,7 +4,7 @@ import { Menu } from '@mui/icons-material';
 import { LayoutContext } from '../Layout';
 import { useConfig } from '../../context/ConfigContext';
 import DashboardControlBar from '../DashboardControlBar';
-import SlideDeck, { SlideDeckHandle } from '../slides/SlideDeck';
+import SlideDeck, { type SlideDeckHandle } from '../slides/SlideDeck';
 import { colors } from '../../theme/colors';
 
 /** Total interval between slide transitions in milliseconds */
@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    return () => { document.removeEventListener('keydown', handleKeyDown); };
   }, [dashboardControlBarVisible, setAppControlBarVisible]);
 
   const handleControlBarSlideClick = (groupIndex: number, slideIndex: number) => {

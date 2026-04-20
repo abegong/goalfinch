@@ -168,7 +168,7 @@ export default function AppControlBar({ open, setOpen, visible }: AppControlBarP
         pl: 1
       }}>
         <IconButton 
-          onClick={() => setOpen(!open)}
+          onClick={() => { setOpen(!open); }}
           sx={{
             transform: open ? 'rotate(0deg)' : 'rotate(-90deg)',
             padding: '12px',
