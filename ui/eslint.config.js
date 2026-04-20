@@ -1,61 +1,100 @@
-const js = require('@eslint/js');
-const tseslint = require('@typescript-eslint/eslint-plugin');
-const tsparser = require('@typescript-eslint/parser');
-const reactPlugin = require('eslint-plugin-react');
-const reactHooksPlugin = require('eslint-plugin-react-hooks');
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+import vitestPlugin from '@vitest/eslint-plugin';
+import testingLibraryPlugin from 'eslint-plugin-testing-library';
+import globals from 'globals';
 
-module.exports = [
+export default tseslint.config(
+  {
+    ignores: ['dist/**', 'node_modules/**', 'build/**', 'coverage/**'],
+  },
+
   js.configs.recommended,
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
+
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      parser: tsparser,
       parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-        ecmaVersion: 'latest',
-        sourceType: 'module',
+        project: ['./tsconfig.json', './tsconfig.node.json'],
+        tsconfigRootDir: import.meta.dirname,
+        ecmaFeatures: { jsx: true },
       },
       globals: {
-        document: 'readonly',
-        window: 'readonly',
-        console: 'readonly',
-        setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        requestAnimationFrame: 'readonly',
-        HTMLElement: 'readonly',
-        HTMLInputElement: 'readonly',
-        KeyboardEvent: 'readonly',
-        // Jest globals
-        test: 'readonly',
-        expect: 'readonly',
-        describe: 'readonly',
-        it: 'readonly',
-        beforeEach: 'readonly',
-        afterEach: 'readonly',
+        ...globals.browser,
+        ...globals.es2022,
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint,
-      'react': reactPlugin,
+      react: reactPlugin,
       'react-hooks': reactHooksPlugin,
-    },
-    rules: {
-      ...tseslint.configs.recommended.rules,
-      ...reactPlugin.configs.recommended.rules,
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-      'react/react-in-jsx-scope': 'off', // Not needed in React 17+
-      '@typescript-eslint/no-explicit-any': 'warn', // Downgrade to warning
-      // '@typescript-eslint/no-unused-vars': 'warn', // Downgrade to warning
+      'jsx-a11y': jsxA11yPlugin,
     },
     settings: {
-      react: {
-        version: 'detect',
-      },
+      react: { version: 'detect' },
+    },
+    rules: {
+      ...reactPlugin.configs.recommended.rules,
+      ...reactPlugin.configs['jsx-runtime'].rules,
+      ...reactHooksPlugin.configs.recommended.rules,
+      ...jsxA11yPlugin.configs.recommended.rules,
+
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
+      ],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        { checksVoidReturn: { attributes: false } },
+      ],
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        { allowNumber: true, allowBoolean: true },
+      ],
+
+      'react/prop-types': 'off',
     },
   },
-];
+
+  {
+    files: [
+      'src/**/*.test.{ts,tsx}',
+      'src/**/__tests__/**/*.{ts,tsx}',
+      'src/setupTests.ts',
+    ],
+    plugins: {
+      vitest: vitestPlugin,
+      'testing-library': testingLibraryPlugin,
+    },
+    rules: {
+      ...vitestPlugin.configs.recommended.rules,
+      ...testingLibraryPlugin.configs.react.rules,
+
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
+  },
+
+  {
+    files: ['vite.config.ts', 'eslint.config.js', '*.config.{js,ts}'],
+    ...tseslint.configs.disableTypeChecked,
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+);
