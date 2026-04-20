@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": ".",
+  "packageManager": "pnpm@10.28.1",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -18,8 +19,10 @@
     "@types/papaparse": "^5.3.15",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/testing-library__jest-dom": "^5.14.9",
     "@uiw/react-json-view": "^1.12.2",
-    "framer-motion": "^12.0.11",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
     "papaparse": "^5.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -75,5 +78,10 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(d3|d3-array|d3-scale|d3-time|d3-time-format|d3-shape|d3-path|d3-color|d3-interpolate|d3-format|d3-selection|d3-axis|d3-zoom|d3-brush|d3-hierarchy|d3-drag|d3-dispatch|d3-ease|d3-timer|d3-transition|internmap)/)"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/d3-dispatch": "3.0.6"
+    }
   }
 }
