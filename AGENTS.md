@@ -19,6 +19,16 @@ goalfinch/
 
 Most development activity is in `ui/`. The `server/` is minimal and the Python side is scripts + docs.
 
+## Branches and deploys
+
+- `main` — default branch. All feature work lands here via PRs from topic branches.
+- `release` — production deploy branch for the React app (www.goalfinch.com). Netlify builds and deploys from this branch.
+- To promote a change to production, open a PR **from `main` into `release`** and merge it. `release` should only ever advance via these `main` → `release` merges; no direct commits, no feature branches targeting `release`.
+- The `release` → production-site mapping is configured in the Netlify dashboard (Site settings → Build & deploy → Branches), not in `netlify.toml`. The multi-site `[[sites]]` format used here can't pin a production branch from config.
+- The two sites defined in the root `netlify.toml` (`goalfinch-site` marketing site, `goalfinch-docs` at docs.goalfinch.com) have their own branch settings in the Netlify dashboard. Those are not documented here — check the dashboard if you need to know.
+
+Agents: don't target `release` for feature work, and don't expect it to be up to date with `main`. Treat `main` as the source of truth for code state.
+
 ## Ground rules
 
 ### Ask before adding tests or docs
