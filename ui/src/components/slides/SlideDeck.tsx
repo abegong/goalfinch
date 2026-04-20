@@ -34,6 +34,12 @@ interface SlideDeckProps {
  *
  * React still owns the slide content (children of each <section>); reveal
  * owns navigation state and animation.
+ *
+ * Lifecycle note: reveal.initialize() is asynchronous. Calling sync(),
+ * configure(), or destroy() before it resolves throws (e.g. "Cannot read
+ * properties of undefined (reading 'forEach')" from the controller's
+ * unbind()). All post-init operations are gated on initializedRef; cleanup
+ * that happens pre-init is deferred to the initialize() promise.
  */
 const SlideDeck = forwardRef<SlideDeckHandle, SlideDeckProps>(function SlideDeck(
   { slideGroups, autoSlideMs, paused, onIndicesChange },
@@ -41,11 +47,22 @@ const SlideDeck = forwardRef<SlideDeckHandle, SlideDeckProps>(function SlideDeck
 ) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const deckRef = useRef<RevealApi | null>(null);
+  const initializedRef = useRef(false);
   const onIndicesChangeRef = useRef(onIndicesChange);
+  const pausedRef = useRef(paused);
+  const autoSlideMsRef = useRef(autoSlideMs);
 
   useEffect(() => {
     onIndicesChangeRef.current = onIndicesChange;
   }, [onIndicesChange]);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
+
+  useEffect(() => {
+    autoSlideMsRef.current = autoSlideMs;
+  }, [autoSlideMs]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -71,6 +88,9 @@ const SlideDeck = forwardRef<SlideDeckHandle, SlideDeckProps>(function SlideDeck
     };
 
     const deck = new Reveal(containerRef.current, config);
+    deckRef.current = deck;
+
+    let disposed = false;
 
     const handleSlideChanged = () => {
       const { h, v } = deck.getIndices();
@@ -78,49 +98,77 @@ const SlideDeck = forwardRef<SlideDeckHandle, SlideDeckProps>(function SlideDeck
     };
 
     deck.initialize().then(() => {
+      if (disposed) {
+        // Unmounted before init finished; tear down the now-initialized deck.
+        try {
+          deck.destroy();
+        } catch {
+          // Ignore: best-effort cleanup.
+        }
+        return;
+      }
+      initializedRef.current = true;
       deck.on('slidechanged', handleSlideChanged);
-      // Override the space (32) key binding with a no-op so Dashboard's
-      // document-level keydown handler can own the pause toggle.
+      // Override space (32) with a no-op so Dashboard's document-level
+      // keydown handler owns the pause toggle.
       const noop = () => {};
       deck.configure({ keyboard: { 32: noop } });
+      // Re-apply props that may have changed during init.
+      deck.configure({
+        autoSlide: pausedRef.current ? 0 : autoSlideMsRef.current,
+      });
+      deck.sync();
+      deck.layout();
     });
 
-    deckRef.current = deck;
-
     return () => {
-      deck.off('slidechanged', handleSlideChanged);
-      deck.destroy();
+      disposed = true;
+      if (initializedRef.current) {
+        try {
+          deck.off('slidechanged', handleSlideChanged);
+          deck.destroy();
+        } catch {
+          // Ignore: best-effort cleanup.
+        }
+      }
+      initializedRef.current = false;
       deckRef.current = null;
     };
-    // Intentionally run once on mount; slide content changes are handled via
-    // deck.sync() in the effect below, and pause/autoSlide via their own effects.
+    // Intentionally run once on mount; slide content changes, pause, and
+    // autoSlide are handled via their own effects below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Re-sync reveal when the slide group shape changes (e.g. config edits).
   useEffect(() => {
+    if (!initializedRef.current) return;
     const deck = deckRef.current;
     if (!deck) return;
     deck.sync();
     deck.layout();
   }, [slideGroups]);
 
-  // Toggle autoslide when pause state or interval changes.
   useEffect(() => {
+    if (!initializedRef.current) return;
     const deck = deckRef.current;
     if (!deck) return;
     deck.configure({ autoSlide: paused ? 0 : autoSlideMs });
   }, [paused, autoSlideMs]);
 
   const goToSlide = useCallback((groupIndex: number, slideIndex: number) => {
+    if (!initializedRef.current) return;
     deckRef.current?.slide(groupIndex, slideIndex);
   }, []);
 
-  const setAutoSlide = useCallback((enabled: boolean) => {
-    deckRef.current?.configure({ autoSlide: enabled ? autoSlideMs : 0 });
-  }, [autoSlideMs]);
+  const setAutoSlide = useCallback(
+    (enabled: boolean) => {
+      if (!initializedRef.current) return;
+      deckRef.current?.configure({ autoSlide: enabled ? autoSlideMs : 0 });
+    },
+    [autoSlideMs],
+  );
 
   const getCurrentIndices = useCallback(() => {
+    if (!initializedRef.current) return { h: 0, v: 0 };
     const indices = deckRef.current?.getIndices();
     return { h: indices?.h ?? 0, v: indices?.v ?? 0 };
   }, []);
