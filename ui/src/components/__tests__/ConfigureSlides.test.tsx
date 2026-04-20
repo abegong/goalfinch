@@ -6,9 +6,10 @@ import ConfigureSlides from '../pages/ConfigureSlides';
 vi.mock('../../context/ConfigContext', () => ({
   useConfig: () => ({
     dashboard: {
-      slideGroups: [{ 
+      slideGroups: [{
         type: 'NESTED_IMAGES',
         slide_count: 3,
+        slides: [],
         captions: {}
       }],
     },
@@ -46,7 +47,7 @@ describe('Goals Component', () => {
     mod.useConfig = () => ({
       dashboard: {
         slideGroups: [
-          { type: 'NESTED_IMAGES', slide_count: 3, captions: {} },
+          { type: 'NESTED_IMAGES', slide_count: 3, slides: [], captions: {} },
           { type: 'BULLETS', slides: [{ type: 'BULLETS', content: [''] }], captions: {} }
         ],
       },
@@ -102,7 +103,7 @@ describe('Goals Component', () => {
     expect(mockSetDashboard).toHaveBeenCalledWith(expect.objectContaining({
       slideGroups: [
         { type: 'BULLETS', slides: [{ type: 'BULLETS', content: [''] }], captions: {} },
-        { type: 'NESTED_IMAGES', slide_count: 3, captions: {} },
+        { type: 'NESTED_IMAGES', slide_count: 3, slides: [], captions: {} },
       ],
     }));
   });

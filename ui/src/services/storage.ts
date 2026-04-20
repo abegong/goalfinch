@@ -79,11 +79,6 @@ export class LocalStorageService implements StorageService {
 
   save<T>(key: string, data: T): void {
     try {
-      // Check if localStorage is available
-      if (!window.localStorage) {
-        throw new Error('localStorage is not available');
-      }
-
       // Validate data before saving
       const validatedData = validateStorageData(key, data);
 
@@ -125,10 +120,6 @@ export class LocalStorageService implements StorageService {
 
   load<T>(key: string): T | null {
     try {
-      if (!window.localStorage) {
-        throw new Error('localStorage is not available');
-      }
-
       const serialized = localStorage.getItem(key);
       if (!serialized) {
         return null;
@@ -170,10 +161,6 @@ export class LocalStorageService implements StorageService {
 
   clear(): void {
     try {
-      if (!window.localStorage) {
-        throw new Error('localStorage is not available');
-      }
-
       Object.values(STORAGE_KEYS).forEach(key => {
         localStorage.removeItem(key);
       });

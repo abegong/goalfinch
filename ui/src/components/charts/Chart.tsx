@@ -22,9 +22,7 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate: _a
   ];
 
   // Find the last date with data
-  const lastDataPoint = [...data]
-    .reverse()
-    .find(d => d.value !== null);
+  const lastDataPoint = data[data.length - 1];
 
   if (lastDataPoint) {
     // Calculate target value for the last data point

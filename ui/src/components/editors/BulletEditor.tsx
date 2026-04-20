@@ -16,17 +16,19 @@ export const BulletEditor: React.FC<BulletEditorProps> = ({
   onChange,
 }) => {
   const handleSlideChange = (update: Partial<BulletSlideConfig>) => {
-    const newSlides = [...(config.slides || [])];
-    newSlides[selectedSlideIndex] = { ...newSlides[selectedSlideIndex], ...update };
+    const newSlides = [...config.slides];
+    newSlides[selectedSlideIndex] = { ...newSlides[selectedSlideIndex], ...update } as BulletSlideConfig;
     onChange({ slides: newSlides });
   };
 
-  // If there are no slides, don't render anything
-  if (!config.slides?.length) {
+  if (config.slides.length === 0) {
     return null;
   }
 
   const selectedSlide = config.slides[selectedSlideIndex];
+  if (!selectedSlide) {
+    return null;
+  }
 
   return (
     <div>
@@ -51,20 +53,20 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
 
   const handleBulletChange = (index: number, value: string) => {
-    const newContent = [...(config.bullets || [])];
+    const newContent = [...config.bullets];
     newContent[index] = value;
     onChange({ bullets: newContent });
   };
 
   const handleDeleteBullet = (index: number) => {
-    const newContent = (config.bullets || []).filter((_, i) => i !== index);
+    const newContent = config.bullets.filter((_, i) => i !== index);
     onChange({ bullets: newContent });
-    
+
     // If we just deleted the last bullet, focus the new last bullet
-    if (index === (config.bullets || []).length - 1 && index > 0) {
+    if (index === config.bullets.length - 1 && index > 0) {
       setTimeout(() => {
         const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
-        const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
+        const lastInput = inputs[inputs.length - 1] as HTMLInputElement | undefined;
         if (lastInput) {
           lastInput.focus();
           const len = lastInput.value.length;
@@ -77,18 +79,17 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const newContent = [...(config.bullets || [])];
+      const newContent = [...config.bullets];
       newContent.splice(index + 1, 0, '');
       onChange({ bullets: newContent });
-      // Focus the new input after React re-renders
       setTimeout(() => {
         const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
-        const nextInput = inputs[index + 1] as HTMLInputElement;
+        const nextInput = inputs[index + 1] as HTMLInputElement | undefined;
         if (nextInput) nextInput.focus();
       }, 0);
-    } else if ((e.key === 'Backspace' || e.key === 'Delete') && (config.bullets || [])[index] === '') {
+    } else if ((e.key === 'Backspace' || e.key === 'Delete') && config.bullets[index] === '') {
       e.preventDefault();
-      if ((config.bullets || []).length > 1) {
+      if (config.bullets.length > 1) {
         handleDeleteBullet(index);
       }
     }
@@ -117,9 +118,11 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
     e.preventDefault();
     if (draggedIndex === null || draggedIndex === dropIndex) return;
 
-    const newBullets = [...(config.bullets || [])];
+    const newBullets = [...config.bullets];
     const [draggedItem] = newBullets.splice(draggedIndex, 1);
-    newBullets.splice(dropIndex, 0, draggedItem);
+    if (draggedItem !== undefined) {
+      newBullets.splice(dropIndex, 0, draggedItem);
+    }
     onChange({ bullets: newBullets });
     setDraggedIndex(null);
     setDropTargetIndex(null);
@@ -127,7 +130,7 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
 
   return (
     <div className={styles['bullet-list']}>
-      {(config.bullets || []).map((bullet, index) => (
+      {config.bullets.map((bullet, index) => (
         <div 
           key={index} 
           className={`${styles['bullet-row']} ${draggedIndex === index ? styles.dragging : ''} ${dropTargetIndex === index && draggedIndex !== index ? styles['drop-target'] : ''}`}
@@ -160,12 +163,11 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
       <button
         type="button"
         onClick={() => {
-          const newContent = [...(config.bullets || []), ''];
+          const newContent = [...config.bullets, ''];
           onChange({ bullets: newContent });
-          // Focus the new input after React re-renders
           setTimeout(() => {
             const inputs = document.querySelectorAll(`.${styles['bullet-row']} input`);
-            const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
+            const lastInput = inputs[inputs.length - 1] as HTMLInputElement | undefined;
             if (lastInput) lastInput.focus();
           }, 0);
         }}

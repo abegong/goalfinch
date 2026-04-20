@@ -96,7 +96,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       case SlideType.BULLETS:
         bulletConfig = config as BulletSlideGroupConfig;
         onChange({
-          slides: [...(bulletConfig.slides || []), {
+          slides: [...bulletConfig.slides, {
             type: SlideType.BULLETS,
             bullets: ['']
           }]
@@ -105,7 +105,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       case SlideType.CHART:
         chartConfig = config as ChartSlideGroupConfig;
         onChange({
-          slides: [...(chartConfig.slides || []), {
+          slides: [...chartConfig.slides, {
             type: SlideType.CHART,
             source: '',
             csv_extraction: null,
@@ -120,7 +120,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       case SlideType.PICTURE:
         pictureConfig = config as PictureSlideGroupConfig;
         onChange({
-          slides: [...(pictureConfig.slides || []), {
+          slides: [...pictureConfig.slides, {
             type: SlideType.PICTURE,
           }]
         } as Partial<PictureSlideGroupConfig>);
@@ -138,8 +138,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   const confirmDeleteSlide = () => {
     if (slideToDelete === null) return;
 
-    // Don't allow deleting the last slide
-    if (!config.slides || config.slides.length <= 1) {
+    if (config.slides.length <= 1) {
       return;
     }
 
@@ -244,7 +243,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       <Box className={styles.slideManagement}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Box className={styles.slideList}>
-            {config.slides?.map((slide, index) => (
+            {config.slides.map((slide, index) => (
               <Paper
                 key={index}
                 className={clsx(styles.slideThumb, {
@@ -265,7 +264,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               <Add sx={{ fontSize: 24 }} />
             </IconButton>
           </Box>
-          {config.slides && config.slides.length > 1 && (
+          {config.slides.length > 1 && (
             <IconButton 
               onClick={() => { handleDeleteSlide(selectedSlideIndex); }}
               sx={{

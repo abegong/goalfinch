@@ -19,12 +19,14 @@ export const ChartEditor: React.FC<ChartEditorProps> = ({ configs, selectedSlide
     onChange(newConfigs);
   };
 
-  // If there are no slides, don't render anything
-  if (!configs?.length) {
+  if (configs.length === 0) {
     return null;
   }
 
   const selectedConfig = configs[selectedSlideIndex];
+  if (!selectedConfig) {
+    return null;
+  }
 
   return (
     <div>

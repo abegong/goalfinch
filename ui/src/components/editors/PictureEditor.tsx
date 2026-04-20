@@ -15,7 +15,7 @@ export const PictureEditor: React.FC<PictureEditorProps> = ({
   onChange,
 }) => {
   const { connections } = useConfig();
-  const sources = connections?.pictureSources || [];
+  const sources = connections.pictureSources;
 
   return (
     <div className={styles.editorSection}>

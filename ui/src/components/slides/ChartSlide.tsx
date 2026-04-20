@@ -69,7 +69,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
           <LoadingIndicator />
         ) : error ? (
           <ErrorDisplay message={error} />
-        ) : data ? (
+        ) : (
           <Chart 
             data={data} 
             goal={slideConfig.goal}
@@ -77,7 +77,7 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
             units={slideConfig.units}
             asOfDate={slideConfig.asOfDate}
           />
-        ) : null}
+        )}
       </Box>
     </Slide>
   );

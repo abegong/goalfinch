@@ -73,18 +73,16 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
       }
       return '';
     }
-    if (field === 'url') {
-      if (!value) {
-        return 'URL is required';
-      }
-      try {
-        new URL(value);
-        return '';
-      } catch {
-        return 'Please enter a valid URL';
-      }
+    // field === 'url'
+    if (!value) {
+      return 'URL is required';
     }
-    return '';
+    try {
+      new URL(value);
+      return '';
+    } catch {
+      return 'Please enter a valid URL';
+    }
   };
 
   const handleEditChange = (field: keyof SourceConfig) => (event: React.ChangeEvent<HTMLInputElement>) => {
