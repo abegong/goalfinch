@@ -7,8 +7,7 @@
  * 3. SlideGroupConfigType - A type utility for type-safe discrimination of slide group types
  */
 
-import { type SlideType, type BulletSlideConfig, type ChartSlideConfig, type PictureSlideConfig } from './slides';
-import { ReactNode } from 'react';
+import type { SlideType, BulletSlideConfig, ChartSlideConfig, PictureSlideConfig } from './slides';
 
 
 /**

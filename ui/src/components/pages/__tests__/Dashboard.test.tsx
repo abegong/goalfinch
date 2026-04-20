@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { describe, it, vi } from 'vitest';
 import Dashboard from '../Dashboard';
-import { ConfigProvider } from '../../../context/ConfigContext';
 import { LayoutContext } from '../../Layout';
 import { type BulletSlideGroupConfig, type ChartSlideGroupConfig, type PictureSlideGroupConfig } from '../../../types/slide_groups';
 import { SlideType } from '../../../types/slides';

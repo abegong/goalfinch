@@ -1,9 +1,6 @@
 import React from 'react';
 import { type SlideGroupConfig } from '../../types/slide_groups';
 import {
-  type BulletSlideConfig,
-  type ChartSlideConfig,
-  type PictureSlideConfig,
   type SlideConfig,
   SlideType,
 } from '../../types/slides';

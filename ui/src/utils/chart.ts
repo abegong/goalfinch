@@ -1,4 +1,3 @@
-import * as d3 from 'd3';
 import Papa from 'papaparse';
 
 export function getDatesInMonth(asOfDate?: string) {

@@ -12,28 +12,11 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
-import { type SourceConfig, type BackendConfig } from '../../types/connections';
+import type { SourceConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
 import { SourceList } from '../SourceList';
 import demoData, { demoConnections } from '../../data/demo_data';
 import { type DashboardConfig } from '../../types/config';
-
-interface DeleteDialogState {
-  open: boolean;
-  type: 'pictureSources' | 'dataSources';
-  index: number;
-}
-
-interface EditDialogState {
-  open: boolean;
-  type: 'pictureSources' | 'dataSources' | null;
-  index: number;
-  source: SourceConfig;
-  errors: {
-    name: string;
-    url: string;
-  };
-}
 
 const defaultConfig = {
   connections: {
@@ -72,20 +55,6 @@ const ConfigureConnections: React.FC = () => {
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
-
-  const handleBackendChange = (field: keyof BackendConfig) => 
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setConnections(prev => ({
-        ...prev,
-        backend: prev.backend ? {
-          ...prev.backend,
-          [field]: event.target.value
-        } : {
-          serverUrl: field === 'serverUrl' ? event.target.value : '',
-          serverPassword: field === 'serverPassword' ? event.target.value : ''
-        }
-      }));
-  };
 
   const handleSourcesChange = (type: 'pictureSources' | 'dataSources', newSources: SourceConfig[]) => {
     setConnections(prev => ({
@@ -176,7 +145,7 @@ const ConfigureConnections: React.FC = () => {
 
           const configData = parseConfig(e.target.result as string);
           importConfig(configData);
-        } catch (error) {
+        } catch {
           alert('Error parsing configuration file');
         }
       };
@@ -202,7 +171,7 @@ const ConfigureConnections: React.FC = () => {
 
         const configData = parseConfig(e.target.result as string);
         importConfig(configData);
-      } catch (error) {
+      } catch {
         alert('Error parsing configuration file');
       }
     };

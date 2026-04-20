@@ -1,41 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { SlideType, slideTypes } from '../../types/slides';
-import { 
-  FormatListBulleted, 
-  Landscape, 
+import { SlideType } from '../../types/slides';
+import {
+  FormatListBulleted,
+  Landscape,
   Timeline,
   Delete,
-  Build,
-  Segment,
-  SsidChart,
   DeleteOutline,
   Add,
-  SpaceBar
 } from '@mui/icons-material';
-import { 
-  SpeedDial, 
-  SpeedDialAction, 
-  SpeedDialIcon, 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  DialogActions, 
-  Button, 
-  Typography, 
-  Card, 
-  CardContent, 
-  CardHeader,
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography,
+  CardContent,
   TextField,
   IconButton,
   Box,
-  Paper
+  Paper,
 } from '@mui/material';
 import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
 import { BulletEditor } from './BulletEditor';
 import { ChartEditor } from './ChartEditor';
-import { SlideConfig, type PictureSlideConfig, type BulletSlideConfig, type ChartSlideConfig } from '../../types/slides';
-import { type BulletSlideGroupConfig, type ChartSlideGroupConfig, type PictureSlideGroupConfig, type SlideGroupConfig } from '../../types/slide_groups';
+import type { PictureSlideConfig, BulletSlideConfig, ChartSlideConfig } from '../../types/slides';
+import type { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
 import PictureEditor from './PictureEditor';
 
 interface SlideGroupEditorProps {
@@ -80,7 +71,6 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   onTransitionEnd,
 }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
   const [name, setName] = useState(config.name || "Untitled Slide Group");
   const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
   const [slideToDelete, setSlideToDelete] = useState<number | null>(null);

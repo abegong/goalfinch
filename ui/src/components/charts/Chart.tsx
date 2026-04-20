@@ -12,7 +12,7 @@ interface ChartProps {
   asOfDate?: string;
 }
 
-const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) => {
+const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate: _asOfDate }) => {
   // Generate goal line data
   const firstDate = data[0]?.date;
   const lastDateInMonth = data[data.length - 1]?.date;
@@ -41,12 +41,6 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) 
       { date: lastDataPoint.date, value: targetForLastDay }
     ];
 
-    // Get current value (last non-null value)
-    const currentValue = [...data]
-      .reverse()
-      .find(d => d.value !== null)?.value || 0;
-
-    // Calculate weekly target values
     const weeklyTargets = [];
     
     for (let i = 0; i <= totalDays; i += 7) {

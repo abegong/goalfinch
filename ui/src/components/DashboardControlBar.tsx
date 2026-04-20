@@ -1,6 +1,6 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, Typography, Checkbox, FormControlLabel } from '@mui/material';
-import { Landscape, ShowChart, SsidChart, FormatListBulleted, Segment } from '@mui/icons-material';
+import { Landscape, ShowChart, FormatListBulleted } from '@mui/icons-material';
 import { SlideType } from '../types/slides';
 import { type SlideGroupConfig } from '../types/slide_groups';
 

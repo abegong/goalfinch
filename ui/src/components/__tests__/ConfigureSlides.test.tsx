@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen, act } from '@testing-library/react';
-import { describe, it, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach, vi } from 'vitest';
 import ConfigureSlides from '../pages/ConfigureSlides';
-import { SlideGroupConfig } from '../../types/slide_groups';
 
 vi.mock('../../context/ConfigContext', () => ({
   useConfig: () => ({
@@ -28,7 +27,7 @@ vi.mock('@mui/lab', () => ({
   TimelineOppositeContent: ({ children, onClick }: any) => (
     <div onClick={onClick} data-testid="timeline-opposite-content">{children}</div>
   ),
-  TimelineDot: ({ children, sx, onClick, ...props }: any) => (
+  TimelineDot: ({ children, sx: _sx, onClick, ...props }: any) => (
     <div data-testid="timeline-dot" onClick={onClick} {...props}>{children}</div>
   ),
   timelineOppositeContentClasses: {

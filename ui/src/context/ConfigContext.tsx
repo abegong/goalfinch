@@ -26,7 +26,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     try {
       const stored = storage.load<DashboardConfig>(STORAGE_KEYS.DASHBOARD);
       return stored || { slideGroups: demoSlides };
-    } catch (error) {
+    } catch {
       return { slideGroups: demoSlides };
     }
   });
@@ -35,7 +35,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     try {
       const stored = storage.load<ConnectionsConfig>(STORAGE_KEYS.CONNECTIONS);
       return stored || demoConnections;
-    } catch (error) {
+    } catch {
       return demoConnections;
     }
   });
@@ -52,7 +52,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           mode: 'light'
         }
       };
-    } catch (error) {
+    } catch {
       return {
         appControlBar: {
           open: false,
@@ -69,7 +69,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   useEffect(() => {
     try {
       storage.save(STORAGE_KEYS.DASHBOARD, dashboard);
-    } catch (error) {
+    } catch {
       // Error is already handled by storage service
     }
   }, [dashboard]);
@@ -77,7 +77,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   useEffect(() => {
     try {
       storage.save(STORAGE_KEYS.CONNECTIONS, connections);
-    } catch (error) {
+    } catch {
       // Error is already handled by storage service
     }
   }, [connections]);
@@ -85,7 +85,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   useEffect(() => {
     try {
       storage.save(STORAGE_KEYS.APP, app);
-    } catch (error) {
+    } catch {
       // Error is already handled by storage service
     }
   }, [app]);

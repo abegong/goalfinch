@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineConnector, TimelineOppositeContent } from '@mui/lab';
-import { Box, IconButton, Typography } from '@mui/material';
-import { Delete, DragIndicator } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 import { type SlideGroupConfig } from '../types/slide_groups';
 import { getSlideIcon } from './editors/SlideGroupEditor';
 import styles from './SlideGroupTimelineItem.module.css';
@@ -28,7 +27,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   onDragStart,
   onDragOver,
   onDrop,
-  onDelete,
+  onDelete: _onDelete,
   isBeingDraggedOver,
   className,
 }) => {

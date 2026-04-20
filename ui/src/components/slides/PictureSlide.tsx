@@ -1,7 +1,7 @@
 import React from 'react';
 import Slide from './Slide';
-import { type Captions, PictureSlideGroupConfig } from '../../types/slide_groups';
-import { type PictureSlideConfig } from '../../types/slides';
+import type { Captions } from '../../types/slide_groups';
+import type { PictureSlideConfig } from '../../types/slides';
 import { Box } from '@mui/material';
 
 interface PictureSlideProps {
@@ -12,7 +12,7 @@ interface PictureSlideProps {
   backgroundImage?: string;
 }
 
-const PictureSlide: React.FC<PictureSlideProps> = ({ slideConfig, text, backgroundImage, ...slideProps }) => {
+const PictureSlide: React.FC<PictureSlideProps> = ({ slideConfig: _slideConfig, text, backgroundImage, ...slideProps }) => {
   return (
     <Slide
       {...slideProps}

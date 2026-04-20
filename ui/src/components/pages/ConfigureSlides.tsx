@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { Timeline, TimelineItem, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses, TimelineSeparator } from '@mui/lab';
-import { Box, Dialog, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, Fade } from '@mui/material';
-import { Add, FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@mui/icons-material';
+import { Timeline, TimelineItem, TimelineContent, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
+import { Box, Dialog, DialogContent, SpeedDial, SpeedDialAction, SpeedDialIcon, Fade } from '@mui/material';
+import { FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@mui/icons-material';
 import { useConfig } from '../../context/ConfigContext';
 import { SlideType } from '../../types/slides';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
@@ -225,17 +225,17 @@ const ConfigureSlides: React.FC = () => {
                 <SpeedDialAction
                   icon={<FormatListBulleted />}
                   tooltipTitle="Add Bullet List"
-                  onClick={(e) => { handleAddSlide(SlideType.BULLETS); }}
+                  onClick={() => { handleAddSlide(SlideType.BULLETS); }}
                 />
                 <SpeedDialAction
                   icon={<Landscape />}
                   tooltipTitle="Add Picture Slides"
-                  onClick={(e) => { handleAddSlide(SlideType.PICTURE); }}
+                  onClick={() => { handleAddSlide(SlideType.PICTURE); }}
                 />
                 <SpeedDialAction
                   icon={<TimelineIcon />}
                   tooltipTitle="Add Chart"
-                  onClick={(e) => { handleAddSlide(SlideType.CHART); }}
+                  onClick={() => { handleAddSlide(SlideType.CHART); }}
                 />
               </SpeedDial>
             </Box>

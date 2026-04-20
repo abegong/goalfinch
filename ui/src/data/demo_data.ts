@@ -10,7 +10,7 @@ import {
   type ChartSlideGroupConfig,
   type PictureSlideGroupConfig
 } from '../types/slide_groups';
-import { type ConnectionsConfig, SourceConfig } from '../types/connections';
+import type { ConnectionsConfig } from '../types/connections';
 
 export const demoSlides: SlideGroupConfig[] = [
   {

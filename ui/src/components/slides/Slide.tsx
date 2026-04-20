@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { type Captions } from '../../types/slide_groups';
 
 interface SlideProps {
@@ -38,9 +38,9 @@ const colorBlockStyles = {
 const Slide: React.FC<SlideProps> = ({
   backgroundColor = 'transparent',
   backgroundImage,
-  text,
+  text: _text,
   children,
-  captions,
+  captions: _captions,
 }) => {
   return (
     <Box
