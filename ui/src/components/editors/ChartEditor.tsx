@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { type ChartSlideConfig } from '../../types/slides';
 import { type Captions } from '../../types/slide_groups';
-import { Box, TextField, Typography, Stack, Autocomplete, Grid } from '@mui/material';
+import { Box, TextField, Typography, Stack, Autocomplete, Grid2 as Grid } from '@mui/material';
 import { ConfigContext } from '../../context/ConfigContext';
 import { type SourceConfig } from '../../types/connections';
 
@@ -71,7 +71,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
       }}>
         <Typography variant="subtitle1" sx={{ mb: 2 }}>Data</Typography>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid size={6}>
             <Autocomplete<SourceConfig>
               id="source"
               options={connections.dataSources}
@@ -92,7 +92,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
           
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="goal"
               fullWidth
@@ -105,7 +105,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="date-column"
               fullWidth
@@ -129,7 +129,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="value-column"
               fullWidth
@@ -153,7 +153,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="filter-column"
               fullWidth
@@ -177,7 +177,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="filter-value"
               fullWidth
@@ -211,7 +211,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
       }}>
         <Typography variant="subtitle1" sx={{ mb: 2 }}>Display</Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id="title"
               fullWidth
@@ -223,7 +223,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="rounding"
               fullWidth
@@ -231,13 +231,13 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               type="number"
               variant="outlined"
               size="small"
-              inputProps={{ min: 0, max: 10 }}
+              slotProps={{ htmlInput: { min: 0, max: 10 } }}
               value={config.rounding}
               onChange={(e) => { handleChange({ rounding: Number(e.target.value) }); }}
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="units"
               fullWidth

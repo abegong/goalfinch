@@ -106,19 +106,21 @@ export default function AppControlBar({ open, setOpen, visible }: AppControlBarP
                 />
               </Box>
             </ListItemIcon>
-            <ListItemText 
+            <ListItemText
               primary="Goal Finch"
-              primaryTypographyProps={{
-                variant: 'h6',
-                sx: { 
-                  fontWeight: 'bold',
-                  color: 'rgb(33, 33, 33)',
-                }
+              slotProps={{
+                primary: {
+                  variant: 'h6',
+                  sx: {
+                    fontWeight: 'bold',
+                    color: 'rgb(33, 33, 33)',
+                  },
+                },
               }}
-              sx={{ 
+              sx={{
                 opacity: open ? 1 : 0,
                 m: 0
-              }} 
+              }}
             />
           </ListItemButton>
         </ListItem>

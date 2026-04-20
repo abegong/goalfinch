@@ -224,17 +224,17 @@ const ConfigureSlides: React.FC = () => {
               >
                 <SpeedDialAction
                   icon={<FormatListBulleted />}
-                  tooltipTitle="Add Bullet List"
+                  slotProps={{ tooltip: { title: 'Add Bullet List' } }}
                   onClick={() => { handleAddSlide(SlideType.BULLETS); }}
                 />
                 <SpeedDialAction
                   icon={<Landscape />}
-                  tooltipTitle="Add Picture Slides"
+                  slotProps={{ tooltip: { title: 'Add Picture Slides' } }}
                   onClick={() => { handleAddSlide(SlideType.PICTURE); }}
                 />
                 <SpeedDialAction
                   icon={<TimelineIcon />}
-                  tooltipTitle="Add Chart"
+                  slotProps={{ tooltip: { title: 'Add Chart' } }}
                   onClick={() => { handleAddSlide(SlideType.CHART); }}
                 />
               </SpeedDial>
@@ -248,10 +248,12 @@ const ConfigureSlides: React.FC = () => {
         onClose={handleCloseModal}
         maxWidth="md"
         fullWidth
-        TransitionComponent={Fade}
-        TransitionProps={{
-          timeout: 300,
-          onExited: handleExited
+        slots={{ transition: Fade }}
+        slotProps={{
+          transition: {
+            timeout: 300,
+            onExited: handleExited,
+          },
         }}
       >
         <DialogContent>

@@ -16,7 +16,7 @@ const Home: React.FC = () => {
           Goal Finch
         </Typography>
         <hr style={{ height: '4px', backgroundColor: 'var(--border-color)', border: 'none' }}></hr>
-        <Typography variant="h5" color="text.secondary" paragraph>
+        <Typography variant="h5" color="text.secondary" component="p" sx={{ mb: 2 }}>
           A simple, flexible progress tracker for personal goals.
         </Typography>
         <List sx={{
