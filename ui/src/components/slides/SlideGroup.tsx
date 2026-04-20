@@ -1,7 +1,12 @@
 import React from 'react';
-import { Card } from '@mui/material';
 import { SlideGroupConfig } from '../../types/slide_groups';
-import { BulletSlideConfig, ChartSlideConfig, PictureSlideConfig, SlideConfig, SlideType } from '../../types/slides';
+import {
+  BulletSlideConfig,
+  ChartSlideConfig,
+  PictureSlideConfig,
+  SlideConfig,
+  SlideType,
+} from '../../types/slides';
 import BulletSlide from './BulletSlide';
 import ChartSlide from './ChartSlide';
 import PictureSlide from './PictureSlide';
@@ -13,94 +18,98 @@ import { colors } from '../../theme/colors';
  * This ensures the same slide gets the same color on a given day, but colors change daily.
  */
 const getHashedColor = (slideIndex: number, groupIndex: number) => {
-  // Get today's date in YYYY-MM-DD format to use as a seed
   const today = new Date().toISOString().split('T')[0];
-  
-  // Create a string to hash
   const str = `${today}-${groupIndex}-${slideIndex}`;
-  
-  // Simple hash function
+
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
+    hash = hash & hash;
   }
-  
-  // Use absolute value of hash to get a positive number
+
   const positiveHash = Math.abs(hash);
-  
-  // Use the hash to select a color
   return colors[positiveHash % colors.length];
 };
 
 interface SlideGroupProps {
   config: SlideGroupConfig;
-  slideIndex: number;
   slideGroupIndex: number;
-  sx?: any;
 }
 
-/**
- * SlideGroup renders a single slide with its captions based on the configuration.
- * 
- * Responsibilities:
- * 1. Slide Content:
- *    - Renders the appropriate slide type (Bullet, Chart, Picture)
- *    - Passes configuration to the specific slide component
- *    - Provides slide index information
- * 
- * 2. Visual Styling:
- *    - Applies a deterministic background color based on indices
- *    - Maintains consistent card-based layout
- *    - Supports custom styling via sx prop
- * 
- * 3. Captions:
- *    - Renders group-level captions using SlideGroupCaptions
- */
-const SlideGroup: React.FC<SlideGroupProps> = ({
-  config,
-  slideIndex,
-  slideGroupIndex,
-  sx,
-}) => {
-  const totalSlides = config.slides.length;
-  const currentSlide = config.slides[slideIndex];
-
-  const renderSlide = (slideConfig: SlideConfig | undefined) => {
-    if (!slideConfig) return null;
-
-    // Get a deterministic color based on indices
-    const slideColor = getHashedColor(slideIndex, slideGroupIndex);
-
-    const commonProps = {
-      index: slideIndex,
-      captions: config.captions,
-      text: `${slideIndex + 1}/${totalSlides}`,
-      backgroundColor: slideColor.hex,
-    };
-
-    switch (slideConfig.type) {
-      case SlideType.BULLETS:
-        return <BulletSlide {...commonProps} slideConfig={slideConfig as BulletSlideConfig} />;
-      case SlideType.CHART:
-        return <ChartSlide {...commonProps} slideConfig={slideConfig as ChartSlideConfig} />;
-      case SlideType.PICTURE:
-        return <PictureSlide
-          {...commonProps}
-          slideConfig={slideConfig as PictureSlideConfig}
-          backgroundImage={"http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png"}
-        />;
-      default:
-        return null;
-    }
+const renderSlideContent = (
+  slideConfig: SlideConfig,
+  groupIndex: number,
+  slideIndex: number,
+  totalSlides: number,
+  captions: SlideGroupConfig['captions'],
+) => {
+  const commonProps = {
+    index: slideIndex,
+    captions,
+    text: `${slideIndex + 1}/${totalSlides}`,
+    backgroundColor: getHashedColor(slideIndex, groupIndex).hex,
   };
 
+  switch (slideConfig.type) {
+    case SlideType.BULLETS:
+      return (
+        <BulletSlide {...commonProps} slideConfig={slideConfig as BulletSlideConfig} />
+      );
+    case SlideType.CHART:
+      return (
+        <ChartSlide {...commonProps} slideConfig={slideConfig as ChartSlideConfig} />
+      );
+    case SlideType.PICTURE:
+      return (
+        <PictureSlide
+          {...commonProps}
+          slideConfig={slideConfig as PictureSlideConfig}
+          backgroundImage={
+            'http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png'
+          }
+        />
+      );
+    default:
+      return null;
+  }
+};
+
+/**
+ * SlideGroup renders a slide group as a reveal.js horizontal <section>
+ * containing one nested <section> per slide. Navigation (left/right between
+ * groups, up/down within a group) and transitions are owned by reveal.js.
+ *
+ * Each nested <section> gets a deterministic per-day background color and
+ * an overlay of group captions.
+ */
+const SlideGroup: React.FC<SlideGroupProps> = ({ config, slideGroupIndex }) => {
+  const totalSlides = config.slides.length;
+
   return (
-    <Card sx={{ width: '100%', height: '100%', position: 'relative', ...sx }}>
-      {renderSlide(currentSlide)}
-      <SlideGroupCaptions captions={config.captions} />
-    </Card>
+    <section>
+      {config.slides.map((slideConfig, slideIndex) => (
+        <section
+          key={slideIndex}
+          style={{
+            backgroundColor: getHashedColor(slideIndex, slideGroupIndex).hex,
+            width: '100%',
+            height: '100%',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          {renderSlideContent(
+            slideConfig,
+            slideGroupIndex,
+            slideIndex,
+            totalSlides,
+            config.captions,
+          )}
+          <SlideGroupCaptions captions={config.captions} />
+        </section>
+      ))}
+    </section>
   );
 };
 
