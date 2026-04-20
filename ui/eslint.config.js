@@ -63,6 +63,8 @@ export default tseslint.config(
       ],
 
       'react/prop-types': 'off',
+
+      'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },
 
