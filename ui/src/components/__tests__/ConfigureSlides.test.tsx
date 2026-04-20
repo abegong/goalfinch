@@ -111,15 +111,13 @@ describe('Goals Component', () => {
   test('applies dragging styles during drag operation', async () => {
     render(<ConfigureSlides />);
     const timelineItems = screen.getAllByTestId('timeline-item');
-    
+
     // Start dragging the first item
-    await act(async () => {
-      fireEvent.dragStart(timelineItems[0], {
-        dataTransfer: {
-          setData: vi.fn(),
-          setDragImage: vi.fn(),
-        },
-      });
+    fireEvent.dragStart(timelineItems[0], {
+      dataTransfer: {
+        setData: vi.fn(),
+        setDragImage: vi.fn(),
+      },
     });
 
     // Check that dragging class is applied

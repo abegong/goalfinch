@@ -168,7 +168,7 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
 
   return (
     <>
-      <Stack spacing={2}>
+      <Stack component="section" aria-label={title} spacing={2}>
         <Typography variant="h6">{title}</Typography>
         <TableContainer component={Paper} variant="outlined">
           <Table size="small">
