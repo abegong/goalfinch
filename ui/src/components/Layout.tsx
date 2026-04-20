@@ -4,7 +4,7 @@ import {
   CssBaseline,
   useTheme
 } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from '@tanstack/react-router';
 import AppControlBar from './AppControlBar';
 import { useConfig } from '../context/ConfigContext';
 

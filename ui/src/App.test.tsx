@@ -1,6 +1,9 @@
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
+import { describe, it, test, expect, vi } from 'vitest';
+import { createMemoryHistory } from '@tanstack/react-router';
 import App from './App';
+import { createAppRouter } from './router';
 import { ConfigContext } from './context/ConfigContext';
 import { SlideType } from './types/slides';
 import { BulletSlideGroupConfig } from './types/slide_groups';
@@ -34,13 +37,15 @@ const defaultConfig = {
   }
 };
 
-const mockSetConnections = jest.fn();
-const mockSetDashboard = jest.fn();
-const mockSetApp = jest.fn();
+const mockSetConnections = vi.fn();
+const mockSetDashboard = vi.fn();
+const mockSetApp = vi.fn();
 
-const renderWithConfig = () => {
+async function renderAt(path: string) {
+  const router = createAppRouter(createMemoryHistory({ initialEntries: [path] }));
+  await router.load();
   return render(
-    <ConfigContext.Provider 
+    <ConfigContext.Provider
       value={{
         connections: defaultConfig.connections,
         setConnections: mockSetConnections,
@@ -50,41 +55,36 @@ const renderWithConfig = () => {
         setApp: mockSetApp
       }}
     >
-      <App />
+      <App router={router} />
     </ConfigContext.Provider>
   );
-};
+}
 
 describe('App smoke tests', () => {
-  beforeEach(() => {
-    window.history.pushState({}, '', '/');
+  it('renders home page', async () => {
+    await renderAt('/');
+    expect(await screen.findByRole('heading', { name: 'Goal Finch', level: 2 })).toBeInTheDocument();
   });
 
-  it('renders home page', () => {
-    renderWithConfig();
-    expect(screen.getByRole('heading', { name: 'Goal Finch', level: 2 })).toBeInTheDocument();
+  it('renders dashboard page', async () => {
+    await renderAt('/dashboard');
   });
 
-  it('renders dashboard page', () => {
-    window.history.pushState({}, '', '/dashboard');
-    renderWithConfig();
+  it('renders configure slides page', async () => {
+    await renderAt('/slides');
   });
 
-  it('renders configure slides page', () => {
-    window.history.pushState({}, '', '/slides');
-    renderWithConfig();
-  });
-
-  it('renders configure connections page', () => {
-    window.history.pushState({}, '', '/connections');
-    renderWithConfig();
-    expect(screen.getByText('Configure Connections')).toBeInTheDocument();
+  it('renders configure connections page', async () => {
+    await renderAt('/connections');
+    expect(await screen.findByText('Configure Connections')).toBeInTheDocument();
   });
 });
 
-test('renders Goal Finch logo in AppControlBar', () => {
-  render(<App />);
-  const appControlBar = screen.getByLabelText('App Control Bar');
+test('renders Goal Finch logo in AppControlBar', async () => {
+  const router = createAppRouter(createMemoryHistory({ initialEntries: ['/'] }));
+  await router.load();
+  render(<App router={router} />);
+  const appControlBar = await screen.findByLabelText('App Control Bar');
   const logoElement = within(appControlBar).getByRole('img', { name: 'Goal Finch Logo' });
   expect(logoElement).toBeInTheDocument();
   expect(logoElement.getAttribute('src')).toBe('/goldfinch-logo.svg');

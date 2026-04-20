@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { describe, it, vi } from 'vitest';
 import Dashboard from '../Dashboard';
 import { ConfigProvider } from '../../../context/ConfigContext';
 import { LayoutContext } from '../../Layout';
@@ -45,13 +45,12 @@ const mockSlideGroups = [
 
 const mockLayoutContext = {
   appControlBarOpen: false,
-  setAppControlBarOpen: jest.fn(),
+  setAppControlBarOpen: vi.fn(),
   appControlBarVisible: true,
-  setAppControlBarVisible: jest.fn(),
+  setAppControlBarVisible: vi.fn(),
 };
 
-// Mock the useConfig hook
-jest.mock('../../../context/ConfigContext', () => ({
+vi.mock('../../../context/ConfigContext', () => ({
   useConfig: () => ({
     dashboard: {
       slideGroups: mockSlideGroups,
@@ -65,8 +64,8 @@ jest.mock('../../../context/ConfigContext', () => ({
         mode: 'light'
       }
     },
-    setApp: jest.fn(),
-    setDashboard: jest.fn()
+    setApp: vi.fn(),
+    setDashboard: vi.fn()
   }),
   ConfigProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>
 }));

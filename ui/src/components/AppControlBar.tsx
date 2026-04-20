@@ -17,7 +17,7 @@ import {
   Slideshow as DashboardIcon,
   ExpandCircleDown as ChevronIcon,
 } from '@mui/icons-material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from '@tanstack/react-router';
 
 const drawerWidth = 240;
 

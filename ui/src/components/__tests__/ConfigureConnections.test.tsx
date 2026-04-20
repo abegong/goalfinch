@@ -1,5 +1,6 @@
 import { render, screen, within, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ConfigContext } from '../../context/ConfigContext';
 import ConfigureConnections from '../pages/ConfigureConnections';
 import { act } from '@testing-library/react';
@@ -16,14 +17,14 @@ const mockSources = {
 };
 
 // Mock context setup
-const mockSetConnections = jest.fn();
+const mockSetConnections = vi.fn();
 const defaultContextValue = {
   connections: mockSources,
   setConnections: mockSetConnections,
   dashboard: { slideGroups: [] },
-  setDashboard: jest.fn(),
+  setDashboard: vi.fn(),
   app: { appControlBar: { open: false, visible: true }, theme: { mode: 'light' as const } },
-  setApp: jest.fn()
+  setApp: vi.fn()
 };
 
 // Test utilities

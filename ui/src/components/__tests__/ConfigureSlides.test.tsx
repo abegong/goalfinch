@@ -1,11 +1,10 @@
 import React from 'react';
 import { render, fireEvent, screen, act } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { describe, it, test, expect, beforeEach, vi } from 'vitest';
 import ConfigureSlides from '../pages/ConfigureSlides';
 import { SlideGroupConfig } from '../../types/slide_groups';
 
-// Mock the ConfigContext module
-jest.mock('../../context/ConfigContext', () => ({
+vi.mock('../../context/ConfigContext', () => ({
   useConfig: () => ({
     dashboard: {
       slideGroups: [{ 
@@ -14,12 +13,11 @@ jest.mock('../../context/ConfigContext', () => ({
         captions: {}
       }],
     },
-    setDashboard: jest.fn(),
+    setDashboard: vi.fn(),
   }),
 }));
 
-// Mock MUI Lab components
-jest.mock('@mui/lab', () => ({
+vi.mock('@mui/lab', () => ({
   Timeline: ({ children }: any) => <div role="list">{children}</div>,
   TimelineItem: ({ children, ...props }: any) => (
     <div role="listitem" data-testid="timeline-item" {...props}>{children}</div>
@@ -39,12 +37,14 @@ jest.mock('@mui/lab', () => ({
 }));
 
 describe('Goals Component', () => {
-  const mockSetDashboard = jest.fn();
-  
-  beforeEach(() => {
-    jest.clearAllMocks();
-    // Update the mock to include multiple slide groups and setDashboard
-    (jest.requireMock('../../context/ConfigContext') as any).useConfig = () => ({
+  const mockSetDashboard = vi.fn();
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const mod = (await import('../../context/ConfigContext')) as unknown as {
+      useConfig: () => unknown;
+    };
+    mod.useConfig = () => ({
       dashboard: {
         slideGroups: [
           { type: 'NESTED_IMAGES', slide_count: 3, captions: {} },
@@ -79,21 +79,21 @@ describe('Goals Component', () => {
     // Start dragging the first item
     fireEvent.dragStart(timelineItems[0], {
       dataTransfer: {
-        setData: jest.fn(),
-        setDragImage: jest.fn(),
+        setData: vi.fn(),
+        setDragImage: vi.fn(),
       },
     });
     
     // Drag over the second item
     fireEvent.dragOver(timelineItems[1], {
-      preventDefault: jest.fn(),
-      stopPropagation: jest.fn(),
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
     });
     
     // Drop on the second item
     fireEvent.drop(timelineItems[1], {
-      preventDefault: jest.fn(),
-      stopPropagation: jest.fn(),
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
       dataTransfer: {
         getData: () => '0',
       },
@@ -116,8 +116,8 @@ describe('Goals Component', () => {
     await act(async () => {
       fireEvent.dragStart(timelineItems[0], {
         dataTransfer: {
-          setData: jest.fn(),
-          setDragImage: jest.fn(),
+          setData: vi.fn(),
+          setDragImage: vi.fn(),
         },
       });
     });

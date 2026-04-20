@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import ChartSlide from '../ChartSlide';
 import { SlideType } from '../../../types/slides';
 
-// Mock the Chart component
-jest.mock('../../charts/Chart');
+vi.mock('../../charts/Chart');
 
 describe('ChartSlide', () => {
   const mockSlideConfig = {

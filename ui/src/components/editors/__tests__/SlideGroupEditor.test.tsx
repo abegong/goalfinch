@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import SlideGroupEditor from '../SlideGroupEditor';
 import { SlideType } from '../../../types/slides';
 import { BulletSlideGroupConfig } from '../../../types/slide_groups';
@@ -20,11 +20,11 @@ const defaultConfig = {
 
 describe('SlideGroupEditor', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders with basic props', () => {
-    render(<SlideGroupEditor type={SlideType.BULLETS} config={defaultConfig} onChange={jest.fn()} />);
+    render(<SlideGroupEditor type={SlideType.BULLETS} config={defaultConfig} onChange={vi.fn()} />);
     
     // Should show the slide type in the Typography component
     expect(screen.getByRole('heading', { level: 6, name: 'Bullet List' })).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('SlideGroupEditor', () => {
   });
 
   it('calls onChange when content is modified', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     render(<SlideGroupEditor type={SlideType.BULLETS} config={defaultConfig} onChange={onChange} />);
     
     const input = screen.getByDisplayValue('Test bullet point');
@@ -55,13 +55,13 @@ describe('SlideGroupEditor', () => {
         ...defaultConfig,
       },
     };
-    render(<SlideGroupEditor {...props} onChange={jest.fn()} />);
+    render(<SlideGroupEditor {...props} onChange={vi.fn()} />);
     
     expect(screen.getByDisplayValue('Test bullet point')).toBeInTheDocument();
   });
 
   it('updates bullet points when edited', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     render(<SlideGroupEditor type={SlideType.BULLETS} config={defaultConfig} onChange={onChange} />);
     
     const input = screen.getByDisplayValue('Test bullet point');
@@ -83,7 +83,7 @@ describe('SlideGroupEditor', () => {
         slides: [],
       },
     };
-    render(<SlideGroupEditor {...props} onChange={jest.fn()} />);
+    render(<SlideGroupEditor {...props} onChange={vi.fn()} />);
     
     // Should still render without crashing
     expect(screen.getByRole('heading', { level: 6, name: 'Bullet List' })).toBeInTheDocument();
