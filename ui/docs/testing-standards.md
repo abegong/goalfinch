@@ -91,7 +91,7 @@
    - Use descriptive names for mock functions
    - Clear mocks in `beforeEach` when needed
    ```typescript
-   const mockHandleSubmit = jest.fn();
+   const mockHandleSubmit = vi.fn();
    
    beforeEach(() => {
      mockHandleSubmit.mockClear();
@@ -147,8 +147,11 @@
 
 1. **Local Development**
    ```bash
-   # Run all tests
-   pnpm test --watchAll=false
+   # Run all tests once (CI-style)
+   pnpm test:ci
+
+   # Watch mode
+   pnpm test
 
    # Run specific test file
    pnpm test ComponentName.test.tsx

@@ -8,7 +8,7 @@ Goal Finch is a simple, flexible progress tracker for personal goals. This is a 
 
 ```
 goalfinch/
-├── ui/                     # React front-end (TypeScript, MUI v6, pnpm)
+├── ui/                     # React front-end (Vite, TypeScript, MUI v6, pnpm)
 ├── server/                 # API server (Node.js + Express, npm)
 ├── python/
 │   ├── scripts/            # Python scripts that talk to the server
@@ -53,21 +53,23 @@ This is where most changes happen. Read this section carefully.
 ### Tooling
 
 - **Package manager: `pnpm`** (version pinned via `packageManager` in `ui/package.json`). Never use `npm` or `yarn` here.
-- React 19 + TypeScript 4.x, Create React App (`react-scripts`), MUI v6, Zod, react-router 6.
-- ESLint config lives in `ui/eslint.config.js` and `ui/package.json`.
+- React 19 + TypeScript 5, **Vite** (build + dev server), **Vitest** (tests), **TanStack Router** (routing), MUI v6, Zod, reveal.js (slide deck).
+- ESLint 9 flat config (`ui/eslint.config.js`) with `typescript-eslint` `strictTypeChecked` + `stylisticTypeChecked`, `react`, `react-hooks`, `jsx-a11y`, `@vitest/eslint-plugin`, `eslint-plugin-testing-library`.
+- TypeScript is `strict` with `noUncheckedIndexedAccess` and `noImplicitOverride` enabled.
 
 ### Verification loop (run after every code change)
 
-From the **repo root** (not inside `ui/`):
+All commands run from `ui/`:
 
 ```bash
-pnpm tsc                      # must compile cleanly
-pnpm test --watchAll=false    # only after tsc passes
+pnpm typecheck    # tsc --noEmit, must be clean
+pnpm lint         # eslint ., must be clean
+pnpm test:ci      # vitest run
 ```
 
-Do not `cd ui && pnpm tsc` — just `pnpm tsc` from the root works.
+`pnpm dev` starts the Vite dev server on <http://localhost:3000>. `pnpm build` produces a production bundle in `ui/dist/`.
 
-If `tsc` fails, fix it before running tests. If tests fail because of your change, fix them (or revert). If tests fail for reasons unrelated to your change, mention it rather than silently ignoring.
+If `typecheck` or `lint` fails, fix it before running tests. If tests fail because of your change, fix them (or revert). If tests fail for reasons unrelated to your change, mention it rather than silently ignoring.
 
 ### Architecture overview
 
@@ -106,7 +108,7 @@ Full details in `ui/docs/testing-standards.md`. Highlights:
 - Prefer `userEvent` over `fireEvent`.
 - Structure: `describe('Component', () => { describe('behavior group', () => { it('should …', …) }) })`.
 - Test behavior, not implementation. Prioritize critical user flows, data mutations, error states, and navigation.
-- Run with `pnpm test --watchAll=false`. Run a single file with `pnpm test ComponentName.test.tsx`.
+- Run with `pnpm test:ci` (one-shot) or `pnpm test` (watch). Run a single file with `pnpm test ComponentName.test.tsx`.
 
 ## Working in `server/`
 
