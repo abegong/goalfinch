@@ -29,5 +29,11 @@ vi.mock('reveal.js', () => {
 
 if (typeof structuredClone === 'undefined') {
   (globalThis as { structuredClone?: typeof structuredClone }).structuredClone =
-    (obj) => JSON.parse(JSON.stringify(obj)) as unknown;
+    <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+}
+
+// jsdom has no layout engine, so window.scrollTo throws "Not implemented".
+// TanStack Router's scroll restoration calls it during navigation in tests.
+if (typeof window !== 'undefined') {
+  window.scrollTo = vi.fn();
 }
