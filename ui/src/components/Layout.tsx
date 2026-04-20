@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useCallback, useEffect } from 'react';
 import { 
   Box, 
   CssBaseline,
@@ -47,7 +47,7 @@ export default function Layout({ children }: LayoutProps) {
     }));
   };
 
-  const setAppControlBarVisible = (visible: boolean) => {
+  const setAppControlBarVisible = useCallback((visible: boolean) => {
     setApp(prev => ({
       ...prev,
       appControlBar: {
@@ -55,12 +55,12 @@ export default function Layout({ children }: LayoutProps) {
         visible
       }
     }));
-  };
+  }, [setApp]);
 
   // Initialize visibility based on route
   useEffect(() => {
     setAppControlBarVisible(location.pathname !== '/dashboard');
-  }, [location.pathname]);
+  }, [location.pathname, setAppControlBarVisible]);
 
   return (
     <LayoutContext.Provider value={{ 

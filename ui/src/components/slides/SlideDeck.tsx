@@ -97,7 +97,7 @@ const SlideDeck = forwardRef<SlideDeckHandle, SlideDeckProps>(function SlideDeck
       onIndicesChangeRef.current(h, v);
     };
 
-    deck.initialize().then(() => {
+    void deck.initialize().then(() => {
       if (disposed) {
         // Unmounted before init finished; tear down the now-initialized deck.
         try {
@@ -111,7 +111,7 @@ const SlideDeck = forwardRef<SlideDeckHandle, SlideDeckProps>(function SlideDeck
       deck.on('slidechanged', handleSlideChanged);
       // Override space (32) with a no-op so Dashboard's document-level
       // keydown handler owns the pause toggle.
-      const noop = () => {};
+      const noop = () => { /* intentional no-op */ };
       deck.configure({ keyboard: { 32: noop } });
       // Re-apply props that may have changed during init.
       deck.configure({

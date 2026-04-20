@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Slide from './Slide';
 import { type ChartSlideConfig } from '../../types/slides';
-import Chart from '../charts/Chart';
+import Chart, { type ChartDataPoint } from '../charts/Chart';
 import LoadingIndicator from '../charts/LoadingIndicator';
 import ErrorDisplay from '../charts/ErrorDisplay';
 import { loadChartData } from '../../utils/chart';
@@ -12,7 +12,7 @@ interface ChartSlideProps extends Omit<React.ComponentProps<typeof Slide>, 'text
 }
 
 const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) => {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<ChartDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,10 +30,8 @@ const ChartSlide: React.FC<ChartSlideProps> = ({ slideConfig, ...slideProps }) =
       }
     };
 
-    fetchData();
+    void fetchData();
   }, [slideConfig.source, slideConfig.asOfDate]);
-
-  console.log(slideConfig);
 
   return (
     <Slide

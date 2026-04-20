@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useMemo, useState, type ReactNode, useEffect } from 'react';
 import { demoSlides, demoConnections } from '../data/demo_data';
 import { type DashboardConfig, type AppConfig } from '../types/config';
 import { type ConnectionsConfig } from '../types/connections';
@@ -19,13 +19,16 @@ export const ConfigContext = createContext<ConfigContextType | undefined>(undefi
 
 export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { showError, showWarning } = useNotification();
-  const storage = new LocalStorageService({ showError, showWarning });
+  const storage = useMemo(
+    () => new LocalStorageService({ showError, showWarning }),
+    [showError, showWarning],
+  );
 
   // Load initial state from storage or use defaults
   const [dashboard, setDashboard] = useState<DashboardConfig>(() => {
     try {
       const stored = storage.load<DashboardConfig>(STORAGE_KEYS.DASHBOARD);
-      return stored || { slideGroups: demoSlides };
+      return stored ?? { slideGroups: demoSlides };
     } catch {
       return { slideGroups: demoSlides };
     }
@@ -34,7 +37,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [connections, setConnections] = useState<ConnectionsConfig>(() => {
     try {
       const stored = storage.load<ConnectionsConfig>(STORAGE_KEYS.CONNECTIONS);
-      return stored || demoConnections;
+      return stored ?? demoConnections;
     } catch {
       return demoConnections;
     }
@@ -43,7 +46,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [app, setApp] = useState<AppConfig>(() => {
     try {
       const stored = storage.load<AppConfig>(STORAGE_KEYS.APP);
-      return stored || {
+      return stored ?? {
         appControlBar: {
           open: false,
           visible: true
@@ -72,7 +75,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     } catch {
       // Error is already handled by storage service
     }
-  }, [dashboard]);
+  }, [dashboard, storage]);
 
   useEffect(() => {
     try {
@@ -80,7 +83,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     } catch {
       // Error is already handled by storage service
     }
-  }, [connections]);
+  }, [connections, storage]);
 
   useEffect(() => {
     try {
@@ -88,7 +91,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     } catch {
       // Error is already handled by storage service
     }
-  }, [app]);
+  }, [app, storage]);
 
   return (
     <ConfigContext.Provider value={{ 

@@ -33,7 +33,7 @@ describe('SlideGroupEditor', () => {
     expect(screen.getByDisplayValue('Test bullet point')).toBeInTheDocument();
   });
 
-  it('calls onChange when content is modified', async () => {
+  it('calls onChange when content is modified', () => {
     const onChange = vi.fn();
     render(<SlideGroupEditor type={SlideType.BULLETS} config={defaultConfig} onChange={onChange} />);
     

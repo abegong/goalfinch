@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ConfigContext } from '../../context/ConfigContext';
 import ConfigureConnections from '../pages/ConfigureConnections';
-import { act } from '@testing-library/react';
 
 // Mock data
 const mockSources = {

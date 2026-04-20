@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ChartProps {
-  data: any[];
+  data: { date: string; value: number | null }[];
   goal: number;
   rounding: number;
   units: string;

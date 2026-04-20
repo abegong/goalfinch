@@ -18,6 +18,7 @@ export interface StorageService {
    * @param data Data to store
    * @throws {StorageError} If save fails
    */
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   save<T>(key: string, data: T): void;
 
   /**
@@ -26,6 +27,7 @@ export interface StorageService {
    * @returns Stored data or null if not found
    * @throws {StorageError} If load fails
    */
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   load<T>(key: string): T | null;
 
   /**
@@ -77,6 +79,7 @@ export class LocalStorageService implements StorageService {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   save<T>(key: string, data: T): void {
     try {
       // Validate data before saving
@@ -118,6 +121,7 @@ export class LocalStorageService implements StorageService {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   load<T>(key: string): T | null {
     try {
       const serialized = localStorage.getItem(key);
@@ -125,7 +129,7 @@ export class LocalStorageService implements StorageService {
         return null;
       }
 
-      const parsed = JSON.parse(serialized);
+      const parsed: unknown = JSON.parse(serialized);
       
       // Handle both versioned and unversioned data for backward compatibility
       let data: T;

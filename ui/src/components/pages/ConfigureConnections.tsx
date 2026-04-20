@@ -12,11 +12,11 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
-import type { SourceConfig } from '../../types/connections';
+import type { ConnectionsConfig, SourceConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
 import { SourceList } from '../SourceList';
 import demoData, { demoConnections } from '../../data/demo_data';
-import { type DashboardConfig } from '../../types/config';
+import type { AppConfig, DashboardConfig } from '../../types/config';
 
 const defaultConfig = {
   connections: {
@@ -49,6 +49,40 @@ const defaultConfig = {
 
 // Current version of the configuration format
 const CURRENT_VERSION = 1;
+
+interface ImportedConfigData {
+  connections: ConnectionsConfig;
+  dashboard: DashboardConfig;
+  app: AppConfig;
+}
+
+interface VersionedImportedConfig {
+  version: number;
+  data: Partial<ImportedConfigData>;
+}
+
+const parseConfig = (jsonString: string): ImportedConfigData => {
+  const parsed = JSON.parse(jsonString) as Partial<VersionedImportedConfig>;
+
+  if (typeof parsed.version !== 'number' || !parsed.data) {
+    throw new Error('Invalid configuration format: Missing version or data field');
+  }
+
+  if (parsed.version > CURRENT_VERSION) {
+    throw new Error(`Unsupported configuration version: ${parsed.version}. Maximum supported version is ${CURRENT_VERSION}`);
+  }
+
+  const configData = parsed.data;
+  if (!configData.connections || !configData.dashboard || !configData.app) {
+    throw new Error('Invalid configuration format: Missing required fields');
+  }
+
+  return {
+    connections: configData.connections,
+    dashboard: configData.dashboard,
+    app: configData.app,
+  };
+};
 
 const ConfigureConnections: React.FC = () => {
   const { connections, setConnections, dashboard, app, setDashboard, setApp } = useConfig();
@@ -101,41 +135,20 @@ const ConfigureConnections: React.FC = () => {
     e.stopPropagation();
   }, []);
 
-  const parseConfig = (jsonString: string) => {
-    const parsed = JSON.parse(jsonString);
-
-    // Require version and data fields
-    if (!parsed.version || !parsed.data) {
-      throw new Error('Invalid configuration format: Missing version or data field');
-    }
-
-    // Check version
-    if (parsed.version > CURRENT_VERSION) {
-      throw new Error(`Unsupported configuration version: ${parsed.version}. Maximum supported version is ${CURRENT_VERSION}`);
-    }
-
-    const configData = parsed.data;
-    if (!configData.connections || !configData.dashboard || !configData.app) {
-      throw new Error('Invalid configuration format: Missing required fields');
-    }
-
-    return configData;
-  };
-
-  const importConfig = (configData: any) => {
+  const importConfig = useCallback((configData: ImportedConfigData) => {
     setConnections(configData.connections);
     setDashboard(configData.dashboard);
     setApp(configData.app);
     setImportModalOpen(false);
-  };
+  }, [setConnections, setDashboard, setApp]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
 
-    const file = e.dataTransfer.files[0];
-    if (file && file.type === 'application/json') {
+    const file = e.dataTransfer.files.item(0);
+    if (file?.type === 'application/json') {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
@@ -153,7 +166,7 @@ const ConfigureConnections: React.FC = () => {
     } else {
       alert('Please drop a JSON file');
     }
-  }, [setConnections, setDashboard, setApp]);
+  }, [importConfig]);
 
   const handleFileInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files?.[0]) {
@@ -177,7 +190,7 @@ const ConfigureConnections: React.FC = () => {
     };
 
     reader.readAsText(file);
-  }, [setConnections, setDashboard, setApp]);
+  }, [importConfig]);
 
   const handleReset = (toDemoData: boolean) => {
     setConnections(toDemoData ? demoConnections : defaultConfig.connections);

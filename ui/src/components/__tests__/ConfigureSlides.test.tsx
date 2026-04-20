@@ -26,10 +26,10 @@ vi.mock('@mui/lab', () => ({
   TimelineConnector: ({ children }: any) => <div>{children}</div>,
   TimelineContent: ({ children }: any) => <div>{children}</div>,
   TimelineOppositeContent: ({ children, onClick }: any) => (
-    <div onClick={onClick} data-testid="timeline-opposite-content">{children}</div>
+    <div role="button" tabIndex={0} onClick={onClick} onKeyDown={onClick} data-testid="timeline-opposite-content">{children}</div>
   ),
   TimelineDot: ({ children, sx: _sx, onClick, ...props }: any) => (
-    <div data-testid="timeline-dot" onClick={onClick} {...props}>{children}</div>
+    <div role="button" tabIndex={0} data-testid="timeline-dot" onClick={onClick} onKeyDown={onClick} {...props}>{children}</div>
   ),
   timelineOppositeContentClasses: {
     root: 'MuiTimelineOppositeContent-root'
@@ -108,7 +108,7 @@ describe('Goals Component', () => {
     }));
   });
 
-  test('applies dragging styles during drag operation', async () => {
+  test('applies dragging styles during drag operation', () => {
     render(<ConfigureSlides />);
     const timelineItems = screen.getAllByTestId('timeline-item');
 
@@ -124,7 +124,7 @@ describe('Goals Component', () => {
     expect(timelineItems[0]).toHaveAttribute('data-dragging', 'true');
     
     // End dragging
-    await act(async () => {
+    act(() => {
       // Simulate dragend event at document level since that's where we're listening
       const dragEndEvent = new Event('dragend', { bubbles: true });
       document.dispatchEvent(dragEndEvent);

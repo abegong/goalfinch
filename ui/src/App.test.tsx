@@ -67,11 +67,13 @@ describe('App smoke tests', () => {
   });
 
   it('renders dashboard page', async () => {
-    await renderAt('/dashboard');
+    const { baseElement } = await renderAt('/dashboard');
+    expect(baseElement).toBeInTheDocument();
   });
 
   it('renders configure slides page', async () => {
-    await renderAt('/slides');
+    const { baseElement } = await renderAt('/slides');
+    expect(baseElement).toBeInTheDocument();
   });
 
   it('renders configure connections page', async () => {

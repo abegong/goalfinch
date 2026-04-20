@@ -69,7 +69,7 @@ const ConfigureSlides: React.FC = () => {
           name: defaultName,
           source: "",
           slide_count: 3,
-          slides: Array(3).fill({ type: SlideType.PICTURE }),
+          slides: Array.from({ length: 3 }, () => ({ type: SlideType.PICTURE })),
           captions: {}
         } as PictureSlideGroupConfig;
     }
@@ -185,13 +185,6 @@ const ConfigureSlides: React.FC = () => {
                 backgroundColor: 'primary.light'
               }
             }
-          },
-          [`& .${TimelineOppositeContent}`]: {
-            // flex: '0 0 150px',
-            maxWidth: '0px',
-            padding: '8px 8px',
-            marginTop: 0,
-            marginBottom: 0
           },
         }}
       >

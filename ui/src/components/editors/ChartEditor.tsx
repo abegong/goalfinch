@@ -24,9 +24,6 @@ export const ChartEditor: React.FC<ChartEditorProps> = ({ configs, selectedSlide
   }
 
   const selectedConfig = configs[selectedSlideIndex];
-  if (!selectedConfig) {
-    return null;
-  }
 
   return (
     <div>
@@ -76,9 +73,9 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               id="source"
               options={connections.dataSources}
               getOptionLabel={(option: SourceConfig) => option.name}
-              value={connections.dataSources.find((source: SourceConfig) => source.url === config.source) || null}
+              value={connections.dataSources.find((source: SourceConfig) => source.url === config.source) ?? null}
               onChange={(_, newValue) => {
-                handleChange({ source: newValue?.url || '' });
+                handleChange({ source: newValue?.url ?? '' });
               }}
               renderInput={(params) => (
                 <TextField

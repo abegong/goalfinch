@@ -126,7 +126,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         } as Partial<PictureSlideGroupConfig>);
         break;
       default:
-        throw new Error(`Unsupported slide type: ${type}`);
+        throw new Error(`Unsupported slide type: ${String(type)}`);
     }
   };
 
@@ -163,9 +163,9 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         break;
       }
       default:
-        throw new Error(`Unsupported slide type: ${type}`);
+        throw new Error(`Unsupported slide type: ${String(type)}`);
     }
-    
+
     // Update the selected slide index if needed
     if (selectedSlideIndex >= slideToDelete && selectedSlideIndex > 0) {
       setSelectedSlideIndex(selectedSlideIndex - 1);

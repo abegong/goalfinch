@@ -4,8 +4,14 @@ import { type TopLevelSpec } from 'vega-lite';
 import { Typography } from '@mui/material';
 import { roundToDigits } from '../../utils/chart';
 
+export interface ChartDataPoint {
+  date: string;
+  value: number | null;
+  showPoint?: boolean;
+}
+
 interface ChartProps {
-  data: {date: string; value: number}[];
+  data: ChartDataPoint[];
   goal: number;
   rounding: number;
   units: string;
@@ -13,7 +19,6 @@ interface ChartProps {
 }
 
 const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate: _asOfDate }) => {
-  // Generate goal line data
   const firstDate = data[0]?.date;
   const lastDateInMonth = data[data.length - 1]?.date;
   const goalLineData = [
@@ -21,8 +26,9 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate: _a
     { date: lastDateInMonth, value: goal }
   ];
 
-  // Find the last date with data
-  const lastDataPoint = data[data.length - 1];
+  const lastDataPoint = [...data]
+    .reverse()
+    .find((d): d is ChartDataPoint & { value: number } => d.value !== null);
 
   if (lastDataPoint) {
     // Calculate target value for the last data point

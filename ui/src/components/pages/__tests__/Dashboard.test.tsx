@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { describe, it, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import Dashboard from '../Dashboard';
 import { LayoutContext } from '../../Layout';
 import { type BulletSlideGroupConfig, type ChartSlideGroupConfig, type PictureSlideGroupConfig } from '../../../types/slide_groups';
@@ -71,10 +71,11 @@ vi.mock('../../../context/ConfigContext', () => ({
 
 describe('Dashboard', () => {
   it('renders all slide types correctly', () => {
-    render(
+    const { baseElement } = render(
       <LayoutContext.Provider value={mockLayoutContext}>
         <Dashboard />
       </LayoutContext.Provider>
     );
+    expect(baseElement).toBeInTheDocument();
   });
 });

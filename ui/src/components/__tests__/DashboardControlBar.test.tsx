@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { describe, test, expect, vi } from 'vitest';
 import DashboardControlBar from '../DashboardControlBar';
 import { type SlideGroupConfig } from '../../types/slide_groups';
 import { SlideType } from '../../types/slides';
@@ -13,16 +14,17 @@ describe('DashboardControlBar', () => {
       // Missing captions field to recreate the error
     } as SlideGroupConfig];
 
+    const noop = vi.fn();
     render(
       <DashboardControlBar
         visible={true}
-        onClose={() => {}}
+        onClose={noop}
         slideGroups={mockSlideGroups}
         visibleColorIndex={0}
         activeSlideIndex={0}
-        onSlideClick={() => {}}
+        onSlideClick={noop}
         isPaused={false}
-        onPauseChange={() => {}}
+        onPauseChange={noop}
       />
     );
 
@@ -42,16 +44,17 @@ describe('DashboardControlBar', () => {
       }
     } as SlideGroupConfig];
 
+    const noop = vi.fn();
     render(
       <DashboardControlBar
         visible={true}
-        onClose={() => {}}
+        onClose={noop}
         slideGroups={mockSlideGroups}
         visibleColorIndex={0}
         activeSlideIndex={0}
-        onSlideClick={() => {}}
+        onSlideClick={noop}
         isPaused={false}
-        onPauseChange={() => {}}
+        onPauseChange={noop}
       />
     );
 
