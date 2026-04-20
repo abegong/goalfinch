@@ -26,7 +26,7 @@ const getHashedColor = (slideIndex: number, groupIndex: number) => {
   }
 
   const positiveHash = Math.abs(hash);
-  return colors[positiveHash % colors.length];
+  return colors[positiveHash % colors.length] ?? colors[0];
 };
 
 interface SlideGroupProps {

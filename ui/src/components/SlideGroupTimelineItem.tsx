@@ -78,11 +78,9 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       className={clsx(
         styles.timelineItem,
         className,
-        {
-          [styles.dragging]: isDragging,
-          [styles.dropAbove]: dropPosition === 'above',
-          [styles.dropBelow]: dropPosition === 'below',
-        }
+        isDragging && styles.dragging,
+        dropPosition === 'above' && styles.dropAbove,
+        dropPosition === 'below' && styles.dropBelow,
       )}
       data-dragging={isDragging}
       data-testid="timeline-item"

@@ -21,11 +21,10 @@ export const BulletEditor: React.FC<BulletEditorProps> = ({
     onChange({ slides: newSlides });
   };
 
-  if (config.slides.length === 0) {
+  const selectedSlide = config.slides[selectedSlideIndex];
+  if (!selectedSlide) {
     return null;
   }
-
-  const selectedSlide = config.slides[selectedSlideIndex];
 
   return (
     <div>
@@ -117,6 +116,7 @@ export const BulletSlideEditor: React.FC<BulletSlideEditorProps> = ({
 
     const newBullets = [...config.bullets];
     const [draggedItem] = newBullets.splice(draggedIndex, 1);
+    if (draggedItem === undefined) return;
     newBullets.splice(dropIndex, 0, draggedItem);
     onChange({ bullets: newBullets });
     setDraggedIndex(null);

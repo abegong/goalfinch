@@ -42,7 +42,8 @@ export async function loadChartData(url: string, asOfDate?: string) {
             const dates = getDatesInMonth(demoAsOfDate);
             const demoSlides = dates
                 .filter(d => {
-                    const day = parseInt(d.date.split('/')[1]);
+                    const parts = d.date.split('/');
+                    const day = parts[1] !== undefined ? parseInt(parts[1]) : NaN;
                     return day <= 20;  // Only keep first 20 days
                 })
                 .filter(() => Math.random() < 0.7)  // Randomly keep only 70% of days

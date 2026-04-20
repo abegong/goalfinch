@@ -68,7 +68,7 @@ describe('ConfigureConnections', () => {
 
       
       // Verify
-      const updatedConnections = mockSetConnections.mock.calls[0][0](mockSources);
+      const updatedConnections = mockSetConnections.mock.calls[0]![0](mockSources);
       expect(updatedConnections.pictureSources).toEqual([
         ...mockSources.pictureSources,
         { name: 'pictures-test', url: 'https://test.com' }
@@ -95,7 +95,7 @@ describe('ConfigureConnections', () => {
 
       
       // Verify
-      const updatedConnections = mockSetConnections.mock.calls[0][0](mockSources);
+      const updatedConnections = mockSetConnections.mock.calls[0]![0](mockSources);
       expect(updatedConnections.pictureSources).toEqual([
         { name: 'pictures-1', url: 'https://new-url.com' }
       ]);
@@ -115,7 +115,7 @@ describe('ConfigureConnections', () => {
 
       
       // Verify
-      const updatedConnections = mockSetConnections.mock.calls[0][0](mockSources);
+      const updatedConnections = mockSetConnections.mock.calls[0]![0](mockSources);
       expect(updatedConnections.pictureSources).toEqual([]);
     });
   });

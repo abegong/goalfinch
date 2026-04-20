@@ -92,9 +92,11 @@ const ConfigureSlides: React.FC = () => {
   };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
+    const group = dashboard.slideGroups[index];
+    if (!group) return;
     const dragPreview = document.createElement('div');
     dragPreview.className = 'drag-preview';
-    dragPreview.textContent = dashboard.slideGroups[index].name;
+    dragPreview.textContent = group.name;
     dragPreview.style.cssText = `
       position: fixed;
       top: -1000px;
@@ -135,6 +137,7 @@ const ConfigureSlides: React.FC = () => {
     if (sourceIndex !== targetIndex) {
       const newSlideGroups = [...dashboard.slideGroups];
       const [removed] = newSlideGroups.splice(sourceIndex, 1);
+      if (!removed) return;
       newSlideGroups.splice(targetIndex, 0, removed);
       handleSlideGroupOrderChange(newSlideGroups);
     }
@@ -250,7 +253,7 @@ const ConfigureSlides: React.FC = () => {
         }}
       >
         <DialogContent>
-          {editingIndex !== null && (
+          {editingIndex !== null && dashboard.slideGroups[editingIndex] && (
             <SlideGroupEditor
               type={dashboard.slideGroups[editingIndex].type}
               config={dashboard.slideGroups[editingIndex]}

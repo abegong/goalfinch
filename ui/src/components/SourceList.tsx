@@ -128,11 +128,12 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
   };
 
   const handleEditSource = (index: number) => {
+    const existing = sources[index];
     setEditDialog({
       open: true,
       type,
       index,
-      source: index < sources.length ? { ...sources[index] } : { name: '', url: '' },
+      source: existing ? { ...existing } : { name: '', url: '' },
       errors: { name: '', url: '' }
     });
   };

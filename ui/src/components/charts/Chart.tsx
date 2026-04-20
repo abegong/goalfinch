@@ -19,8 +19,14 @@ interface ChartProps {
 }
 
 const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate: _asOfDate }) => {
-  const firstDate = data[0]?.date;
-  const lastDateInMonth = data[data.length - 1]?.date;
+  const firstPoint = data[0];
+  const lastPoint = data[data.length - 1];
+  if (!firstPoint || !lastPoint) {
+    return null;
+  }
+
+  const firstDate = firstPoint.date;
+  const lastDateInMonth = lastPoint.date;
   const goalLineData = [
     { date: firstDate, value: 0 },
     { date: lastDateInMonth, value: goal }
@@ -179,7 +185,8 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate: _a
 
     // Add showPoint property to data
     safeData.forEach((d, i: number) => {
-      if (i === 0 || d.value !== safeData[i - 1].value) {
+      const prev = safeData[i - 1];
+      if (i === 0 || d.value !== prev?.value) {
         d.showPoint = true;
       } else {
         d.showPoint = false;

@@ -246,9 +246,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
             {config.slides.map((slide, index) => (
               <Paper
                 key={index}
-                className={clsx(styles.slideThumb, {
-                  [styles.selectedSlide]: index === selectedSlideIndex
-                })}
+                className={clsx(styles.slideThumb, index === selectedSlideIndex && styles.selectedSlide)}
                 elevation={1}
                 sx={{ cursor: 'pointer' }}
                 onClick={() => { setSelectedSlideIndex(index); }}

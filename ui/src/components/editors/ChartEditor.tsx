@@ -13,17 +13,18 @@ interface ChartEditorProps {
 }
 
 export const ChartEditor: React.FC<ChartEditorProps> = ({ configs, selectedSlideIndex, captions, onChange }) => {
+  const selectedConfig = configs[selectedSlideIndex];
+
   const handleSlideChange = (update: Partial<ChartSlideConfig>) => {
+    if (!selectedConfig) return;
     const newConfigs = [...configs];
-    newConfigs[selectedSlideIndex] = { ...configs[selectedSlideIndex], ...update };
+    newConfigs[selectedSlideIndex] = { ...selectedConfig, ...update };
     onChange(newConfigs);
   };
 
-  if (configs.length === 0) {
+  if (!selectedConfig) {
     return null;
   }
-
-  const selectedConfig = configs[selectedSlideIndex];
 
   return (
     <div>

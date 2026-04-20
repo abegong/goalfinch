@@ -2,7 +2,12 @@
  * Color palette used for slide transitions and visual styling.
  * Each color has a hex value and a descriptive name.
  */
-export const colors = [
+interface ColorEntry {
+  hex: string;
+  name: string;
+}
+
+export const colors: readonly [ColorEntry, ...ColorEntry[]] = [
   { hex: '#FF6B6B', name: 'Coral Red' },
   { hex: '#4ECDC4', name: 'Turquoise' },
   { hex: '#45B7D1', name: 'Sky Blue' },

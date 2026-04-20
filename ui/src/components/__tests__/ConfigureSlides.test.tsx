@@ -60,7 +60,7 @@ describe('Goals Component', () => {
     
     // Find all timeline dots and click the first one (the slide dot, not the add button)
     const timelineDots = screen.getAllByTestId('timeline-dot');
-    fireEvent.click(timelineDots[0]);
+    fireEvent.click(timelineDots[0]!);
     
     // The state should be updated without infinite loops
     expect(timelineDots[0]).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe('Goals Component', () => {
     const timelineItems = screen.getAllByRole('listitem');
     
     // Start dragging the first item
-    fireEvent.dragStart(timelineItems[0], {
+    fireEvent.dragStart(timelineItems[0]!, {
       dataTransfer: {
         setData: vi.fn(),
         setDragImage: vi.fn(),
@@ -85,13 +85,13 @@ describe('Goals Component', () => {
     });
     
     // Drag over the second item
-    fireEvent.dragOver(timelineItems[1], {
+    fireEvent.dragOver(timelineItems[1]!, {
       preventDefault: vi.fn(),
       stopPropagation: vi.fn(),
     });
     
     // Drop on the second item
-    fireEvent.drop(timelineItems[1], {
+    fireEvent.drop(timelineItems[1]!, {
       preventDefault: vi.fn(),
       stopPropagation: vi.fn(),
       dataTransfer: {
@@ -113,7 +113,7 @@ describe('Goals Component', () => {
     const timelineItems = screen.getAllByTestId('timeline-item');
 
     // Start dragging the first item
-    fireEvent.dragStart(timelineItems[0], {
+    fireEvent.dragStart(timelineItems[0]!, {
       dataTransfer: {
         setData: vi.fn(),
         setDragImage: vi.fn(),
