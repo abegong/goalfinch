@@ -1,30 +1,40 @@
 import React from 'react';
 import { VegaLite } from 'react-vega';
-import { TopLevelSpec } from 'vega-lite';
+import { type TopLevelSpec } from 'vega-lite';
 import { Typography } from '@mui/material';
 import { roundToDigits } from '../../utils/chart';
 
+export interface ChartDataPoint {
+  date: string;
+  value: number | null;
+  showPoint?: boolean;
+}
+
 interface ChartProps {
-  data: Array<{date: string; value: number}>;
+  data: ChartDataPoint[];
   goal: number;
   rounding: number;
   units: string;
   asOfDate?: string;
 }
 
-const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) => {
-  // Generate goal line data
-  const firstDate = data[0]?.date;
-  const lastDateInMonth = data[data.length - 1]?.date;
+const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate: _asOfDate }) => {
+  const firstPoint = data[0];
+  const lastPoint = data[data.length - 1];
+  if (!firstPoint || !lastPoint) {
+    return null;
+  }
+
+  const firstDate = firstPoint.date;
+  const lastDateInMonth = lastPoint.date;
   const goalLineData = [
     { date: firstDate, value: 0 },
     { date: lastDateInMonth, value: goal }
   ];
 
-  // Find the last date with data
   const lastDataPoint = [...data]
     .reverse()
-    .find(d => d.value !== null);
+    .find((d): d is ChartDataPoint & { value: number } => d.value !== null);
 
   if (lastDataPoint) {
     // Calculate target value for the last data point
@@ -41,12 +51,6 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) 
       { date: lastDataPoint.date, value: targetForLastDay }
     ];
 
-    // Get current value (last non-null value)
-    const currentValue = [...data]
-      .reverse()
-      .find(d => d.value !== null)?.value || 0;
-
-    // Calculate weekly target values
     const weeklyTargets = [];
     
     for (let i = 0; i <= totalDays; i += 7) {
@@ -173,15 +177,16 @@ const Chart: React.FC<ChartProps> = ({ data, goal, rounding, units, asOfDate }) 
     };
 
     // Use JSON parse/stringify for deep cloning
-    const safeData = JSON.parse(JSON.stringify(data)) as Array<{
+    const safeData = JSON.parse(JSON.stringify(data)) as {
       date: string;
       value: number;
       showPoint?: boolean;
-    }>;
+    }[];
 
     // Add showPoint property to data
     safeData.forEach((d, i: number) => {
-      if (i === 0 || d.value !== safeData[i - 1].value) {
+      const prev = safeData[i - 1];
+      if (i === 0 || d.value !== prev?.value) {
         d.showPoint = true;
       } else {
         d.showPoint = false;

@@ -1,14 +1,14 @@
 [[sites]]
   name = "goalfinch-app"
-  
+
   [sites.build]
     base = "/"
-    command = "npm run build"
-    publish = "build/"
+    command = "pnpm build"
+    publish = "dist/"
     edge_functions = []
     functions = {}
     headers = []
     redirects = []
-  
+
   [sites.environment]
     NODE_VERSION = "20"

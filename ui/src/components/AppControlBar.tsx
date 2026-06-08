@@ -17,7 +17,7 @@ import {
   Slideshow as DashboardIcon,
   ExpandCircleDown as ChevronIcon,
 } from '@mui/icons-material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from '@tanstack/react-router';
 
 const drawerWidth = 240;
 
@@ -106,19 +106,21 @@ export default function AppControlBar({ open, setOpen, visible }: AppControlBarP
                 />
               </Box>
             </ListItemIcon>
-            <ListItemText 
+            <ListItemText
               primary="Goal Finch"
-              primaryTypographyProps={{
-                variant: 'h6',
-                sx: { 
-                  fontWeight: 'bold',
-                  color: 'rgb(33, 33, 33)',
-                }
+              slotProps={{
+                primary: {
+                  variant: 'h6',
+                  sx: {
+                    fontWeight: 'bold',
+                    color: 'rgb(33, 33, 33)',
+                  },
+                },
               }}
-              sx={{ 
+              sx={{
                 opacity: open ? 1 : 0,
                 m: 0
-              }} 
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -168,7 +170,7 @@ export default function AppControlBar({ open, setOpen, visible }: AppControlBarP
         pl: 1
       }}>
         <IconButton 
-          onClick={() => setOpen(!open)}
+          onClick={() => { setOpen(!open); }}
           sx={{
             transform: open ? 'rotate(0deg)' : 'rotate(-90deg)',
             padding: '12px',

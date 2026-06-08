@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { SourceConfig } from '../types/connections';
+import { type SourceConfig } from '../types/connections';
 
 interface DeleteDialogState {
   open: boolean;
@@ -73,18 +73,16 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
       }
       return '';
     }
-    if (field === 'url') {
-      if (!value) {
-        return 'URL is required';
-      }
-      try {
-        new URL(value);
-        return '';
-      } catch {
-        return 'Please enter a valid URL';
-      }
+    // field === 'url'
+    if (!value) {
+      return 'URL is required';
     }
-    return '';
+    try {
+      new URL(value);
+      return '';
+    } catch {
+      return 'Please enter a valid URL';
+    }
   };
 
   const handleEditChange = (field: keyof SourceConfig) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,11 +128,12 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
   };
 
   const handleEditSource = (index: number) => {
+    const existing = sources[index];
     setEditDialog({
       open: true,
       type,
       index,
-      source: index < sources.length ? { ...sources[index] } : { name: '', url: '' },
+      source: existing ? { ...existing } : { name: '', url: '' },
       errors: { name: '', url: '' }
     });
   };
@@ -170,7 +169,7 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
 
   return (
     <>
-      <Stack spacing={2}>
+      <Stack component="section" aria-label={title} spacing={2}>
         <Typography variant="h6">{title}</Typography>
         <TableContainer component={Paper} variant="outlined">
           <Table size="small">
@@ -198,14 +197,14 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
                     <TableCell align="right">
                       <IconButton 
                         size="small"
-                        onClick={() => handleEditSource(index)}
+                        onClick={() => { handleEditSource(index); }}
                         data-testid={`edit-${source.name}`}
                       >
                         <EditIcon />
                       </IconButton>
                       <IconButton 
                         size="small"
-                        onClick={() => handleDeleteSource(index)}
+                        onClick={() => { handleDeleteSource(index); }}
                         data-testid={`delete-${source.name}`}
                       >
                         <DeleteIcon />
@@ -219,7 +218,7 @@ export const SourceList: React.FC<SourceListProps> = ({ type, title, sources, on
         </TableContainer>
         <Button
           variant="outlined"
-          onClick={() => handleEditSource(sources.length)}
+          onClick={() => { handleEditSource(sources.length); }}
           sx={{ alignSelf: 'flex-start' }}
         >
           Add Source

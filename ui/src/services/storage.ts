@@ -18,6 +18,7 @@ export interface StorageService {
    * @param data Data to store
    * @throws {StorageError} If save fails
    */
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   save<T>(key: string, data: T): void;
 
   /**
@@ -26,6 +27,7 @@ export interface StorageService {
    * @returns Stored data or null if not found
    * @throws {StorageError} If load fails
    */
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   load<T>(key: string): T | null;
 
   /**
@@ -77,13 +79,9 @@ export class LocalStorageService implements StorageService {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   save<T>(key: string, data: T): void {
     try {
-      // Check if localStorage is available
-      if (!window.localStorage) {
-        throw new Error('localStorage is not available');
-      }
-
       // Validate data before saving
       const validatedData = validateStorageData(key, data);
 
@@ -123,18 +121,15 @@ export class LocalStorageService implements StorageService {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
   load<T>(key: string): T | null {
     try {
-      if (!window.localStorage) {
-        throw new Error('localStorage is not available');
-      }
-
       const serialized = localStorage.getItem(key);
       if (!serialized) {
         return null;
       }
 
-      const parsed = JSON.parse(serialized);
+      const parsed: unknown = JSON.parse(serialized);
       
       // Handle both versioned and unversioned data for backward compatibility
       let data: T;
@@ -170,10 +165,6 @@ export class LocalStorageService implements StorageService {
 
   clear(): void {
     try {
-      if (!window.localStorage) {
-        throw new Error('localStorage is not available');
-      }
-
       Object.values(STORAGE_KEYS).forEach(key => {
         localStorage.removeItem(key);
       });

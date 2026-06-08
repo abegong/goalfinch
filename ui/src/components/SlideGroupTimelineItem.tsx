@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TimelineItem, TimelineSeparator, TimelineContent, TimelineDot, TimelineConnector, TimelineOppositeContent } from '@mui/lab';
-import { Box, IconButton, Typography } from '@mui/material';
-import { Delete, DragIndicator } from '@mui/icons-material';
-import { SlideGroupConfig } from '../types/slide_groups';
+import { Typography } from '@mui/material';
+import { type SlideGroupConfig } from '../types/slide_groups';
 import { getSlideIcon } from './editors/SlideGroupEditor';
 import styles from './SlideGroupTimelineItem.module.css';
 import clsx from 'clsx';
@@ -28,7 +27,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
   onDragStart,
   onDragOver,
   onDrop,
-  onDelete,
+  onDelete: _onDelete,
   isBeingDraggedOver,
   className,
 }) => {
@@ -41,7 +40,7 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       setDropPosition(null);
     };
     document.addEventListener('dragend', handleDragEnd);
-    return () => document.removeEventListener('dragend', handleDragEnd);
+    return () => { document.removeEventListener('dragend', handleDragEnd); };
   }, []);
 
   useEffect(() => {
@@ -79,11 +78,9 @@ const SlideGroupTimelineItem: React.FC<SlideGroupTimelineItemProps> = ({
       className={clsx(
         styles.timelineItem,
         className,
-        {
-          [styles.dragging]: isDragging,
-          [styles.dropAbove]: dropPosition === 'above',
-          [styles.dropBelow]: dropPosition === 'below',
-        }
+        isDragging && styles.dragging,
+        dropPosition === 'above' && styles.dropAbove,
+        dropPosition === 'below' && styles.dropBelow,
       )}
       data-dragging={isDragging}
       data-testid="timeline-item"

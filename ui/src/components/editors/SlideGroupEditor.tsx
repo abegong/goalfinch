@@ -1,41 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { SlideType, slideTypes } from '../../types/slides';
-import { 
-  FormatListBulleted, 
-  Landscape, 
+import { SlideType } from '../../types/slides';
+import {
+  FormatListBulleted,
+  Landscape,
   Timeline,
   Delete,
-  Build,
-  Segment,
-  SsidChart,
   DeleteOutline,
   Add,
-  SpaceBar
 } from '@mui/icons-material';
-import { 
-  SpeedDial, 
-  SpeedDialAction, 
-  SpeedDialIcon, 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  DialogActions, 
-  Button, 
-  Typography, 
-  Card, 
-  CardContent, 
-  CardHeader,
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography,
+  CardContent,
   TextField,
   IconButton,
   Box,
-  Paper
+  Paper,
 } from '@mui/material';
 import styles from './SlideGroupEditor.module.css';
 import clsx from 'clsx';
 import { BulletEditor } from './BulletEditor';
 import { ChartEditor } from './ChartEditor';
-import { SlideConfig, PictureSlideConfig, BulletSlideConfig, ChartSlideConfig } from '../../types/slides';
-import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
+import type { PictureSlideConfig, BulletSlideConfig, ChartSlideConfig } from '../../types/slides';
+import type { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
 import PictureEditor from './PictureEditor';
 
 interface SlideGroupEditorProps {
@@ -80,7 +71,6 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   onTransitionEnd,
 }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
   const [name, setName] = useState(config.name || "Untitled Slide Group");
   const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
   const [slideToDelete, setSlideToDelete] = useState<number | null>(null);
@@ -106,7 +96,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       case SlideType.BULLETS:
         bulletConfig = config as BulletSlideGroupConfig;
         onChange({
-          slides: [...(bulletConfig.slides || []), {
+          slides: [...bulletConfig.slides, {
             type: SlideType.BULLETS,
             bullets: ['']
           }]
@@ -115,7 +105,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       case SlideType.CHART:
         chartConfig = config as ChartSlideGroupConfig;
         onChange({
-          slides: [...(chartConfig.slides || []), {
+          slides: [...chartConfig.slides, {
             type: SlideType.CHART,
             source: '',
             csv_extraction: null,
@@ -130,13 +120,13 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       case SlideType.PICTURE:
         pictureConfig = config as PictureSlideGroupConfig;
         onChange({
-          slides: [...(pictureConfig.slides || []), {
+          slides: [...pictureConfig.slides, {
             type: SlideType.PICTURE,
           }]
         } as Partial<PictureSlideGroupConfig>);
         break;
       default:
-        throw new Error(`Unsupported slide type: ${type}`);
+        throw new Error(`Unsupported slide type: ${String(type)}`);
     }
   };
 
@@ -148,8 +138,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
   const confirmDeleteSlide = () => {
     if (slideToDelete === null) return;
 
-    // Don't allow deleting the last slide
-    if (!config.slides || config.slides.length <= 1) {
+    if (config.slides.length <= 1) {
       return;
     }
 
@@ -174,9 +163,9 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         break;
       }
       default:
-        throw new Error(`Unsupported slide type: ${type}`);
+        throw new Error(`Unsupported slide type: ${String(type)}`);
     }
-    
+
     // Update the selected slide index if needed
     if (selectedSlideIndex >= slideToDelete && selectedSlideIndex > 0) {
       setSelectedSlideIndex(selectedSlideIndex - 1);
@@ -243,7 +232,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
         </Typography>
         <Box flexGrow={0.25} />
         <IconButton
-          onClick={() => setIsDeleteDialogOpen(true)}
+          onClick={() => { setIsDeleteDialogOpen(true); }}
           className={styles.deleteButton}
           size="small"
         >
@@ -254,15 +243,13 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
       <Box className={styles.slideManagement}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Box className={styles.slideList}>
-            {config.slides?.map((slide, index) => (
+            {config.slides.map((slide, index) => (
               <Paper
                 key={index}
-                className={clsx(styles.slideThumb, {
-                  [styles.selectedSlide]: index === selectedSlideIndex
-                })}
+                className={clsx(styles.slideThumb, index === selectedSlideIndex && styles.selectedSlide)}
                 elevation={1}
                 sx={{ cursor: 'pointer' }}
-                onClick={() => setSelectedSlideIndex(index)}
+                onClick={() => { setSelectedSlideIndex(index); }}
               >
                 {getSlideIcon(slide.type)}
               </Paper>
@@ -275,9 +262,9 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
               <Add sx={{ fontSize: 24 }} />
             </IconButton>
           </Box>
-          {config.slides && config.slides.length > 1 && (
+          {config.slides.length > 1 && (
             <IconButton 
-              onClick={() => handleDeleteSlide(selectedSlideIndex)}
+              onClick={() => { handleDeleteSlide(selectedSlideIndex); }}
               sx={{
                 padding: '8px',
                 backgroundColor: 'white',
@@ -321,7 +308,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
 
       <Dialog
         open={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
+        onClose={() => { setIsDeleteDialogOpen(false); }}
       >
         <DialogTitle>Delete Slide Group?</DialogTitle>
         <DialogContent>
@@ -330,7 +317,7 @@ export const SlideGroupEditor: React.FC<SlideGroupEditorProps> = ({
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setIsDeleteDialogOpen(false); }}>Cancel</Button>
           <Button 
             onClick={() => {
               if (onDelete) onDelete();

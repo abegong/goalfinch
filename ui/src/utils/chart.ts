@@ -1,5 +1,15 @@
-import * as d3 from 'd3';
 import Papa from 'papaparse';
+
+interface RawChartRow {
+  date: string;
+  value: string | number;
+}
+
+export interface ProcessedChartDataPoint {
+  date: string;
+  value: number | null;
+  showPoint: boolean;
+}
 
 export function getDatesInMonth(asOfDate?: string) {
     const referenceDate = asOfDate ? new Date(asOfDate) : new Date();
@@ -32,7 +42,8 @@ export async function loadChartData(url: string, asOfDate?: string) {
             const dates = getDatesInMonth(demoAsOfDate);
             const demoSlides = dates
                 .filter(d => {
-                    const day = parseInt(d.date.split('/')[1]);
+                    const parts = d.date.split('/');
+                    const day = parts[1] !== undefined ? parseInt(parts[1]) : NaN;
                     return day <= 20;  // Only keep first 20 days
                 })
                 .filter(() => Math.random() < 0.7)  // Randomly keep only 70% of days
@@ -46,23 +57,24 @@ export async function loadChartData(url: string, asOfDate?: string) {
         // Otherwise load from actual URL
         const response = await fetch(url);
         const csvText = await response.text();
-        const { data } = Papa.parse(csvText, { header: true });
+        const { data } = Papa.parse<RawChartRow>(csvText, { header: true });
         return preprocessChartData(data, asOfDate);
     } catch (error) {
-        throw new Error(`Failed to load chart data: ${error}`);
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(`Failed to load chart data: ${message}`);
     }
 }
 
-function preprocessChartData(data: any[], asOfDate?: string) {
-    // Get all dates in the month
+function preprocessChartData(
+    data: RawChartRow[],
+    asOfDate?: string,
+): ProcessedChartDataPoint[] {
     const allDates = getDatesInMonth(asOfDate);
-    
+
     let cumulativeValue = 0;
     let prevValue = 0;
-    
-    // Process the data exactly as in niblings.js
-    const processedData = allDates.map(dateObj => {
-        // If we're past asOfDate, return the date with null value
+
+    const processedData: ProcessedChartDataPoint[] = allDates.map(dateObj => {
         if (asOfDate && new Date(dateObj.date) > new Date(asOfDate)) {
             return {
                 date: dateObj.date,
@@ -72,14 +84,19 @@ function preprocessChartData(data: any[], asOfDate?: string) {
         }
 
         const matchingEntries = data.filter(d => d.date === dateObj.date);
-        const dayValue = matchingEntries.length > 0 
-            ? matchingEntries.reduce((sum, entry) => sum + (parseFloat(entry.value) || 0), 0)
+        const dayValue = matchingEntries.length > 0
+            ? matchingEntries.reduce((sum, entry) => {
+                const parsed = typeof entry.value === 'number'
+                  ? entry.value
+                  : parseFloat(entry.value);
+                return sum + (Number.isFinite(parsed) ? parsed : 0);
+              }, 0)
             : 0;
-        
+
         cumulativeValue += dayValue;
         const valueChanged = cumulativeValue !== prevValue;
         prevValue = cumulativeValue;
-        
+
         return {
             date: dateObj.date,
             value: cumulativeValue,

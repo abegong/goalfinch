@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { ChartSlideConfig } from '../../types/slides';
-import { Captions } from '../../types/slide_groups';
-import { Box, TextField, Typography, Stack, Autocomplete, Grid } from '@mui/material';
+import { type ChartSlideConfig } from '../../types/slides';
+import { type Captions } from '../../types/slide_groups';
+import { Box, TextField, Typography, Stack, Autocomplete, Grid2 as Grid } from '@mui/material';
 import { ConfigContext } from '../../context/ConfigContext';
-import { SourceConfig } from '../../types/connections';
+import { type SourceConfig } from '../../types/connections';
 
 interface ChartEditorProps {
   configs: ChartSlideConfig[];
@@ -13,18 +13,18 @@ interface ChartEditorProps {
 }
 
 export const ChartEditor: React.FC<ChartEditorProps> = ({ configs, selectedSlideIndex, captions, onChange }) => {
+  const selectedConfig = configs[selectedSlideIndex];
+
   const handleSlideChange = (update: Partial<ChartSlideConfig>) => {
+    if (!selectedConfig) return;
     const newConfigs = [...configs];
-    newConfigs[selectedSlideIndex] = { ...configs[selectedSlideIndex], ...update };
+    newConfigs[selectedSlideIndex] = { ...selectedConfig, ...update };
     onChange(newConfigs);
   };
 
-  // If there are no slides, don't render anything
-  if (!configs?.length) {
+  if (!selectedConfig) {
     return null;
   }
-
-  const selectedConfig = configs[selectedSlideIndex];
 
   return (
     <div>
@@ -69,14 +69,14 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
       }}>
         <Typography variant="subtitle1" sx={{ mb: 2 }}>Data</Typography>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid size={6}>
             <Autocomplete<SourceConfig>
               id="source"
               options={connections.dataSources}
               getOptionLabel={(option: SourceConfig) => option.name}
-              value={connections.dataSources.find((source: SourceConfig) => source.url === config.source) || null}
+              value={connections.dataSources.find((source: SourceConfig) => source.url === config.source) ?? null}
               onChange={(_, newValue) => {
-                handleChange({ source: newValue?.url || '' });
+                handleChange({ source: newValue?.url ?? '' });
               }}
               renderInput={(params) => (
                 <TextField
@@ -90,7 +90,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
           
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="goal"
               fullWidth
@@ -99,11 +99,11 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               variant="outlined"
               size="small"
               value={config.goal}
-              onChange={(e) => handleChange({ goal: Number(e.target.value) })}
+              onChange={(e) => { handleChange({ goal: Number(e.target.value) }); }}
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="date-column"
               fullWidth
@@ -127,7 +127,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="value-column"
               fullWidth
@@ -151,7 +151,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="filter-column"
               fullWidth
@@ -175,7 +175,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="filter-value"
               fullWidth
@@ -209,7 +209,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
       }}>
         <Typography variant="subtitle1" sx={{ mb: 2 }}>Display</Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id="title"
               fullWidth
@@ -217,11 +217,11 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               variant="outlined"
               size="small"
               value={config.title ?? ''}
-              onChange={(e) => handleChange({ title: e.target.value || undefined })}
+              onChange={(e) => { handleChange({ title: e.target.value || undefined }); }}
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="rounding"
               fullWidth
@@ -229,13 +229,13 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               type="number"
               variant="outlined"
               size="small"
-              inputProps={{ min: 0, max: 10 }}
+              slotProps={{ htmlInput: { min: 0, max: 10 } }}
               value={config.rounding}
-              onChange={(e) => handleChange({ rounding: Number(e.target.value) })}
+              onChange={(e) => { handleChange({ rounding: Number(e.target.value) }); }}
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={6}>
             <TextField
               id="units"
               fullWidth
@@ -243,7 +243,7 @@ export const ChartSlideEditor: React.FC<ChartSlideEditorProps> = ({
               variant="outlined"
               size="small"
               value={config.units}
-              onChange={(e) => handleChange({ units: e.target.value })}
+              onChange={(e) => { handleChange({ units: e.target.value }); }}
             />
           </Grid>
         </Grid>

@@ -1,10 +1,10 @@
-import React, { useState, createContext, useEffect } from 'react';
+import React, { createContext, useCallback, useEffect } from 'react';
 import { 
   Box, 
   CssBaseline,
   useTheme
 } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from '@tanstack/react-router';
 import AppControlBar from './AppControlBar';
 import { useConfig } from '../context/ConfigContext';
 
@@ -47,7 +47,7 @@ export default function Layout({ children }: LayoutProps) {
     }));
   };
 
-  const setAppControlBarVisible = (visible: boolean) => {
+  const setAppControlBarVisible = useCallback((visible: boolean) => {
     setApp(prev => ({
       ...prev,
       appControlBar: {
@@ -55,12 +55,12 @@ export default function Layout({ children }: LayoutProps) {
         visible
       }
     }));
-  };
+  }, [setApp]);
 
   // Initialize visibility based on route
   useEffect(() => {
     setAppControlBarVisible(location.pathname !== '/dashboard');
-  }, [location.pathname]);
+  }, [location.pathname, setAppControlBarVisible]);
 
   return (
     <LayoutContext.Provider value={{ 

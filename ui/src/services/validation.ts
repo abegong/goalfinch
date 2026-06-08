@@ -21,8 +21,8 @@ const schemaMap = {
 } as const;
 
 export function validateStorageData<T>(key: string, data: T): T {
-  const schema = schemaMap[key as keyof typeof schemaMap];
-  
+  const schema = (schemaMap as Record<string, z.ZodType | undefined>)[key];
+
   if (!schema) {
     // If we don't have a schema for this key, assume the data is valid
     return data;

@@ -1,10 +1,7 @@
 import React from 'react';
-import { SlideGroupConfig } from '../../types/slide_groups';
+import { type SlideGroupConfig } from '../../types/slide_groups';
 import {
-  BulletSlideConfig,
-  ChartSlideConfig,
-  PictureSlideConfig,
-  SlideConfig,
+  type SlideConfig,
   SlideType,
 } from '../../types/slides';
 import BulletSlide from './BulletSlide';
@@ -29,7 +26,7 @@ const getHashedColor = (slideIndex: number, groupIndex: number) => {
   }
 
   const positiveHash = Math.abs(hash);
-  return colors[positiveHash % colors.length];
+  return colors[positiveHash % colors.length] ?? colors[0];
 };
 
 interface SlideGroupProps {
@@ -54,17 +51,17 @@ const renderSlideContent = (
   switch (slideConfig.type) {
     case SlideType.BULLETS:
       return (
-        <BulletSlide {...commonProps} slideConfig={slideConfig as BulletSlideConfig} />
+        <BulletSlide {...commonProps} slideConfig={slideConfig} />
       );
     case SlideType.CHART:
       return (
-        <ChartSlide {...commonProps} slideConfig={slideConfig as ChartSlideConfig} />
+        <ChartSlide {...commonProps} slideConfig={slideConfig} />
       );
     case SlideType.PICTURE:
       return (
         <PictureSlide
           {...commonProps}
-          slideConfig={slideConfig as PictureSlideConfig}
+          slideConfig={slideConfig}
           backgroundImage={
             'http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png'
           }

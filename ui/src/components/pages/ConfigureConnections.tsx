@@ -12,28 +12,11 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
-import { SourceConfig, BackendConfig } from '../../types/connections';
+import type { ConnectionsConfig, SourceConfig } from '../../types/connections';
 import { useConfig } from '../../context/ConfigContext';
 import { SourceList } from '../SourceList';
 import demoData, { demoConnections } from '../../data/demo_data';
-import { DashboardConfig } from '../../types/config';
-
-interface DeleteDialogState {
-  open: boolean;
-  type: 'pictureSources' | 'dataSources';
-  index: number;
-}
-
-interface EditDialogState {
-  open: boolean;
-  type: 'pictureSources' | 'dataSources' | null;
-  index: number;
-  source: SourceConfig;
-  errors: {
-    name: string;
-    url: string;
-  };
-}
+import type { AppConfig, DashboardConfig } from '../../types/config';
 
 const defaultConfig = {
   connections: {
@@ -67,25 +50,45 @@ const defaultConfig = {
 // Current version of the configuration format
 const CURRENT_VERSION = 1;
 
+interface ImportedConfigData {
+  connections: ConnectionsConfig;
+  dashboard: DashboardConfig;
+  app: AppConfig;
+}
+
+interface VersionedImportedConfig {
+  version: number;
+  data: Partial<ImportedConfigData>;
+}
+
+const parseConfig = (jsonString: string): ImportedConfigData => {
+  const parsed = JSON.parse(jsonString) as Partial<VersionedImportedConfig>;
+
+  if (typeof parsed.version !== 'number' || !parsed.data) {
+    throw new Error('Invalid configuration format: Missing version or data field');
+  }
+
+  if (parsed.version > CURRENT_VERSION) {
+    throw new Error(`Unsupported configuration version: ${parsed.version}. Maximum supported version is ${CURRENT_VERSION}`);
+  }
+
+  const configData = parsed.data;
+  if (!configData.connections || !configData.dashboard || !configData.app) {
+    throw new Error('Invalid configuration format: Missing required fields');
+  }
+
+  return {
+    connections: configData.connections,
+    dashboard: configData.dashboard,
+    app: configData.app,
+  };
+};
+
 const ConfigureConnections: React.FC = () => {
   const { connections, setConnections, dashboard, app, setDashboard, setApp } = useConfig();
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
-
-  const handleBackendChange = (field: keyof BackendConfig) => 
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setConnections(prev => ({
-        ...prev,
-        backend: prev.backend ? {
-          ...prev.backend,
-          [field]: event.target.value
-        } : {
-          serverUrl: field === 'serverUrl' ? event.target.value : '',
-          serverPassword: field === 'serverPassword' ? event.target.value : ''
-        }
-      }));
-  };
 
   const handleSourcesChange = (type: 'pictureSources' | 'dataSources', newSources: SourceConfig[]) => {
     setConnections(prev => ({
@@ -132,41 +135,20 @@ const ConfigureConnections: React.FC = () => {
     e.stopPropagation();
   }, []);
 
-  const parseConfig = (jsonString: string) => {
-    const parsed = JSON.parse(jsonString);
-
-    // Require version and data fields
-    if (!parsed.version || !parsed.data) {
-      throw new Error('Invalid configuration format: Missing version or data field');
-    }
-
-    // Check version
-    if (parsed.version > CURRENT_VERSION) {
-      throw new Error(`Unsupported configuration version: ${parsed.version}. Maximum supported version is ${CURRENT_VERSION}`);
-    }
-
-    const configData = parsed.data;
-    if (!configData.connections || !configData.dashboard || !configData.app) {
-      throw new Error('Invalid configuration format: Missing required fields');
-    }
-
-    return configData;
-  };
-
-  const importConfig = (configData: any) => {
+  const importConfig = useCallback((configData: ImportedConfigData) => {
     setConnections(configData.connections);
     setDashboard(configData.dashboard);
     setApp(configData.app);
     setImportModalOpen(false);
-  };
+  }, [setConnections, setDashboard, setApp]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
 
-    const file = e.dataTransfer.files[0];
-    if (file && file.type === 'application/json') {
+    const file = e.dataTransfer.files.item(0);
+    if (file?.type === 'application/json') {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
@@ -176,7 +158,7 @@ const ConfigureConnections: React.FC = () => {
 
           const configData = parseConfig(e.target.result as string);
           importConfig(configData);
-        } catch (error) {
+        } catch {
           alert('Error parsing configuration file');
         }
       };
@@ -184,10 +166,10 @@ const ConfigureConnections: React.FC = () => {
     } else {
       alert('Please drop a JSON file');
     }
-  }, [setConnections, setDashboard, setApp]);
+  }, [importConfig]);
 
   const handleFileInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files || !event.target.files[0]) {
+    if (!event.target.files?.[0]) {
       return;
     }
 
@@ -202,13 +184,13 @@ const ConfigureConnections: React.FC = () => {
 
         const configData = parseConfig(e.target.result as string);
         importConfig(configData);
-      } catch (error) {
+      } catch {
         alert('Error parsing configuration file');
       }
     };
 
     reader.readAsText(file);
-  }, [setConnections, setDashboard, setApp]);
+  }, [importConfig]);
 
   const handleReset = (toDemoData: boolean) => {
     setConnections(toDemoData ? demoConnections : defaultConfig.connections);
@@ -280,13 +262,13 @@ const ConfigureConnections: React.FC = () => {
             <Button variant="outlined" onClick={handleExportConfig}>
               Export Configuration
             </Button>
-            <Button variant="outlined" onClick={() => setImportModalOpen(true)}>
+            <Button variant="outlined" onClick={() => { setImportModalOpen(true); }}>
               Import Configuration
             </Button>
             <Button 
               variant="outlined" 
               color="error" 
-              onClick={() => setResetModalOpen(true)}
+              onClick={() => { setResetModalOpen(true); }}
               sx={{ 
                 '&:hover': {
                   backgroundColor: 'error.main',
@@ -303,7 +285,7 @@ const ConfigureConnections: React.FC = () => {
 
       <Dialog
         open={resetModalOpen}
-        onClose={() => setResetModalOpen(false)}
+        onClose={() => { setResetModalOpen(false); }}
       >
         <DialogTitle>Reset Configuration</DialogTitle>
         <DialogContent>
@@ -312,9 +294,9 @@ const ConfigureConnections: React.FC = () => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setResetModalOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setResetModalOpen(false); }}>Cancel</Button>
           <Button
-            onClick={() => handleReset(true)}
+            onClick={() => { handleReset(true); }}
             color="error"
             sx={{ 
               '&:hover': {
@@ -327,7 +309,7 @@ const ConfigureConnections: React.FC = () => {
             Reset to demo configuration
           </Button>
           <Button
-            onClick={() => handleReset(false)}
+            onClick={() => { handleReset(false); }}
             color="error"
             sx={{ 
               '&:hover': {
@@ -344,7 +326,7 @@ const ConfigureConnections: React.FC = () => {
 
       <Dialog
         open={importModalOpen}
-        onClose={() => setImportModalOpen(false)}
+        onClose={() => { setImportModalOpen(false); }}
         maxWidth="sm"
         fullWidth
       >
@@ -377,7 +359,7 @@ const ConfigureConnections: React.FC = () => {
           <input type="file" onChange={handleFileInput} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setImportModalOpen(false)}>Cancel</Button>
+          <Button onClick={() => { setImportModalOpen(false); }}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </>

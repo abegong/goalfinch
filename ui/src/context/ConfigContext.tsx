@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useMemo, useState, type ReactNode, useEffect } from 'react';
 import { demoSlides, demoConnections } from '../data/demo_data';
-import { DashboardConfig, AppConfig } from '../types/config';
-import { ConnectionsConfig } from '../types/connections';
+import { type DashboardConfig, type AppConfig } from '../types/config';
+import { type ConnectionsConfig } from '../types/connections';
 import { LocalStorageService } from '../services/storage';
 import { STORAGE_KEYS } from '../constants';
 import { useNotification } from './NotificationContext';
@@ -19,14 +19,17 @@ export const ConfigContext = createContext<ConfigContextType | undefined>(undefi
 
 export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { showError, showWarning } = useNotification();
-  const storage = new LocalStorageService({ showError, showWarning });
+  const storage = useMemo(
+    () => new LocalStorageService({ showError, showWarning }),
+    [showError, showWarning],
+  );
 
   // Load initial state from storage or use defaults
   const [dashboard, setDashboard] = useState<DashboardConfig>(() => {
     try {
       const stored = storage.load<DashboardConfig>(STORAGE_KEYS.DASHBOARD);
-      return stored || { slideGroups: demoSlides };
-    } catch (error) {
+      return stored ?? { slideGroups: demoSlides };
+    } catch {
       return { slideGroups: demoSlides };
     }
   });
@@ -34,8 +37,8 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [connections, setConnections] = useState<ConnectionsConfig>(() => {
     try {
       const stored = storage.load<ConnectionsConfig>(STORAGE_KEYS.CONNECTIONS);
-      return stored || demoConnections;
-    } catch (error) {
+      return stored ?? demoConnections;
+    } catch {
       return demoConnections;
     }
   });
@@ -43,7 +46,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [app, setApp] = useState<AppConfig>(() => {
     try {
       const stored = storage.load<AppConfig>(STORAGE_KEYS.APP);
-      return stored || {
+      return stored ?? {
         appControlBar: {
           open: false,
           visible: true
@@ -52,7 +55,7 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           mode: 'light'
         }
       };
-    } catch (error) {
+    } catch {
       return {
         appControlBar: {
           open: false,
@@ -69,26 +72,26 @@ export const ConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   useEffect(() => {
     try {
       storage.save(STORAGE_KEYS.DASHBOARD, dashboard);
-    } catch (error) {
+    } catch {
       // Error is already handled by storage service
     }
-  }, [dashboard]);
+  }, [dashboard, storage]);
 
   useEffect(() => {
     try {
       storage.save(STORAGE_KEYS.CONNECTIONS, connections);
-    } catch (error) {
+    } catch {
       // Error is already handled by storage service
     }
-  }, [connections]);
+  }, [connections, storage]);
 
   useEffect(() => {
     try {
       storage.save(STORAGE_KEYS.APP, app);
-    } catch (error) {
+    } catch {
       // Error is already handled by storage service
     }
-  }, [app]);
+  }, [app, storage]);
 
   return (
     <ConfigContext.Provider value={{ 

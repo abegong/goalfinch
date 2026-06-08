@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Timeline, TimelineItem, TimelineContent, TimelineDot, TimelineOppositeContent, timelineOppositeContentClasses, TimelineSeparator } from '@mui/lab';
-import { Box, Dialog, DialogContent, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, Fade } from '@mui/material';
-import { Add, FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@mui/icons-material';
+import { Timeline, TimelineItem, TimelineContent, TimelineOppositeContent, timelineOppositeContentClasses } from '@mui/lab';
+import { Box, Dialog, DialogContent, SpeedDial, SpeedDialAction, SpeedDialIcon, Fade } from '@mui/material';
+import { FormatListBulleted, Landscape, Timeline as TimelineIcon } from '@mui/icons-material';
 import { useConfig } from '../../context/ConfigContext';
 import { SlideType } from '../../types/slides';
 import SlideGroupTimelineItem from '../SlideGroupTimelineItem';
-import { BulletSlideGroupConfig, ChartSlideGroupConfig, PictureSlideGroupConfig, SlideGroupConfig } from '../../types/slide_groups';
+import { type BulletSlideGroupConfig, type ChartSlideGroupConfig, type PictureSlideGroupConfig, type SlideGroupConfig } from '../../types/slide_groups';
 import SlideGroupEditor from '../editors/SlideGroupEditor';
 
 const ConfigureSlides: React.FC = () => {
@@ -69,7 +69,7 @@ const ConfigureSlides: React.FC = () => {
           name: defaultName,
           source: "",
           slide_count: 3,
-          slides: Array(3).fill({ type: SlideType.PICTURE }),
+          slides: Array.from({ length: 3 }, () => ({ type: SlideType.PICTURE })),
           captions: {}
         } as PictureSlideGroupConfig;
     }
@@ -92,9 +92,11 @@ const ConfigureSlides: React.FC = () => {
   };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
+    const group = dashboard.slideGroups[index];
+    if (!group) return;
     const dragPreview = document.createElement('div');
     dragPreview.className = 'drag-preview';
-    dragPreview.textContent = dashboard.slideGroups[index].name;
+    dragPreview.textContent = group.name;
     dragPreview.style.cssText = `
       position: fixed;
       top: -1000px;
@@ -135,6 +137,7 @@ const ConfigureSlides: React.FC = () => {
     if (sourceIndex !== targetIndex) {
       const newSlideGroups = [...dashboard.slideGroups];
       const [removed] = newSlideGroups.splice(sourceIndex, 1);
+      if (!removed) return;
       newSlideGroups.splice(targetIndex, 0, removed);
       handleSlideGroupOrderChange(newSlideGroups);
     }
@@ -186,13 +189,6 @@ const ConfigureSlides: React.FC = () => {
               }
             }
           },
-          [`& .${TimelineOppositeContent}`]: {
-            // flex: '0 0 150px',
-            maxWidth: '0px',
-            padding: '8px 8px',
-            marginTop: 0,
-            marginBottom: 0
-          },
         }}
       >
         {dashboard.slideGroups.map((slideGroup, index) => (
@@ -201,9 +197,9 @@ const ConfigureSlides: React.FC = () => {
             slideGroup={slideGroup}
             index={index}
             slideGroups={dashboard.slideGroups}
-            onToggleExpanded={() => handleClick(index)}
+            onToggleExpanded={() => { handleClick(index); }}
             onDragStart={handleDragStart}
-            onDragOver={(e) => handleDragOver(e, index)}
+            onDragOver={(e) => { handleDragOver(e, index); }}
             onDrop={handleDrop}
             onDelete={handleSlideGroupDelete}
             isBeingDraggedOver={dragOverIndex === index}
@@ -224,18 +220,18 @@ const ConfigureSlides: React.FC = () => {
               >
                 <SpeedDialAction
                   icon={<FormatListBulleted />}
-                  tooltipTitle="Add Bullet List"
-                  onClick={(e) => handleAddSlide(SlideType.BULLETS)}
+                  slotProps={{ tooltip: { title: 'Add Bullet List' } }}
+                  onClick={() => { handleAddSlide(SlideType.BULLETS); }}
                 />
                 <SpeedDialAction
                   icon={<Landscape />}
-                  tooltipTitle="Add Picture Slides"
-                  onClick={(e) => handleAddSlide(SlideType.PICTURE)}
+                  slotProps={{ tooltip: { title: 'Add Picture Slides' } }}
+                  onClick={() => { handleAddSlide(SlideType.PICTURE); }}
                 />
                 <SpeedDialAction
                   icon={<TimelineIcon />}
-                  tooltipTitle="Add Chart"
-                  onClick={(e) => handleAddSlide(SlideType.CHART)}
+                  slotProps={{ tooltip: { title: 'Add Chart' } }}
+                  onClick={() => { handleAddSlide(SlideType.CHART); }}
                 />
               </SpeedDial>
             </Box>
@@ -248,18 +244,20 @@ const ConfigureSlides: React.FC = () => {
         onClose={handleCloseModal}
         maxWidth="md"
         fullWidth
-        TransitionComponent={Fade}
-        TransitionProps={{
-          timeout: 300,
-          onExited: handleExited
+        slots={{ transition: Fade }}
+        slotProps={{
+          transition: {
+            timeout: 300,
+            onExited: handleExited,
+          },
         }}
       >
         <DialogContent>
-          {editingIndex !== null && (
+          {editingIndex !== null && dashboard.slideGroups[editingIndex] && (
             <SlideGroupEditor
               type={dashboard.slideGroups[editingIndex].type}
               config={dashboard.slideGroups[editingIndex]}
-              onChange={(newConfig) => handleSlideGroupChange(editingIndex, newConfig)}
+              onChange={(newConfig) => { handleSlideGroupChange(editingIndex, newConfig); }}
               onDelete={() => {
                 handleSlideGroupDelete(editingIndex);
                 handleCloseModal();

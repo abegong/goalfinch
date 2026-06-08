@@ -1,46 +1,68 @@
-# Getting Started with Create React App
+# Goal Finch UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The Goal Finch dashboard: a React + TypeScript single-page app built with
+Vite, tested with Vitest, and routed with TanStack Router.
 
-## Available Scripts
+## Prerequisites
 
-In the project directory, you can run:
+- Node.js 20+
+- [pnpm](https://pnpm.io/) (the repo pins a version via `packageManager` in
+  `package.json`; Corepack will pick it up automatically)
 
-### `pnpm start`
+## Setup
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+pnpm install
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Scripts
 
-### `pnpm test`
+All scripts are run from this directory (`ui/`).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Script              | What it does                                            |
+| ------------------- | ------------------------------------------------------- |
+| `pnpm dev`          | Start the Vite dev server on <http://localhost:3000>    |
+| `pnpm build`        | Type-check (`tsc --noEmit`) then produce a prod bundle in `dist/` |
+| `pnpm preview`      | Serve the built `dist/` output locally                  |
+| `pnpm test`         | Run Vitest in watch mode                                |
+| `pnpm test:ci`      | Run Vitest once (for CI)                                |
+| `pnpm typecheck`    | `tsc --noEmit`                                          |
+| `pnpm lint`         | ESLint flat config, type-aware                          |
+| `pnpm lint:fix`     | ESLint with `--fix`                                     |
 
-### `pnpm build`
+`pnpm start` is aliased to `pnpm dev` for muscle memory.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Project layout
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+src/
+  components/   React components (pages, slides, editors, etc.)
+  context/      React contexts (config, notifications, layout)
+  services/     Cross-cutting services (localStorage, validation)
+  types/        Shared TypeScript types
+  utils/        Pure helpers (chart data prep, etc.)
+  router.tsx    TanStack Router route tree
+  App.tsx       RouterProvider host
+  index.tsx     Root mount
+  setupTests.ts Vitest global setup (jest-dom matchers, mocks, polyfills)
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Testing
 
-### `pnpm eject`
+- Framework: [Vitest](https://vitest.dev/) with
+  [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+  and `@testing-library/jest-dom` matchers.
+- Environment: `jsdom`.
+- See `docs/testing-standards.md` for conventions.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Linting and type checking
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- ESLint 9 flat config (`eslint.config.js`) with `typescript-eslint`
+  `strictTypeChecked` + `stylisticTypeChecked`, plus `react`, `react-hooks`,
+  `jsx-a11y`, `@vitest/eslint-plugin`, and `eslint-plugin-testing-library`.
+- TypeScript is configured `strict` with `noUncheckedIndexedAccess` and
+  `noImplicitOverride` enabled; see `tsconfig.json`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Deployment
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Build output lives in `dist/`. Netlify settings are in `netlify.toml`.

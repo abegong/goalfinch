@@ -1,25 +1,23 @@
 import React from 'react';
 import { render, fireEvent, screen, act } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { describe, test, expect, beforeEach, vi } from 'vitest';
 import ConfigureSlides from '../pages/ConfigureSlides';
-import { SlideGroupConfig } from '../../types/slide_groups';
 
-// Mock the ConfigContext module
-jest.mock('../../context/ConfigContext', () => ({
+vi.mock('../../context/ConfigContext', () => ({
   useConfig: () => ({
     dashboard: {
-      slideGroups: [{ 
+      slideGroups: [{
         type: 'NESTED_IMAGES',
         slide_count: 3,
+        slides: [],
         captions: {}
       }],
     },
-    setDashboard: jest.fn(),
+    setDashboard: vi.fn(),
   }),
 }));
 
-// Mock MUI Lab components
-jest.mock('@mui/lab', () => ({
+vi.mock('@mui/lab', () => ({
   Timeline: ({ children }: any) => <div role="list">{children}</div>,
   TimelineItem: ({ children, ...props }: any) => (
     <div role="listitem" data-testid="timeline-item" {...props}>{children}</div>
@@ -28,10 +26,10 @@ jest.mock('@mui/lab', () => ({
   TimelineConnector: ({ children }: any) => <div>{children}</div>,
   TimelineContent: ({ children }: any) => <div>{children}</div>,
   TimelineOppositeContent: ({ children, onClick }: any) => (
-    <div onClick={onClick} data-testid="timeline-opposite-content">{children}</div>
+    <div role="button" tabIndex={0} onClick={onClick} onKeyDown={onClick} data-testid="timeline-opposite-content">{children}</div>
   ),
-  TimelineDot: ({ children, sx, onClick, ...props }: any) => (
-    <div data-testid="timeline-dot" onClick={onClick} {...props}>{children}</div>
+  TimelineDot: ({ children, sx: _sx, onClick, ...props }: any) => (
+    <div role="button" tabIndex={0} data-testid="timeline-dot" onClick={onClick} onKeyDown={onClick} {...props}>{children}</div>
   ),
   timelineOppositeContentClasses: {
     root: 'MuiTimelineOppositeContent-root'
@@ -39,15 +37,17 @@ jest.mock('@mui/lab', () => ({
 }));
 
 describe('Goals Component', () => {
-  const mockSetDashboard = jest.fn();
-  
-  beforeEach(() => {
-    jest.clearAllMocks();
-    // Update the mock to include multiple slide groups and setDashboard
-    (jest.requireMock('../../context/ConfigContext') as any).useConfig = () => ({
+  const mockSetDashboard = vi.fn();
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const mod = (await import('../../context/ConfigContext')) as unknown as {
+      useConfig: () => unknown;
+    };
+    mod.useConfig = () => ({
       dashboard: {
         slideGroups: [
-          { type: 'NESTED_IMAGES', slide_count: 3, captions: {} },
+          { type: 'NESTED_IMAGES', slide_count: 3, slides: [], captions: {} },
           { type: 'BULLETS', slides: [{ type: 'BULLETS', content: [''] }], captions: {} }
         ],
       },
@@ -60,7 +60,7 @@ describe('Goals Component', () => {
     
     // Find all timeline dots and click the first one (the slide dot, not the add button)
     const timelineDots = screen.getAllByTestId('timeline-dot');
-    fireEvent.click(timelineDots[0]);
+    fireEvent.click(timelineDots[0]!);
     
     // The state should be updated without infinite loops
     expect(timelineDots[0]).toBeInTheDocument();
@@ -77,23 +77,23 @@ describe('Goals Component', () => {
     const timelineItems = screen.getAllByRole('listitem');
     
     // Start dragging the first item
-    fireEvent.dragStart(timelineItems[0], {
+    fireEvent.dragStart(timelineItems[0]!, {
       dataTransfer: {
-        setData: jest.fn(),
-        setDragImage: jest.fn(),
+        setData: vi.fn(),
+        setDragImage: vi.fn(),
       },
     });
     
     // Drag over the second item
-    fireEvent.dragOver(timelineItems[1], {
-      preventDefault: jest.fn(),
-      stopPropagation: jest.fn(),
+    fireEvent.dragOver(timelineItems[1]!, {
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
     });
     
     // Drop on the second item
-    fireEvent.drop(timelineItems[1], {
-      preventDefault: jest.fn(),
-      stopPropagation: jest.fn(),
+    fireEvent.drop(timelineItems[1]!, {
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
       dataTransfer: {
         getData: () => '0',
       },
@@ -103,30 +103,28 @@ describe('Goals Component', () => {
     expect(mockSetDashboard).toHaveBeenCalledWith(expect.objectContaining({
       slideGroups: [
         { type: 'BULLETS', slides: [{ type: 'BULLETS', content: [''] }], captions: {} },
-        { type: 'NESTED_IMAGES', slide_count: 3, captions: {} },
+        { type: 'NESTED_IMAGES', slide_count: 3, slides: [], captions: {} },
       ],
     }));
   });
 
-  test('applies dragging styles during drag operation', async () => {
+  test('applies dragging styles during drag operation', () => {
     render(<ConfigureSlides />);
     const timelineItems = screen.getAllByTestId('timeline-item');
-    
+
     // Start dragging the first item
-    await act(async () => {
-      fireEvent.dragStart(timelineItems[0], {
-        dataTransfer: {
-          setData: jest.fn(),
-          setDragImage: jest.fn(),
-        },
-      });
+    fireEvent.dragStart(timelineItems[0]!, {
+      dataTransfer: {
+        setData: vi.fn(),
+        setDragImage: vi.fn(),
+      },
     });
 
     // Check that dragging class is applied
     expect(timelineItems[0]).toHaveAttribute('data-dragging', 'true');
     
     // End dragging
-    await act(async () => {
+    act(() => {
       // Simulate dragend event at document level since that's where we're listening
       const dragEndEvent = new Event('dragend', { bubbles: true });
       document.dispatchEvent(dragEndEvent);

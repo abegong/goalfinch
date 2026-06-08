@@ -1,6 +1,6 @@
 import React from 'react';
-import { PictureSlideGroupConfig } from '../../types/slide_groups';
-import { SourceConfig } from '../../types/connections';
+import { type PictureSlideGroupConfig } from '../../types/slide_groups';
+import { type SourceConfig } from '../../types/connections';
 import styles from './SlideGroupEditor.module.css';
 import { Autocomplete, TextField } from '@mui/material';
 import { useConfig } from '../../context/ConfigContext';
@@ -15,7 +15,7 @@ export const PictureEditor: React.FC<PictureEditorProps> = ({
   onChange,
 }) => {
   const { connections } = useConfig();
-  const sources = connections?.pictureSources || [];
+  const sources = connections.pictureSources;
 
   return (
     <div className={styles.editorSection}>

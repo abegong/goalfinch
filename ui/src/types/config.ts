@@ -2,7 +2,7 @@
  * Core configuration types for Goal Finch.
  */
 
-import { SlideGroupConfig } from './slide_groups';
+import { type SlideGroupConfig } from './slide_groups';
 
 /**
  * Configuration for the main dashboard view of Goal Finch.
