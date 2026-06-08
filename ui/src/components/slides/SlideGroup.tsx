@@ -10,6 +10,9 @@ import PictureSlide from './PictureSlide';
 import SlideGroupCaptions from './SlideGroupCaptions';
 import { colors } from '../../theme/colors';
 
+const PICTURE_BACKGROUND_IMAGE =
+  'http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png';
+
 /**
  * Creates a deterministic hash from the slide index, group index and current date.
  * This ensures the same slide gets the same color on a given day, but colors change daily.
@@ -33,6 +36,17 @@ interface SlideGroupProps {
   config: SlideGroupConfig;
   slideGroupIndex: number;
 }
+
+const getSlideBackground = (
+  slideConfig: SlideConfig,
+  groupIndex: number,
+  slideIndex: number,
+) => {
+  if (slideConfig.type === SlideType.PICTURE) {
+    return { color: '#000000', image: PICTURE_BACKGROUND_IMAGE };
+  }
+  return { color: getHashedColor(slideIndex, groupIndex).hex };
+};
 
 const renderSlideContent = (
   slideConfig: SlideConfig,
@@ -62,9 +76,7 @@ const renderSlideContent = (
         <PictureSlide
           {...commonProps}
           slideConfig={slideConfig}
-          backgroundImage={
-            'http://goal-finch.s3-website-us-east-1.amazonaws.com/cool-backgrounds/cool-background%20(3).png'
-          }
+          backgroundImage={PICTURE_BACKGROUND_IMAGE}
         />
       );
     default:
@@ -85,27 +97,41 @@ const SlideGroup: React.FC<SlideGroupProps> = ({ config, slideGroupIndex }) => {
 
   return (
     <section>
-      {config.slides.map((slideConfig, slideIndex) => (
-        <section
-          key={slideIndex}
-          style={{
-            backgroundColor: getHashedColor(slideIndex, slideGroupIndex).hex,
-            width: '100%',
-            height: '100%',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          {renderSlideContent(
-            slideConfig,
-            slideGroupIndex,
-            slideIndex,
-            totalSlides,
-            config.captions,
-          )}
-          <SlideGroupCaptions captions={config.captions} />
-        </section>
-      ))}
+      {config.slides.map((slideConfig, slideIndex) => {
+        const background = getSlideBackground(slideConfig, slideGroupIndex, slideIndex);
+        return (
+          <section
+            key={slideIndex}
+            data-background-color={background.color}
+            data-background-image={background.image}
+            data-background-size={background.image ? 'cover' : undefined}
+            style={{
+              backgroundColor: background.color,
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                overflow: 'hidden',
+              }}
+            >
+              {renderSlideContent(
+                slideConfig,
+                slideGroupIndex,
+                slideIndex,
+                totalSlides,
+                config.captions,
+              )}
+              <SlideGroupCaptions captions={config.captions} />
+            </div>
+          </section>
+        );
+      })}
     </section>
   );
 };
