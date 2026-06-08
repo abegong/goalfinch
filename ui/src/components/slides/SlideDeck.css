@@ -1,0 +1,27 @@
+.reveal.reveal-gapless-slide.slide .slides > section:not([data-transition]).past,
+.reveal.reveal-gapless-slide.slide .slides > section[data-transition='slide'].past,
+.reveal.reveal-gapless-slide.slide .slides > section[data-transition~='slide-out'].past {
+  opacity: 1;
+  transform: translateX(-100%);
+}
+
+.reveal.reveal-gapless-slide.slide .slides > section:not([data-transition]).future,
+.reveal.reveal-gapless-slide.slide .slides > section[data-transition='slide'].future,
+.reveal.reveal-gapless-slide.slide .slides > section[data-transition~='slide-in'].future {
+  opacity: 1;
+  transform: translateX(100%);
+}
+
+.reveal.reveal-gapless-slide.slide .slides > section > section:not([data-transition]).past,
+.reveal.reveal-gapless-slide.slide .slides > section > section[data-transition='slide'].past,
+.reveal.reveal-gapless-slide.slide .slides > section > section[data-transition~='slide-out'].past {
+  opacity: 1;
+  transform: translateY(-100%);
+}
+
+.reveal.reveal-gapless-slide.slide .slides > section > section:not([data-transition]).future,
+.reveal.reveal-gapless-slide.slide .slides > section > section[data-transition='slide'].future,
+.reveal.reveal-gapless-slide.slide .slides > section > section[data-transition~='slide-in'].future {
+  opacity: 1;
+  transform: translateY(100%);
+}

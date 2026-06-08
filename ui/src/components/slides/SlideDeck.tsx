@@ -8,6 +8,7 @@ import React, {
 import Reveal from 'reveal.js';
 import type { RevealApi, RevealConfig } from 'reveal.js';
 import 'reveal.js/reveal.css';
+import './SlideDeck.css';
 import { type SlideGroupConfig } from '../../types/slide_groups';
 import SlideGroup from './SlideGroup';
 
@@ -182,7 +183,7 @@ const SlideDeck = forwardRef<SlideDeckHandle, SlideDeckProps>(function SlideDeck
   return (
     <div
       ref={containerRef}
-      className="reveal"
+      className="reveal reveal-gapless-slide"
       style={{ width: '100%', height: '100%' }}
     >
       <div className="slides">
